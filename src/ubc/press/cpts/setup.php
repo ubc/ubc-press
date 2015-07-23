@@ -28,6 +28,18 @@ class Setup {
 	static $post_types_to_set_up = array();
 
 
+
+	/**
+	 * Our initializer which determines and then creates our custom post types
+	 * Also runs methods before and after creation which run actions enabling us
+	 * to hook in if required
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
 	public function init() {
 
 		// Run an action so we can hook in beforehand
