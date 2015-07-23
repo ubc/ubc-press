@@ -20,5 +20,12 @@
     },
     "require": {
         "jjgrainger/wp-custom-post-type-class": "dev-master"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-0": {
+            "UBC": "src/",
+            "UBC\\Press\\Tests": "tests/"
+        }
     }
 }

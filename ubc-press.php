@@ -38,24 +38,8 @@ class UBC_Press {
 
 
 	/**
-	 * Array of loader files to include in out init, relative to $plugin_path
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 * @var string $loader_files
-	 */
-
-	public static $loader_files = array(
-		'dashboard-widgets/load-dashboard-widgets.php',
-		'post-types/load-post-types.php',
-		'taxonomies/load-taxonomies.php',
-		'roles/load-roles.php',
-	);
-
-
-	/**
 	 * Our initialization method which loads the required files and sets any actions
-	 * and filters we need. No autoloader just yet.
+	 * and filters we need.
 	 *
 	 * @since 1.0.0
 	 *
@@ -71,8 +55,8 @@ class UBC_Press {
 		// We have an autoloader for components
 		self::load_autoloader();
 
-		// Load the loaders
-		add_action( 'init', array( __CLASS__, 'load_loaders' ), 5 );
+		$ubc_press = new \UBC\Press\Setup;
+		$ubc_press->init();
 
 	}/* init() */
 
@@ -91,51 +75,6 @@ class UBC_Press {
 		require self::$plugin_path . 'vendor/autoload.php';
 
 	}/* load_autoloader() */
-
-
-	/**
-	 * Loads the required loader files for each of our modules
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	public static function load_loaders() {
-
-		/**
-		 * Filters the files loaded
-		 *
-		 * Allows other plugins or options to determine which files are required
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param array $loader_files The relative (to this file) paths to the loader files
-		 */
-
-		$loaders = apply_filters( 'ubc_press_loader_files', static::$loader_files );
-
-		// Bail if we don't have any
-		if ( ! $loaders || ! is_array( $loaders ) || empty( $loaders ) ) {
-			return;
-		}
-
-		// Loop over and require the files we need
-		foreach ( $loaders as $key => $loader ) {
-
-			$actual_path = self::$plugin_path . 'inc/' . $loader;
-
-			if ( ! file_exists( $actual_path ) ) {
-				continue;
-			}
-
-			require_once $actual_path;
-
-		}
-
-	}/* load_loaders() */
-
 
 }/* class UBC_Press */
 
