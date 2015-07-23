@@ -45,17 +45,11 @@ class Setup {
 		// Run an action so we can hook in beforehand
 		$this->before();
 
+		// Determine which CPTs to create
 		$this->determine();
 
+		// Create the CPTs
 		$this->create();
-
-		$cpt_label_args = array(
-			'post_type_name' 	=> 'link',
-			'singular' 			=> 'link',
-			'plural' 			=> 'Links',
-			'slug' 				=> 'link',
-		);
-		$link = new \UBC\Press\CPTs\CPT( $cpt_label_args );
 
 		// Run an action so we can hook in afterwards
 		$this->after();
