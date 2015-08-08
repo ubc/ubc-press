@@ -114,14 +114,82 @@ class Press {
 
 	}/* load_autoloader() */
 
+
+
+	/**
+	 * Method run on plugin activation. In order for us to be able to do stuff internally
+	 * we need to initialize this class, which calls the autoloader. This means we can
+	 * keep our code nice and encapsulated
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function on_activation() {
+
+		self::init();
+		do_action( 'ubc_press_on_activation' );
+
+	}/* on_activation() */
+
+
+	/**
+	 * Method run on plugin deactivation
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function on_deactivation() {
+
+		do_action( 'ubc_press_on_deactivation' );
+
+	}/* on_deactivation() */
+
+
+	/**
+	 * A quick getter for the plugin version number
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return (int) The version of this plugin
+	 */
+
+	public static function get_version() {
+
+		return static::$version;
+
+	}/* get_version() */
+
+
+
+	/**
+	 * Quick getter for the text domain of this plugin
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return (string) The text domain of this plugin
+	 */
+
+	public static function get_text_domain() {
+
+		return static::$text_domain;
+
+	}/* get_text_domain() */
+
+
 }/* class UBC_Press */
 
 // Fire it up
-add_action( 'plugins_loaded', 'plugins_loaded_init_ubc_press' );
+add_action( 'plugins_loaded', array( '\UBC\Press', 'init' ) );
 
-function plugins_loaded_init_ubc_press() {
 
-	$UBC_Press = new UBC_Press();
-	$UBC_Press->init();
-
-}/* plugins_loaded_init_ubc_press() */
+// On plugin activation, we do bits and pieces
+\register_activation_hook( __FILE__, array( '\UBC\Press', 'on_activation' ) );
+\register_deactivation_hook( __FILE__, array( '\UBC\Press', 'on_deactivation' ) );
