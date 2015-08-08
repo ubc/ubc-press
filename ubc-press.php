@@ -74,6 +74,17 @@ class Press {
 
 	public static $plugin_path = '';
 
+	/**
+	 * The url to this file
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @var (string) $plugin_url
+	 */
+
+	public static $plugin_url = '';
+
 
 	/**
 	 * Our initialization method which loads the required files and sets any actions
@@ -87,8 +98,17 @@ class Press {
 
 	public static function init() {
 
+		if ( ! is_null( self::$instance ) ) {
+			return;
+		}
+
+		self::$instance = new self;
+
 		// Set the plugin path as where this file resides
 		self::$plugin_path = trailingslashit( dirname( __FILE__ ) );
+
+		// And the URL
+		self::$plugin_url = trailingslashit( plugins_url( '', __FILE__ ) );
 
 		// We have an autoloader for components
 		self::load_autoloader();
