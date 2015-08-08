@@ -14,17 +14,55 @@
  * Text Domain:       ubc-press
 */
 
+namespace UBC;
+
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
 // Return if this is loaded via WP CLI for now
-if ( defined( 'WP_CLI' ) and WP_CLI ) {
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	return;
 }
 
-class UBC_Press {
+class Press {
+
+	/**
+	 * The version of this plugin
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @var (string) $version The version of this plugin
+	 */
+
+	protected static $version = '1.0.0';
+
+
+	/**
+	 * The text domain for this plugin
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @var (string) $text_domain The text domain for this plugin
+	 */
+
+	protected static $text_domain = 'ubc-press';
+
+
+	/**
+	 * Instance of this class
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @var (object) $instance
+	 */
+
+	protected static $instance;
+
 
 	/**
 	 * The path to this file
