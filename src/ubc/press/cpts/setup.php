@@ -79,7 +79,10 @@ class Setup {
 				'plural' 			=> 'Assignments',
 				'slug' 				=> 'assignment',
 			),
-			'wp_args' => array(),
+			'wp_args' => array(
+				'capability_type' => 'assignment',
+				'map_meta_cap' => true,
+			),
 			'icon' => 'dashicons-media-text',
 		);
 
@@ -90,8 +93,11 @@ class Setup {
 				'plural' 			=> 'Handouts',
 				'slug' 				=> 'handout',
 			),
-			'wp_args' => array(),
-			'icon' => '',
+			'wp_args' => array(
+				'capability_type' => 'handout',
+				'map_meta_cap' => true,
+			),
+			'icon' => 'dashicons-portfolio',
 		);
 
 		$post_types_to_set_up['note'] = array(
@@ -101,7 +107,10 @@ class Setup {
 				'plural' 			=> 'Notes',
 				'slug' 				=> 'note',
 			),
-			'wp_args' => array(),
+			'wp_args' => array(
+				'capability_type' => 'note',
+				'map_meta_cap' => true,
+			),
 			'icon' => 'dashicons-edit',
 		);
 
@@ -112,7 +121,10 @@ class Setup {
 				'plural' 			=> 'Readings',
 				'slug' 				=> 'reading',
 			),
-			'wp_args' => array(),
+			'wp_args' => array(
+				'capability_type' => 'reading',
+				'map_meta_cap' => true,
+			),
 			'icon' => 'dashicons-book-alt',
 		);
 
@@ -123,7 +135,10 @@ class Setup {
 				'plural' 			=> 'Links',
 				'slug' 				=> 'link',
 			),
-			'wp_args' => array(),
+			'wp_args' => array(
+				'capability_type' => 'link',
+				'map_meta_cap' => true,
+			),
 			'icon' => 'dashicons-admin-links',
 		);
 
