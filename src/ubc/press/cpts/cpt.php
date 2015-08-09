@@ -79,7 +79,7 @@ class CPT {
 	public function __construct( $label_args, $wp_args = array(), $icon = '' ) {
 
 		if ( ! $label_args || ! is_array( $label_args ) || ! array_key_exists( 'post_type_name', $label_args ) ) {
-			return new \WP_Error( 'incorrect_cpt_args', __( 'Incorrect CPT args were passed to \UBC\Press\CPTs\CPT', 'ubc-press' ) );
+			return new \WP_Error( 'incorrect_cpt_args', __( 'Incorrect CPT args were passed to \UBC\Press\CPTs\CPT', \UBC\Press::get_text_domain() ) );
 		}
 
 		// Set our class properties so we have access to them easily
