@@ -45,6 +45,9 @@ class Setup {
 		// Setup activation/deactivation
 		self::setup_activation_deactivation();
 
+		// Setup metaboxes
+		self::setup_metaboxes();
+
 	}/* init() */
 
 
@@ -103,6 +106,24 @@ class Setup {
 		$taxonomies->init();
 
 	}/* setup_cts */
+
+
+
+	/**
+	 * Set up our custom metaboxes
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function setup_metaboxes() {
+
+		$metaboxes = new \UBC\Press\Metaboxes\Setup;
+		$metaboxes->init();
+
+	}/* setup_metaboxes() */
 
 
 	/**

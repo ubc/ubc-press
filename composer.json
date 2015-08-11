@@ -27,6 +27,9 @@
         "psr-0": {
             "UBC": "src/",
             "UBC\\Press\\Tests": "tests/"
-        }
+        },
+        "files": [
+            "vendor/webdevstudios/cmb2/init.php"
+        ]
     }
 }
