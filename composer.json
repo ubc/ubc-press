@@ -19,7 +19,8 @@
         "email": "richard.tape@ubc.ca"
     },
     "require": {
-        "jjgrainger/wp-custom-post-type-class": "dev-master"
+        "jjgrainger/wp-custom-post-type-class": "dev-master",
+        "webdevstudios/cmb2": "2.1.0"
     },
     "minimum-stability": "dev",
     "autoload": {
