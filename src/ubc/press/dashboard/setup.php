@@ -566,7 +566,7 @@ class Setup {
 			'users.php',
 		);
 
-		$submenu['themes.php'][315] = array(
+		$submenu['themes.php'][325] = array(
 			__( 'Plugins', \UBC\Press::get_text_domain() ),
 			'activate_plugins',
 			'plugins.php',
