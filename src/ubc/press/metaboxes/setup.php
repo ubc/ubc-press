@@ -115,61 +115,53 @@ class Setup {
 		) );
 		$cmb_demo->add_field( array(
 			'name' => __( 'Test Text Small', 'cmb2' ),
-			'desc' => __( 'field description (optional)', 'cmb2' ),
 			'id'   => $prefix . 'textsmall',
 			'type' => 'text_small',
 			// 'repeatable' => true,
 		) );
 		$cmb_demo->add_field( array(
 			'name' => __( 'Test Text Medium', 'cmb2' ),
-			'desc' => __( 'field description (optional)', 'cmb2' ),
 			'id'   => $prefix . 'textmedium',
 			'type' => 'text_medium',
 			// 'repeatable' => true,
 		) );
-		$cmb_demo->add_field( array(
+		$test_field_1 = $cmb_demo->add_field( array(
 			'name' => __( 'Website URL', 'cmb2' ),
-			'desc' => __( 'field description (optional)', 'cmb2' ),
 			'id'   => $prefix . 'url',
 			'type' => 'text_url',
 			// 'protocols' => array('http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet'), // Array of allowed protocols
 			// 'repeatable' => true,
 		) );
-		$cmb_demo->add_field( array(
+
+		$test_field_2 = $cmb_demo->add_field( array(
 			'name' => __( 'Test Text Email', 'cmb2' ),
-			'desc' => __( 'field description (optional)', 'cmb2' ),
 			'id'   => $prefix . 'email',
 			'type' => 'text_email',
 			// 'repeatable' => true,
 		) );
-		$cmb_demo->add_field( array(
+		$test_field_3 = $cmb_demo->add_field( array(
 			'name' => __( 'Test Time', 'cmb2' ),
-			'desc' => __( 'field description (optional)', 'cmb2' ),
 			'id'   => $prefix . 'time',
 			'type' => 'text_time',
 		) );
 		$cmb_demo->add_field( array(
 			'name' => __( 'Time zone', 'cmb2' ),
-			'desc' => __( 'Time zone', 'cmb2' ),
 			'id'   => $prefix . 'timezone',
 			'type' => 'select_timezone',
 		) );
 		$cmb_demo->add_field( array(
 			'name' => __( 'Test Date Picker', 'cmb2' ),
-			'desc' => __( 'field description (optional)', 'cmb2' ),
 			'id'   => $prefix . 'textdate',
 			'type' => 'text_date',
 		) );
 		$cmb_demo->add_field( array(
 			'name' => __( 'Test Date Picker (UNIX timestamp)', 'cmb2' ),
-			'desc' => __( 'field description (optional)', 'cmb2' ),
 			'id'   => $prefix . 'textdate_timestamp',
 			'type' => 'text_date_timestamp',
 			// 'timezone_meta_key' => $prefix . 'timezone', // Optionally make this field honor the timezone selected in the select_timezone specified above
 		) );
 		$cmb_demo->add_field( array(
 			'name' => __( 'Test Date/Time Picker Combo (UNIX timestamp)', 'cmb2' ),
-			'desc' => __( 'field description (optional)', 'cmb2' ),
 			'id'   => $prefix . 'datetime_timestamp',
 			'type' => 'text_datetime_timestamp',
 		) );
@@ -178,13 +170,11 @@ class Setup {
 		// Feel free to uncomment and use if your server meets the requirement
 		$cmb_demo->add_field( array(
 			'name' => __( 'Test Date/Time Picker/Time zone Combo (serialized DateTime object)', 'cmb2' ),
-			'desc' => __( 'field description (optional)', 'cmb2' ),
 			'id'   => $prefix . 'datetime_timestamp_timezone',
 			'type' => 'text_datetime_timestamp_timezone',
 		) );
 		$cmb_demo->add_field( array(
 			'name' => __( 'Test Money', 'cmb2' ),
-			'desc' => __( 'field description (optional)', 'cmb2' ),
 			'id'   => $prefix . 'textmoney',
 			'type' => 'text_money',
 			// 'before_field' => '£', // override '$' symbol if needed
@@ -192,38 +182,33 @@ class Setup {
 		) );
 		$cmb_demo->add_field( array(
 			'name'    => __( 'Test Color Picker', 'cmb2' ),
-			'desc'    => __( 'field description (optional)', 'cmb2' ),
 			'id'      => $prefix . 'colorpicker',
 			'type'    => 'colorpicker',
 			'default' => '#ffffff',
 		) );
 		$cmb_demo->add_field( array(
 			'name' => __( 'Test Text Area', 'cmb2' ),
-			'desc' => __( 'field description (optional)', 'cmb2' ),
 			'id'   => $prefix . 'textarea',
 			'type' => 'textarea',
 		) );
 		$cmb_demo->add_field( array(
 			'name' => __( 'Test Text Area Small', 'cmb2' ),
-			'desc' => __( 'field description (optional)', 'cmb2' ),
 			'id'   => $prefix . 'textareasmall',
 			'type' => 'textarea_small',
 		) );
 		$cmb_demo->add_field( array(
 			'name' => __( 'Test Text Area for Code', 'cmb2' ),
-			'desc' => __( 'field description (optional)', 'cmb2' ),
 			'id'   => $prefix . 'textarea_code',
 			'type' => 'textarea_code',
 		) );
 		$cmb_demo->add_field( array(
 			'name' => __( 'Test Title Weeeee', 'cmb2' ),
-			'desc' => __( 'This is a title description', 'cmb2' ),
 			'id'   => $prefix . 'title',
+			'desc' => __( 'Titles can have descriptions, too', 'cmb2' ),
 			'type' => 'title',
 		) );
 		$cmb_demo->add_field( array(
 			'name'             => __( 'Test Select', 'cmb2' ),
-			'desc'             => __( 'field description (optional)', 'cmb2' ),
 			'id'               => $prefix . 'select',
 			'type'             => 'select',
 			'show_option_none' => true,
@@ -235,7 +220,6 @@ class Setup {
 		) );
 		$cmb_demo->add_field( array(
 			'name'             => __( 'Test Radio inline', 'cmb2' ),
-			'desc'             => __( 'field description (optional)', 'cmb2' ),
 			'id'               => $prefix . 'radio_inline',
 			'type'             => 'radio_inline',
 			'show_option_none' => 'No Selection',
@@ -247,7 +231,6 @@ class Setup {
 		) );
 		$cmb_demo->add_field( array(
 			'name'    => __( 'Test Radio', 'cmb2' ),
-			'desc'    => __( 'field description (optional)', 'cmb2' ),
 			'id'      => $prefix . 'radio',
 			'type'    => 'radio',
 			'options' => array(
@@ -258,7 +241,6 @@ class Setup {
 		) );
 		$cmb_demo->add_field( array(
 			'name'     => __( 'Test Taxonomy Radio', 'cmb2' ),
-			'desc'     => __( 'field description (optional)', 'cmb2' ),
 			'id'       => $prefix . 'text_taxonomy_radio',
 			'type'     => 'taxonomy_radio',
 			'taxonomy' => 'category', // Taxonomy Slug
@@ -266,14 +248,12 @@ class Setup {
 		) );
 		$cmb_demo->add_field( array(
 			'name'     => __( 'Test Taxonomy Select', 'cmb2' ),
-			'desc'     => __( 'field description (optional)', 'cmb2' ),
 			'id'       => $prefix . 'taxonomy_select',
 			'type'     => 'taxonomy_select',
 			'taxonomy' => 'category', // Taxonomy Slug
 		) );
 		$cmb_demo->add_field( array(
 			'name'     => __( 'Test Taxonomy Multi Checkbox', 'cmb2' ),
-			'desc'     => __( 'field description (optional)', 'cmb2' ),
 			'id'       => $prefix . 'multitaxonomy',
 			'type'     => 'taxonomy_multicheck',
 			'taxonomy' => 'post_tag', // Taxonomy Slug
@@ -281,13 +261,11 @@ class Setup {
 		) );
 		$cmb_demo->add_field( array(
 			'name' => __( 'Test Checkbox', 'cmb2' ),
-			'desc' => __( 'field description (optional)', 'cmb2' ),
 			'id'   => $prefix . 'checkbox',
 			'type' => 'checkbox',
 		) );
 		$cmb_demo->add_field( array(
 			'name'    => __( 'Test Multi Checkbox', 'cmb2' ),
-			'desc'    => __( 'field description (optional)', 'cmb2' ),
 			'id'      => $prefix . 'multicheckbox',
 			'type'    => 'multicheck',
 			// 'multiple' => true, // Store values in individual rows
@@ -300,7 +278,6 @@ class Setup {
 		) );
 		$cmb_demo->add_field( array(
 			'name'    => __( 'Test wysiwyg', 'cmb2' ),
-			'desc'    => __( 'field description (optional)', 'cmb2' ),
 			'id'      => $prefix . 'wysiwyg',
 			'type'    => 'wysiwyg',
 			'options' => array( 'textarea_rows' => 5 ),
@@ -335,6 +312,10 @@ class Setup {
 			'after'        => '<p>Testing <b>"after"</b> parameter</p>',
 			'after_row'    => '<p>Testing <b>"after_row"</b> parameter</p>',
 		) );
+
+		$cmb2Grid = new \Cmb2Grid\Grid\Cmb2Grid( $cmb_demo );
+		$row_1 = $cmb2Grid->addRow();
+		$row_1->addColumns( array( $test_field_1, $test_field_2, $test_field_3 ) );
 
 	}
 

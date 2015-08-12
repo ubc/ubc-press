@@ -18,9 +18,16 @@
     "support": {
         "email": "richard.tape@ubc.ca"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/origgami/CMB2-grid"
+        }
+    ],
     "require": {
         "jjgrainger/wp-custom-post-type-class": "dev-master",
-        "webdevstudios/cmb2": "2.1.0"
+        "webdevstudios/cmb2": "2.1.0",
+        "origgami/CMB2-grid": "dev-master"
     },
     "minimum-stability": "dev",
     "autoload": {
@@ -29,7 +36,8 @@
             "UBC\\Press\\Tests": "tests/"
         },
         "files": [
-            "vendor/webdevstudios/cmb2/init.php"
+            "vendor/webdevstudios/cmb2/init.php",
+            "vendor/origgami/CMB2-grid/Cmb2GridPlugin.php"
         ]
     }
 }
