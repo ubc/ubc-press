@@ -313,6 +313,9 @@ class Setup {
 			'after_row'    => '<p>Testing <b>"after_row"</b> parameter</p>',
 		) );
 
+		if ( ! is_admin() ) {
+			return;
+		}
 		$cmb2Grid = new \Cmb2Grid\Grid\Cmb2Grid( $cmb_demo );
 		$row_1 = $cmb2Grid->addRow();
 		$row_1->addColumns( array( $test_field_1, $test_field_2, $test_field_3 ) );
