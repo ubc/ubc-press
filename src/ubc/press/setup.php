@@ -33,6 +33,9 @@ class Setup {
 
 		self::$instance = new self;
 
+		// Setup plugin tieups
+		self::setup_plugins();
+
 		// Set up the dashboard
 		self::setup_dashboard();
 
@@ -124,6 +127,24 @@ class Setup {
 		$metaboxes->init();
 
 	}/* setup_metaboxes() */
+
+
+
+	/**
+	 * Extra bits and pieces for plugins we support
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function setup_plugins() {
+
+		$plugins = new \UBC\Press\Plugins\Setup;
+		$plugins->init();
+
+	}/* setup_plugins() */
 
 
 	/**
