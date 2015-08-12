@@ -723,7 +723,15 @@ class Setup {
 
 		global $menu;
 
+		if ( ! isset( $menu[10] ) ) {
+			return;
+		}
+
 		if ( 'upload.php' !== $menu[10][2] ) {
+			return;
+		}
+
+		if ( ! isset( $menu[10][0] ) ) {
 			return;
 		}
 
