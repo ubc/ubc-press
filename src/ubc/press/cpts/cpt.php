@@ -86,7 +86,6 @@ class CPT {
 		static::$label_args = $label_args;
 		static::$wp_args 	= $wp_args;
 		static::$icon 		= $icon;
-
 		// Run before we do anything so we can hook in and do...stuff
 		$this->before();
 
@@ -185,7 +184,7 @@ class CPT {
 			 *
 			 * @param array array() as per http://codex.wordpress.org/Function_Reference/register_post_type#Parameters
 			 */
-			apply_filters( 'ubc_press_wp_post_type_args_' . $cpt_name, array() )
+			apply_filters( 'ubc_press_wp_post_type_args_' . $cpt_name, $cpt_wp_args )
 		);
 
 		static::$wp_args = $cpt_wp_args;
