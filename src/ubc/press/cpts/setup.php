@@ -82,6 +82,7 @@ class Setup {
 			'wp_args' => array(
 				'capability_type' => 'assignment',
 				'map_meta_cap' => true,
+				'supports' => array( 'title' ),
 			),
 			'icon' => 'dashicons-media-text',
 		);

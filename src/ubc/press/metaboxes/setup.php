@@ -94,7 +94,7 @@ class Setup {
 		$cmb_demo = new_cmb2_box( array(
 			'id'            => $prefix . 'metabox',
 			'title'         => __( 'Test Metabox', 'cmb2' ),
-			'object_types'  => array( 'page' ), // Post type
+			'object_types'  => array( 'assignment' ), // Post type
 			// 'show_on_cb' => 'yourprefix_show_if_front_page', // function should return a bool value
 			// 'context'    => 'normal',
 			// 'priority'   => 'high',
