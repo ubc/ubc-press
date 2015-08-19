@@ -190,6 +190,7 @@ class Press {
 
 	/**
 	 * Quick getter for the text domain of this plugin
+	 * Usage: \UBC\Press::get_text_domain()
 	 *
 	 * @since 1.0.0
 	 *
@@ -204,7 +205,7 @@ class Press {
 	}/* get_text_domain() */
 
 
-}/* class UBC_Press */
+}/* class \UBC\Press */
 
 // Fire it up
 add_action( 'plugins_loaded', array( '\UBC\Press', 'init' ) );
