@@ -28,6 +28,8 @@ class Setup {
 
 		$this->setup_sitebuilder();
 
+		// $this->setup_poststoposts();
+
 	}/* init() */
 
 
@@ -42,9 +44,30 @@ class Setup {
 
 	public function setup_sitebuilder() {
 
+		// @TODO: If not active need to show message on Add New Section screen
+		if ( ! defined( 'SITEORIGIN_PANELS_VERSION' ) ) {
+			return;
+		}
+
 		$sitebuilder = new \UBC\Press\Plugins\SiteBuilder\Setup;
 		$sitebuilder->init();
 
 	}/* setup_sitebuilder() */
+
+	/**
+	 * Posts2Posts Mods
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function setup_poststoposts() {
+
+		$poststpposts = new \UBC\Press\Plugins\PostsToPosts\Setup;
+		$poststpposts->init();
+
+	}/* setup_poststoposts() */
 
 }/* class Setup */
