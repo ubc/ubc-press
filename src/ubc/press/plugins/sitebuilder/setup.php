@@ -39,6 +39,8 @@ class Setup {
 
 		$this->setup_actions();
 
+		$this->setup_filters();
+
 	}/* init() */
 
 	/**
@@ -66,6 +68,23 @@ class Setup {
 		add_action( 'init', array( $this, 'init__register_custom_widgets' ), 0 );
 
 	}/* setup_actions() */
+
+
+
+	/**
+	 * Filters to modify items in SiteBuilder
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function setup_filters() {
+
+		add_filter( 'gettext', array( $this, 'gettext__change_add_widgets' ), 10, 3 );
+
+	}/* setup_filters() */
 
 
 	/**
@@ -219,6 +238,32 @@ class Setup {
 		$newsowidgets->init();
 
 	}/* init__register_custom_widgets() */
+
+
+	/**
+	 * SiteBuilder has an 'Add Widget' button. We want to call them 'Components'
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (object) $translations - A translations object for this domain
+	 * @param (string) $text - The text being translated
+	 * @param (string) $domain - The current domain
+	 * @return (string) Modified text
+	 */
+
+	public function gettext__change_add_widgets( $translations, $text, $domain ) {
+
+		if ( 'siteorigin-panels' !== $domain ) {
+			return $translations;
+		}
+
+		if ( 'Add Widget' !== $text ) {
+			return $translations;
+		}
+
+		return __( 'Add Component', \UBC\Press::get_text_domain() );
+
+	}/* gettext__change_add_widgets() */
 
 
 }/* class Setup */
