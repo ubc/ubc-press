@@ -104,14 +104,21 @@ class Setup {
 		// Create the metabox
 		$section_description = new_cmb2_box( array(
 			'id'            => $prefix . 'metabox',
-			'title'         => __( 'Section Description', \UBC\Press::get_text_domain() ),
+			'title'         => __( 'Section Details', \UBC\Press::get_text_domain() ),
 			'object_types'  => array( 'section' ),
 			'context'    	=> 'normal',
 			'priority' 		=> 'low',
 		) );
 
 		// Add fields to the metabox
-		$section_description->add_field( array(
+		$section_help = $section_description->add_field( array(
+			'name' => __( 'Where are section details displayed?', \UBC\Press::get_text_domain() ),
+			'id'   => $prefix . 'title_info',
+			'desc' => __( 'Section details are shown on the listings page for the course (which may include the course home page).', \UBC\Press::get_text_domain() ),
+			'type' => 'title',
+		) );
+
+		$section_description_content = $section_description->add_field( array(
 			'name'    => __( '', \UBC\Press::get_text_domain() ),
 			'desc'	  => __( 'Give a brief (20-30 word) description of the content students will find in this course section. Perhaps an overview of the content within each component.', \UBC\Press::get_text_domain() ),
 			'id'      => $prefix . 'content',
@@ -122,6 +129,13 @@ class Setup {
 				'teeny' => true,
 			),
 		) );
+
+		if ( ! is_admin() ) {
+			return;
+		}
+		$grid_layout = new \Cmb2Grid\Grid\Cmb2Grid( $section_description );
+		$row_1 = $grid_layout->addRow();
+		$row_1->addColumns( array( $section_help, $section_description_content ) );
 
 	}/* cmb2_init__section_description() */
 
