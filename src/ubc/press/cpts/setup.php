@@ -82,11 +82,12 @@ class Setup {
 			'wp_args' => array(
 				'capability_type' => 'section',
 				'map_meta_cap' => true,
-				'supports' => array( 'title' ),
+				'supports' => array( 'title', 'page-attributes' ),
 				'rewrite' => array(
 					'with_front' => false,
 					'slug' => 'section',
 				),
+				'hierarchical' => true,
 			),
 			'icon' => 'dashicons-welcome-add-page',
 		);
