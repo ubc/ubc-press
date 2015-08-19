@@ -72,6 +72,25 @@ class Setup {
 
 		$post_types_to_set_up = array();
 
+		$post_types_to_set_up['section'] = array(
+			'label_args' => array(
+				'post_type_name' 	=> 'section',
+				'singular' 			=> 'Section',
+				'plural' 			=> 'Sections',
+				'slug' 				=> 'section',
+			),
+			'wp_args' => array(
+				'capability_type' => 'section',
+				'map_meta_cap' => true,
+				'supports' => array( 'title' ),
+				'rewrite' => array(
+					'with_front' => false,
+					'slug' => 'section',
+				),
+			),
+			'icon' => 'dashicons-welcome-add-page',
+		);
+
 		$post_types_to_set_up['assignment'] = array(
 			'label_args' => array(
 				'post_type_name' 	=> 'assignment',
@@ -83,6 +102,10 @@ class Setup {
 				'capability_type' => 'assignment',
 				'map_meta_cap' => true,
 				'supports' => array( 'title' ),
+				'rewrite' => array(
+					'with_front' => false,
+					'slug' => 'assignment',
+				),
 			),
 			'icon' => 'dashicons-media-text',
 		);
@@ -97,6 +120,10 @@ class Setup {
 			'wp_args' => array(
 				'capability_type' => 'handout',
 				'map_meta_cap' => true,
+				'rewrite' => array(
+					'with_front' => false,
+					'slug' => 'handout',
+				),
 			),
 			'icon' => 'dashicons-portfolio',
 		);
@@ -111,6 +138,10 @@ class Setup {
 			'wp_args' => array(
 				'capability_type' => 'note',
 				'map_meta_cap' => true,
+				'rewrite' => array(
+					'with_front' => false,
+					'slug' => 'note',
+				),
 			),
 			'icon' => 'dashicons-edit',
 		);
@@ -125,6 +156,10 @@ class Setup {
 			'wp_args' => array(
 				'capability_type' => 'reading',
 				'map_meta_cap' => true,
+				'rewrite' => array(
+					'with_front' => false,
+					'slug' => 'reading',
+				),
 			),
 			'icon' => 'dashicons-book-alt',
 		);
@@ -139,6 +174,10 @@ class Setup {
 			'wp_args' => array(
 				'capability_type' => 'link',
 				'map_meta_cap' => true,
+				'rewrite' => array(
+					'with_front' => false,
+					'slug' => 'link',
+				),
 			),
 			'icon' => 'dashicons-admin-links',
 		);
