@@ -82,7 +82,14 @@ class Setup {
 
 	public function setup_filters() {
 
+		// Change 'Add Widget' to 'Add Component'
 		add_filter( 'gettext', array( $this, 'gettext__change_add_widgets' ), 10, 3 );
+
+		// Change 'Page Builder' to 'Content Builder'
+		add_filter( 'gettext', array( $this, 'gettext__change_page_builder' ), 10, 3 );
+
+		// Scrub 'Switch to Editor' on Section post type
+		add_filter( 'gettext', array( $this, 'gettext__change_switch_to_editor' ), 10, 3 );
 
 	}/* setup_filters() */
 
@@ -265,5 +272,58 @@ class Setup {
 
 	}/* gettext__change_add_widgets() */
 
+
+	/**
+	 * SiteBuilder has an 'Page Builder' title. We want to call it 'Content Builder'
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (object) $translations - A translations object for this domain
+	 * @param (string) $text - The text being translated
+	 * @param (string) $domain - The current domain
+	 * @return (string) Modified text
+	 */
+
+	public function gettext__change_page_builder( $translations, $text, $domain ) {
+
+		if ( 'siteorigin-panels' !== $domain ) {
+			return $translations;
+		}
+
+		if ( 'Page Builder' !== $text ) {
+			return $translations;
+		}
+
+		return __( 'Content Builder', \UBC\Press::get_text_domain() );
+
+	}/* gettext__change_page_builder() */
+
+
+	/**
+	 * We don't need the 'Switch To Editor' link on the Sections post type
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (object) $translations - A translations object for this domain
+	 * @param (string) $text - The text being translated
+	 * @param (string) $domain - The current domain
+	 * @return (string) Modified text
+	 */
+
+	public function gettext__change_switch_to_editor( $translations, $text, $domain ) {
+
+		if ( 'siteorigin-panels' !== $domain ) {
+			return $translations;
+		}
+
+		if ( 'Switch to Editor' !== $text ) {
+			return $translations;
+		}
+
+		// $current_screen = get_current_screen();
+
+		return __( '', \UBC\Press::get_text_domain() );
+
+	}/* gettext__change_switch_to_editor() */
 
 }/* class Setup */
