@@ -80,9 +80,53 @@ class Setup {
 
 	public function create() {
 
+		// Add a section description metabox
+		add_action( 'cmb2_init', array( $this, 'cmb2_init__section_description' ) );
+
 		add_action( 'cmb2_init', array( $this, 'cmb2_init__test' ) );
 
 	}/* create() */
+
+
+	/**
+	 * A section requires a description.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param  null
+	 * @return null
+	 */
+
+	public function cmb2_init__section_description() {
+
+		$prefix = '_section_description';
+
+		// Create the metabox
+		$section_description = new_cmb2_box( array(
+			'id'            => $prefix . 'metabox',
+			'title'         => __( 'Section Description', \UBC\Press::get_text_domain() ),
+			'object_types'  => array( 'section' ),
+			'context'    	=> 'normal',
+			'priority' 		=> 'low',
+		) );
+
+		// Add fields to the metabox
+		$section_description->add_field( array(
+			'name'    => __( '', \UBC\Press::get_text_domain() ),
+			'desc'	  => __( 'Give a brief (20-30 word) description of the content students will find in this course section. Perhaps an overview of the content within each component.', \UBC\Press::get_text_domain() ),
+			'id'      => $prefix . 'content',
+			'type'    => 'wysiwyg',
+			'options' => array(
+				'textarea_rows' => 5,
+				'media_buttons' => false,
+				'teeny' => true,
+			),
+		) );
+
+	}/* cmb2_init__section_description() */
+
+
+
 
 	function cmb2_init__test() {
 
