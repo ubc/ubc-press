@@ -91,6 +91,9 @@ class Setup {
 		// Scrub 'Switch to Editor' on Section post type
 		add_filter( 'gettext', array( $this, 'gettext__change_switch_to_editor' ), 10, 3 );
 
+		// When there's no components, there's a Add a +widget, []row or &prebuilt layout message. Change it
+		add_filter( 'gettext', array( $this, 'gettext__change_no_component_message' ), 10, 3 );
+
 	}/* setup_filters() */
 
 
@@ -248,7 +251,7 @@ class Setup {
 
 
 	/**
-	 * SiteBuilder has an 'Add Widget' button. We want to call them 'Components'
+	 * Replace 'widget' with 'component' to stop confusion for users
 	 *
 	 * @since 1.0.0
 	 *
@@ -264,11 +267,13 @@ class Setup {
 			return $translations;
 		}
 
-		if ( 'Add Widget' !== $text ) {
+		// Test if $text contains either 'Widget' or 'widget'
+
+		if ( false === strpos( $text, 'widget' ) && false === strpos( $text, 'Widget' ) ) {
 			return $translations;
 		}
 
-		return __( 'Add Component', \UBC\Press::get_text_domain() );
+		return str_replace( 'widget', 'component', str_replace( 'Widget', 'Component', $text ) );
 
 	}/* gettext__change_add_widgets() */
 
@@ -320,10 +325,44 @@ class Setup {
 			return $translations;
 		}
 
-		// $current_screen = get_current_screen();
+		$current_screen = get_current_screen();
+
+		if ( ! $current_screen || ! is_a( $current_screen, 'WP_Screen' ) ) {
+			return $translations;
+		}
+
+		if ( 'section' !== $current_screen->id ) {
+			return $translations;
+		}
 
 		return __( '', \UBC\Press::get_text_domain() );
 
 	}/* gettext__change_switch_to_editor() */
+
+
+	/**
+	 * Change the default message shown when there are no components
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (object) $translations - A translations object for this domain
+	 * @param (string) $text - The text being translated
+	 * @param (string) $domain - The current domain
+	 * @return (string) Modified text
+	 */
+
+	public function gettext__change_no_component_message( $translations, $text, $domain ) {
+
+		if ( 'siteorigin-panels' !== $domain ) {
+			return $translations;
+		}
+
+		if ( 'Add a 1{widget}, 2{row} or 3{prebuilt layout} to get started. Read our 4{documentation} if you need help.' !== $text ) {
+			return $translations;
+		}
+
+		return __( 'Add a 1{component}, 2{row} or 3{prebuilt layout} to get started.', \UBC\Press::get_text_domain() );
+
+	}/* gettext__change_no_component_message() */
 
 }/* class Setup */
