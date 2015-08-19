@@ -26,8 +26,9 @@ class AddAssignmentWidget extends \SiteOrigin_Widget {
 			array(),
 
 			array(
-				'text' => array(
+				'assignment_post_id' => array(
 					'type' => 'select',
+					'label' => __( 'Choose Assignment', \UBC\Press::get_text_domain() ),
 					'prompt' => __( 'Choose Assignment', \UBC\Press::get_text_domain() ),
 					'options' => \UBC\Press\Plugins\SiteBuilder\Widgets\Utils::get_array_of_posts_for_cpt( 'assignment' ),
 				),
