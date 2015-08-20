@@ -9,14 +9,20 @@
  * @return null
  */
 
-$assignment_post_id = ( isset( $instance['assignment_post_id'] ) ) ? absint( $instance['assignment_post_id'] ) : false;
+$post_id = ( isset( $instance['assignment_post_id'] ) ) ? absint( $instance['assignment_post_id'] ) : false;
 
-if ( ! $assignment_post_id ) {
+if ( ! $post_id ) {
 	return;
 }
 
 // Fetch the content for this handout
-$title 		= get_the_title( $assignment_post_id );
+$title 		= get_the_title( $post_id );
+$permalink = get_permalink( $post_id );
 ?>
 
-<p><span class="dashicons dashicons-list-view"></span><?php echo esc_html( $title ); ?></p>
+<p>
+	<span class="dashicons dashicons-list-view"></span>
+	<a href="<?php echo esc_url( $permalink ); ?>" title="<?php the_title_attribute( array( 'post' => $post_id ) ); ?>">
+		<?php echo esc_html( $title ); ?>
+	</a>
+</p>
