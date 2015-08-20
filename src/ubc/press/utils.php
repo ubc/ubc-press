@@ -153,10 +153,79 @@ class Utils {
 	 * @since 1.0.0
 	 *
 	 * @param (int) $post_id - A specific ID for a handout to fetch
+	 * @param (array) $fields_to_fetch - A specific set of fields to fetch
+	 * @param (array) $taxonomies_to_fetch - A specific set of taxonomies to fetch
 	 * @return (array) An array of content, by meta key
 	 */
 
-	public static function get_handout_content( $post_id = null ) {
+	public static function get_handout_content( $post_id = null, $fields_to_fetch = array(), $taxonomies_to_fetch = array() ) {
+
+		// If we haven't specified which fields to fetch, get the default
+		if ( empty( $fields_to_fetch ) ) {
+			$fields_to_fetch = array(
+				'_handout_details_file_list',
+				'_handout_details_description',
+			);
+		}
+
+		if ( empty( $taxonomies_to_fetch ) ) {
+			$taxonomies_to_fetch = array(
+				'handout_type',
+			);
+		}
+
+		return apply_filters( 'ubc_press_handout_content', static::get_generic_content( $post_id, $fields_to_fetch, $taxonomies_to_fetch ) );
+
+	}/* get_handout_content() */
+
+
+
+	/**
+	 * Fetch the content for a section, including the meta (description etc.)
+	 * and the content blocks (components)
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $post_id - A specific ID for a section to fetch
+	 * @param (array) $fields_to_fetch - A specific set of fields to fetch
+	 * @param (array) $taxonomies_to_fetch - A specific set of taxonomies to fetch
+	 * @return (array) An array of content, by meta key
+	 */
+
+	public static function get_section_content( $post_id, $fields_to_fetch = array(), $taxonomies_to_fetch = array() ) {
+
+		// If we haven't specified which fields to fetch, get the default
+		if ( empty( $fields_to_fetch ) ) {
+			$fields_to_fetch = array(
+				'_section_description_content',
+			);
+		}
+
+		// if ( empty( $taxonomies_to_fetch ) ) {
+		// 	$taxonomies_to_fetch = array(
+		// 		'handout_type',
+		// 	);
+		// }
+
+		return apply_filters( 'ubc_press_section_content', static::get_generic_content( $post_id, $fields_to_fetch, $taxonomies_to_fetch ) );
+
+
+	}/* get_section_content() */
+
+
+
+	/**
+	 * A generic method which allows us to fetch fields and taxonomies for a specific post
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $post_id - A specific ID for a section to fetch
+	 * @param (array) $fields_to_fetch - A specific set of fields to fetch
+	 * @param (array) $taxonomies_to_fetch - A specific set of taxonomies to fetch
+	 * @return (array) An array of content, by meta key
+	 */
+
+	public static function get_generic_content( $post_id, $fields_to_fetch = array(), $taxonomies_to_fetch = array() ) {
 
 		// Default to the ID in the loop if none passed
 		if ( empty( $post_id ) ) {
@@ -169,15 +238,6 @@ class Utils {
 
 		// Sanitize
 		$post_id = absint( $post_id );
-
-		$fields_to_fetch = array(
-			'_handout_details_file_list',
-			'_handout_details_description',
-		);
-
-		$taxonomies_to_fetch = array(
-			'handout_type',
-		);
 
 		// Start our output
 		$content = array();
@@ -195,9 +255,8 @@ class Utils {
 			$content['taxonomies'][ $taxonomy ] = $tax_terms;
 		}
 
-		return apply_filters( 'ubc_press_handout_content', $content, $post_id );
+		return apply_filters( 'ubc_press_generic_content', $content, $post_id );
 
-	}/* get_handout_content() */
-
+	}/* get_generic_content() */
 
 }/* Utils */
