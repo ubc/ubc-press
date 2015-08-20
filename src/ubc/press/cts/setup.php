@@ -16,6 +16,7 @@ class Setup {
 
 	public function init() {
 
+		// Handout types
 		add_action( 'ubc_press_after_create_cpt', array( $this, 'ubc_press_after_create_cpt__add_handout_type' ), 10, 4 );
 
 	}/* init() */

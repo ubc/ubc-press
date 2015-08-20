@@ -763,8 +763,6 @@ class Setup {
 
 		$columns = array_slice( $columns, 0, 2, true ) + array( 'components' => __( 'Components', \UBC\Press::get_text_domain() ) ) + array_slice( $columns, 2, count( $columns ) - 1, true );
 
-		// $columns['components'] = __( 'Components', \UBC\Press::get_text_domain() );
-
 		return $columns;
 
 	}/* manage_section_posts_columns__add_components() */

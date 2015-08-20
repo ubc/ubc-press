@@ -102,7 +102,7 @@ class Setup {
 
 	public function cmb2_init__section_description() {
 
-		$prefix = '_section_description';
+		$prefix = '_section_description_';
 
 		// Create the metabox
 		$section_description = new_cmb2_box( array(
@@ -155,7 +155,7 @@ class Setup {
 
 	public function cmb2_init__handout_details() {
 
-		$prefix = '_handout_details';
+		$prefix = '_handout_details_';
 
 		// Create the metabox
 		$handout_details = new_cmb2_box( array(
