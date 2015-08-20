@@ -86,6 +86,9 @@ class Setup {
 		// Add a handout details metabox
 		add_action( 'cmb2_init', array( $this, 'cmb2_init__handout_details' ) );
 
+		// Add a URL link to the links post type
+		add_action( 'cmb2_init', array( $this, 'cmb2_init__link_details' ) );
+
 		// add_action( 'cmb2_init', array( $this, 'cmb2_init__test' ) );
 
 	}/* create() */
@@ -185,6 +188,60 @@ class Setup {
 	}/* cmb2_init__handout_details() */
 
 
+	/**
+	 * Link details - URL
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function cmb2_init__link_details() {
+
+		$prefix = '_link_details_';
+
+		// Create the metabox
+		$link_details = new_cmb2_box( array(
+			'id'            => $prefix . 'metabox',
+			'title'         => __( 'Link Details', \UBC\Press::get_text_domain() ),
+			'object_types'  => array( 'link' ),
+			'context'    	=> 'normal',
+			'priority' 		=> 'low',
+			'show_names'	=> true,
+		) );
+
+		$link_details_group = $link_details->add_field( array(
+			'id'          => $prefix . 'link_details_group',
+			'type'        => 'group',
+			'options'     => array(
+				'group_title'   => __( 'Link {#}', \UBC\Press::get_text_domain() ),
+				'add_button'    => __( 'Add Another Link', \UBC\Press::get_text_domain() ),
+				'remove_button' => __( 'Remove Link', \UBC\Press::get_text_domain() ),
+				'sortable'      => true, // beta
+			),
+		) );
+
+		$link_url = $link_details->add_group_field( $link_details_group, array(
+			'name'			=> __( 'Link URL(s)', \UBC\Press::get_text_domain() ),
+			'id'			=> $prefix . 'link_list',
+			'type' 			=> 'text_url',
+			'repeatable' 	=> true,
+			'options' => array(
+				'add_row_text' => __( 'Add URL', \UBC\Press::get_text_domain() ),
+			),
+		) );
+
+		$link_description = $link_details->add_group_field( $link_details_group, array(
+			'name'			=> __( 'Link Description', \UBC\Press::get_text_domain() ),
+			'id'			=> $prefix . 'link__description',
+			'type' 			=> 'textarea',
+		) );
+
+	}/* cmb2_init__link_details() */
+
+
+
 	function cmb2_init__test() {
 
 		// Start with an underscore to hide fields from custom fields list
@@ -203,6 +260,7 @@ class Setup {
 			// 'cmb_styles' => false, // false to disable the CMB stylesheet
 			// 'closed'     => true, // true to keep the metabox closed by default
 		) );
+
 		$cmb_demo->add_field( array(
 			'name'       => __( 'Test Text', 'cmb2' ),
 			'desc'       => __( 'field description (optional)', 'cmb2' ),
@@ -214,12 +272,14 @@ class Setup {
 			// 'on_front'        => false, // Optionally designate a field to wp-admin only
 			// 'repeatable'      => true,
 		) );
+
 		$cmb_demo->add_field( array(
 			'name' => __( 'Test Text Small', 'cmb2' ),
 			'id'   => $prefix . 'textsmall',
 			'type' => 'text_small',
 			// 'repeatable' => true,
 		) );
+
 		$cmb_demo->add_field( array(
 			'name' => __( 'Test Text Medium', 'cmb2' ),
 			'id'   => $prefix . 'textmedium',

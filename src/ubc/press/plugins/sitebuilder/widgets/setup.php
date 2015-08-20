@@ -34,6 +34,9 @@ class Setup {
 		// Add a reading
 		$this->add_reading_widget();
 
+		// Add a link
+		$this->add_link_widget();
+
 	}/* init() */
 
 
@@ -85,6 +88,18 @@ class Setup {
 
 	}/* add_reading_widget() */
 
+	/**
+	 * Register the Add Link widget
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+	public function add_link_widget() {
 
+		$widget = new \UBC\Press\Plugins\SiteBuilder\Widgets\AddLink\AddLinkWidget;
+
+	}/* add_link_widget() */
 
 }/* class Setup */
