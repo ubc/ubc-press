@@ -39,11 +39,11 @@ class Setup {
 		// Set up the dashboard
 		self::setup_dashboard();
 
-		// Setup our custom post types
-		self::setup_cpts();
-
 		// Setup our custom taxonomies
 		self::setup_cts();
+
+		// Setup our custom post types
+		self::setup_cpts();
 
 		// Setup activation/deactivation
 		self::setup_activation_deactivation();
