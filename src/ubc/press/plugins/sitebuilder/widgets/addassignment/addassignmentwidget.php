@@ -36,7 +36,7 @@ class AddAssignmentWidget extends \SiteOrigin_Widget {
 				),
 				'text' => array(
 					'type' => 'text',
-					'label' => 'Ignore',
+					'label' => 'Title',
 					'state_handler' => array(
 				        'assignment_post_id[none_found]' => array( 'hide' ),
 				        '_else[assignment_post_id]' => array( 'hide' ),

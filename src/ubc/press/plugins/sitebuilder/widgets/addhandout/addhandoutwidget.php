@@ -36,7 +36,7 @@ class AddHandoutWidget extends \SiteOrigin_Widget {
 				),
 				'text' => array(
 					'type' => 'text',
-					'label' => 'Ignore',
+					'label' => 'Title',
 					'state_handler' => array(
 				        'handout_post_id[none_found]' => array( 'hide' ),
 				        '_else[handout_post_id]' => array( 'hide' ),
