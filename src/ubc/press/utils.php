@@ -145,4 +145,59 @@ class Utils {
 	}/* current_users_role_is_one_of() */
 
 
+	/**
+	 * Get content for a handout
+	 *
+	 * Usage: \UBC\Press\Utils::get_handout_content( $post_id )
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $post_id - A specific ID for a handout to fetch
+	 * @return (array) An array of content, by meta key
+	 */
+
+	public static function get_handout_content( $post_id = null ) {
+
+		// Default to the ID in the loop if none passed
+		if ( empty( $post_id ) ) {
+			$post_id = get_the_ID();
+		}
+
+		if ( empty( $post_id ) ) {
+			return array();
+		}
+
+		// Sanitize
+		$post_id = absint( $post_id );
+
+		$fields_to_fetch = array(
+			'_handout_details_file_list',
+			'_handout_details_description',
+		);
+
+		$taxonomies_to_fetch = array(
+			'handout_type',
+		);
+
+		// Start our output
+		$content = array();
+		$content['fields'] = array();
+		$content['taxonomies'] = array();
+
+		// Add each field
+		foreach ( $fields_to_fetch as $id => $field ) {
+			$content['fields'][ $field ] = get_post_meta( $post_id, $field, true );
+		}
+
+		// Add each taxonomy and it's terms
+		foreach ( $taxonomies_to_fetch as $id => $taxonomy ) {
+			$tax_terms = wp_get_object_terms( $post_id, $taxonomy );
+			$content['taxonomies'][ $taxonomy ] = $tax_terms;
+		}
+
+		return apply_filters( 'ubc_press_handout_content', $content, $post_id );
+
+	}/* get_handout_content() */
+
+
 }/* Utils */
