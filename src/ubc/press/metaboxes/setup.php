@@ -83,7 +83,10 @@ class Setup {
 		// Add a section description metabox
 		add_action( 'cmb2_init', array( $this, 'cmb2_init__section_description' ) );
 
-		add_action( 'cmb2_init', array( $this, 'cmb2_init__test' ) );
+		// Add a handout details metabox
+		add_action( 'cmb2_init', array( $this, 'cmb2_init__handout_details' ) );
+
+		// add_action( 'cmb2_init', array( $this, 'cmb2_init__test' ) );
 
 	}/* create() */
 
@@ -140,6 +143,46 @@ class Setup {
 	}/* cmb2_init__section_description() */
 
 
+	/**
+	 * Add a handout details metabox for the handout CPT which allows an instructor
+	 * to upload a file and a description of the file as well as choose an icon
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function cmb2_init__handout_details() {
+
+		$prefix = '_handout_details';
+
+		// Create the metabox
+		$handout_details = new_cmb2_box( array(
+			'id'            => $prefix . 'metabox',
+			'title'         => __( 'Handout Details', \UBC\Press::get_text_domain() ),
+			'object_types'  => array( 'handout' ),
+			'context'    	=> 'normal',
+			'priority' 		=> 'low',
+			'show_names'	=> true,
+		) );
+
+		$handout_media = $handout_details->add_field( array(
+			'name'         => __( 'Handout Files', \UBC\Press::get_text_domain() ),
+			'desc'         => __( 'Upload or add multiple images/attachments.', 'cmb2' ),
+			'id'           => $prefix . 'file_list',
+			'type'         => 'file_list',
+			'preview_size' => array( 100, 100 ), // Default: array( 50, 50 )
+		) );
+
+		$handout_description = $handout_details->add_field( array(
+			'name' => __( 'Handout Description', \UBC\Press::get_text_domain() ),
+			'id'   => $prefix . 'description',
+			'type' => 'textarea',
+			'desc' => __( 'A brief description of the handout, perhaps the file type, size or contents of a zip file.', \UBC\Press::get_text_domain() ),
+		) );
+
+	}/* cmb2_init__handout_details() */
 
 
 	function cmb2_init__test() {

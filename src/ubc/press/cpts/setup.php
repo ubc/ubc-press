@@ -121,6 +121,7 @@ class Setup {
 			'wp_args' => array(
 				'capability_type' => 'handout',
 				'map_meta_cap' => true,
+				'supports' => array( 'title' ),
 				'rewrite' => array(
 					'with_front' => false,
 					'slug' => 'handout',
