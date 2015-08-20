@@ -11,6 +11,12 @@
 
 $assignment_post_id = ( isset( $instance['assignment_post_id'] ) ) ? absint( $instance['assignment_post_id'] ) : false;
 
-$post = get_post( $assignment_post_id );
-var_dump( $post );
+if ( ! $assignment_post_id ) {
+	return;
+}
+
+// Fetch the content for this handout
+$title 		= get_the_title( $assignment_post_id );
 ?>
+
+<p><span class="dashicons dashicons-list-view"></span><?php echo esc_html( $title ); ?></p>
