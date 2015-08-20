@@ -115,6 +115,11 @@ class Setup {
 			return;
 		}
 
+		// Don't add it for handouts
+		if ( 'handout' === $cpt_object->post_type_name ) {
+			return;
+		}
+
 		// Fetch current, or default to post/page
 		$all_sp_settings	= get_option( 'siteorigin_panels_settings', array() );
 		$post_types 		= ( isset( $all_sp_settings['post-types'] ) ) ? $all_sp_settings['post-types'] : array( 'post', 'page' );
