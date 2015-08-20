@@ -89,6 +89,9 @@ class Setup {
 		// Add a URL link to the links post type
 		add_action( 'cmb2_init', array( $this, 'cmb2_init__link_details' ) );
 
+		// Course settings metabox
+		add_action( 'cmb2_init', array( $this, 'cmb2_init__course_settings' ) );
+
 		// add_action( 'cmb2_init', array( $this, 'cmb2_init__test' ) );
 
 	}/* create() */
@@ -240,6 +243,46 @@ class Setup {
 
 	}/* cmb2_init__link_details() */
 
+
+	/**
+	 * Course Settings
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function cmb2_init__course_settings() {
+
+		$prefix = 'ubc_course_settings_';
+		/**
+		 * Sample metabox to demonstrate each field type included
+		 */
+		$cmb_demo = new_cmb2_box( array(
+			'id'            => $prefix . 'metabox',
+			'title'         => __( 'Test Metabox', 'cmb2' ),
+			'show_on'    => array(
+				'key'   => 'options-page',
+				'value' => array( 'ubc_course_settings' ),
+			),
+			'cmb_styles' => false,
+			'hookup' 	=> false,
+		) );
+
+		$cmb_demo->add_field( array(
+			'name'       => __( 'Test Text', 'cmb2' ),
+			'desc'       => __( 'field description (optional)', 'cmb2' ),
+			'id'         => $prefix . 'text',
+			'type'       => 'text',
+			'show_on_cb' => 'yourprefix_hide_if_no_cats', // function should return a bool value
+			// 'sanitization_cb' => 'my_custom_sanitization', // custom sanitization callback parameter
+			// 'escape_cb'       => 'my_custom_escaping',  // custom escaping callback parameter
+			// 'on_front'        => false, // Optionally designate a field to wp-admin only
+			// 'repeatable'      => true,
+		) );
+
+	}/* cmb2_init__course_settings() */
 
 
 	function cmb2_init__test() {

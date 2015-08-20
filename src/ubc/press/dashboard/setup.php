@@ -126,6 +126,10 @@ class Setup {
 		// Fill content of components admin column
 		add_action( 'manage_pages_custom_column', array( $this, 'manage_pages_custom_column__components_content' ), 10, 2 );
 
+		// Create the 'Course Options' Page
+		add_action( 'admin_init', array( $this, 'admin_init__register_setting' ) );
+		add_action( 'admin_menu', array( $this, 'admin_menu__add_course_options_page' ) );
+
 	}/* setup_actions() */
 
 
@@ -809,6 +813,48 @@ class Setup {
 		}
 
 	}/* manage_pages_custom_column__components_content() */
+
+
+	/**
+	 * Register the Course Settings Options
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function admin_init__register_setting() {
+		register_setting( 'ubc_course_settings', 'ubc_course_settings' );
+	}/* admin_init__register_setting() */
+
+
+	/**
+	 * Add the course options page ... page
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function admin_menu__add_course_options_page() {
+
+		$course_options_page = add_menu_page( 'Course Settings', 'Course Settings', 'manage_options', 'ubc_course_settings', array( $this, 'admin_page_display' ) );
+		add_action( "admin_print_styles-{$course_options_page}", array( 'CMB2_hookup', 'enqueue_cmb_css' ) );
+
+	}/* admin_menu__add_course_options_page() */
+
+
+	public function admin_page_display() {
+		?>
+		<div class="wrap cmb2-options-page ubc_course_settings">
+			<h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
+			<?php cmb2_metabox_form( 'ubc_course_settings_metabox', 'ubc_course_settings' ); ?>
+		</div>
+		<?php
+
+	}/* admin_page_display() */
 
 
 	/**
