@@ -25,15 +25,47 @@ class Setup {
 
 	public function init() {
 
+		// Allow us to add an Assignment to a piece of content
 		$this->add_assignment_widget();
+
+		// Add a handout
+		$this->add_handout_widget();
 
 	}/* init() */
 
+
+	/**
+	 * Register the Add Assignment Widget
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
 
 	public function add_assignment_widget() {
 
 		$widget = new \UBC\Press\Plugins\SiteBuilder\Widgets\AddAssignment\AddAssignmentWidget;
 
 	}/* add_assignment_widget() */
+
+
+	/**
+	 * Register the Add HAndout Widget
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function add_handout_widget() {
+
+		$widget = new \UBC\Press\Plugins\SiteBuilder\Widgets\AddHandout\AddHandoutWidget;
+
+	}/* add_handout_widget() */
+
+
+
 
 }/* class Setup */
