@@ -31,6 +31,9 @@ class Setup {
 		// Add a handout
 		$this->add_handout_widget();
 
+		// Add a reading
+		$this->add_reading_widget();
+
 	}/* init() */
 
 
@@ -65,6 +68,22 @@ class Setup {
 
 	}/* add_handout_widget() */
 
+
+
+	/**
+	 * Register the Add Reading widget
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function add_reading_widget() {
+
+		$widget = new \UBC\Press\Plugins\SiteBuilder\Widgets\AddReading\AddReadingWidget;
+
+	}/* add_reading_widget() */
 
 
 
