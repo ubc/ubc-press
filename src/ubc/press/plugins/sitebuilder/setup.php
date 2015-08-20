@@ -115,8 +115,13 @@ class Setup {
 			return;
 		}
 
-		// Don't add it for handouts
-		if ( 'handout' === $cpt_object->post_type_name ) {
+		// Don't add it for handouts/links
+		$exclude = array(
+			'handout',
+			'link',
+		);
+
+		if ( in_array( $cpt_object->post_type_name, $exclude ) ) {
 			return;
 		}
 
