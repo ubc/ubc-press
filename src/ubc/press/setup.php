@@ -51,6 +51,9 @@ class Setup {
 		// Setup metaboxes
 		self::setup_metaboxes();
 
+		// Set up changes we make for the theme
+		self::setup_theme();
+
 	}/* init() */
 
 
@@ -148,6 +151,23 @@ class Setup {
 
 
 	/**
+	 * Set up our theme changes. Mainly changing order/layout
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function setup_theme() {
+
+		$theme = new \UBC\Press\Theme\Setup;
+		$theme->init();
+
+	}/* setup_theme() */
+
+
+	/**
 	 * Actions and filters to be hooked into during setup
 	 *
 	 * @since 1.0.0
@@ -196,7 +216,6 @@ class Setup {
 	}/* on_activation() */
 
 
-
 	/**
 	 * Run when the plugin is deactivated. Again, called from the main plugin file
 	 *
@@ -210,7 +229,6 @@ class Setup {
 
 		if ( ! current_user_can( 'activate_plugins' ) ) {
 			return;
-
 		}
 
 		$plugin = isset( $_REQUEST['plugin'] ) ? $_REQUEST['plugin'] : '';
