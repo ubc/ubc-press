@@ -18,6 +18,7 @@ class AddHandoutWidget extends \SiteOrigin_Widget {
 			array(
 				'description' => __( 'Select a handout to add', \UBC\Press::get_text_domain() ),
 				'help' => '#',
+				'has_preview' => false,
 			),
 			array(),
 			array(

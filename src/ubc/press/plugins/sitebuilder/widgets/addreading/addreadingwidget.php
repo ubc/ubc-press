@@ -18,6 +18,7 @@ class AddReadingWidget extends \SiteOrigin_Widget {
 			array(
 				'description' => __( 'Select a reading to add', \UBC\Press::get_text_domain() ),
 				'help' => '#',
+				'has_preview' => false,
 			),
 			array(),
 			array(

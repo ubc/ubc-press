@@ -18,6 +18,7 @@ class AddAssignmentWidget extends \SiteOrigin_Widget {
 			array(
 				'description' => __( 'Select an assignment to add', \UBC\Press::get_text_domain() ),
 				'help' => '#',
+				'has_preview' => false,
 			),
 			array(),
 			array(
