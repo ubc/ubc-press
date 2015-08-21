@@ -88,7 +88,7 @@ class Setup {
 		// Change 'Page Builder' to 'Content Builder'
 		add_filter( 'gettext', array( $this, 'gettext__change_page_builder' ), 10, 3 );
 
-		// Scrub 'Switch to Editor' on Section post type
+		// Scrub 'Switch to Editor' on Section/Assignment post type
 		add_filter( 'gettext', array( $this, 'gettext__change_switch_to_editor' ), 10, 3 );
 
 		// When there's no components, there's a Add a +widget, []row or &prebuilt layout message. Change it
@@ -341,7 +341,12 @@ class Setup {
 			return $translations;
 		}
 
-		if ( 'section' !== $current_screen->id ) {
+		$exclude_from = array(
+			'section',
+			'assignment',
+		);
+
+		if ( ! in_array( $current_screen->id, $exclude_from ) ) {
 			return $translations;
 		}
 
