@@ -169,6 +169,8 @@ class Setup {
 
 		wp_register_style( 'ubc-press-dashboard', \UBC\Press::$plugin_url . 'src/ubc/press/dashboard/assets/css/ubc-press-dashboard.css', null, \UBC\Press::get_version(), 'all' );
 
+		wp_register_script( 'ubc-press-dashboard', \UBC\Press::$plugin_url . 'src/ubc/press/dashboard/assets/js/ubc-press-dashboard.js' );
+
 	}/* init__register_assets() */
 
 
