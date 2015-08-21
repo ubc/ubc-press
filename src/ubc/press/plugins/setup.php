@@ -54,20 +54,4 @@ class Setup {
 
 	}/* setup_sitebuilder() */
 
-	/**
-	 * Posts2Posts Mods
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	public function setup_poststoposts() {
-
-		$poststpposts = new \UBC\Press\Plugins\PostsToPosts\Setup;
-		$poststpposts->init();
-
-	}/* setup_poststoposts() */
-
 }/* class Setup */
