@@ -209,7 +209,6 @@ class Utils {
 
 		return apply_filters( 'ubc_press_section_content', static::get_generic_content( $post_id, $fields_to_fetch, $taxonomies_to_fetch ) );
 
-
 	}/* get_section_content() */
 
 

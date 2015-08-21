@@ -88,6 +88,7 @@ class Setup {
 					'slug' => 'section',
 				),
 				'hierarchical' => true,
+				'has_archive' => 'sections',
 			),
 			'icon' => 'dashicons-welcome-add-page',
 		);
@@ -107,6 +108,7 @@ class Setup {
 					'with_front' => false,
 					'slug' => 'assignment',
 				),
+				'has_archive' => 'assignments',
 			),
 			'icon' => 'dashicons-media-text',
 		);
@@ -126,6 +128,7 @@ class Setup {
 					'with_front' => false,
 					'slug' => 'handout',
 				),
+				'has_archive' => 'handouts',
 			),
 			'icon' => 'dashicons-portfolio',
 		);
@@ -144,6 +147,7 @@ class Setup {
 					'with_front' => false,
 					'slug' => 'note',
 				),
+				'has_archive' => 'notes',
 			),
 			'icon' => 'dashicons-edit',
 		);
@@ -162,6 +166,7 @@ class Setup {
 					'with_front' => false,
 					'slug' => 'reading',
 				),
+				'has_archive' => 'readings',
 			),
 			'icon' => 'dashicons-book-alt',
 		);
@@ -181,6 +186,7 @@ class Setup {
 					'with_front' => false,
 					'slug' => 'link',
 				),
+				'has_archive' => 'links',
 			),
 			'icon' => 'dashicons-admin-links',
 		);
