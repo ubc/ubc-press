@@ -259,4 +259,50 @@ class Utils {
 
 	}/* get_generic_content() */
 
+
+
+	/**
+	 * An array of faculties
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return (array) an array of faculties
+	 */
+
+	public static function get_faculty_list() {
+
+		$faculties = array(
+			'Arts',
+			'Medicine',
+		);
+
+		return apply_filters( 'ubc_press_faculities_list', $faculties );
+
+	}/* get_faculty_list() */
+
+
+
+	/**
+	 * An array of departments. This is an associative array of arrays.
+	 * The top-level key is the faculty
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return (array) An associative array of faculties
+	 */
+
+	public static function get_department_list() {
+
+		$departments = array(
+			'Arts' => array( 'Philosophy', 'Drama' ),
+			'Medicine' => array( 'Nursing', 'Midwifery' ),
+		);
+
+		return apply_filters( 'ubc_press_departments_list', $departments );
+
+	}/* get_department_list() */
+
+
 }/* Utils */
