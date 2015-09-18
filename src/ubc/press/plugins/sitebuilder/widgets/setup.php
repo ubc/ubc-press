@@ -13,6 +13,16 @@ namespace UBC\Press\Plugins\SiteBuilder\Widgets;
 
 class Setup {
 
+	/**
+	 * An array of registered UBC Press widgets
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @var array
+	 */
+
+	public static $registered_ubc_press_widgets = array();
 
 	/**
 	 * Initialize ourselves
@@ -40,6 +50,17 @@ class Setup {
 	}/* init() */
 
 
+	public function check_dependencies() {
+
+		if ( ! class_exists( 'SiteOrigin_Widget' ) ) {
+			return false;
+		}
+
+		return true;
+
+	}/* check_dependencies() */
+
+
 	/**
 	 * Register the Add Assignment Widget
 	 *
@@ -51,7 +72,13 @@ class Setup {
 
 	public function add_assignment_widget() {
 
+		if ( ! $this->check_dependencies() ) {
+			return;
+		}
+
 		$widget = new \UBC\Press\Plugins\SiteBuilder\Widgets\AddAssignment\AddAssignmentWidget;
+
+		static::$registered_ubc_press_widgets[] = 'AddAssignmentWidget';
 
 	}/* add_assignment_widget() */
 
@@ -67,7 +94,13 @@ class Setup {
 
 	public function add_handout_widget() {
 
+		if ( ! $this->check_dependencies() ) {
+			return;
+		}
+
 		$widget = new \UBC\Press\Plugins\SiteBuilder\Widgets\AddHandout\AddHandoutWidget;
+
+		static::$registered_ubc_press_widgets[] = 'AddHandoutWidget';
 
 	}/* add_handout_widget() */
 
@@ -84,7 +117,13 @@ class Setup {
 
 	public function add_reading_widget() {
 
+		if ( ! $this->check_dependencies() ) {
+			return;
+		}
+
 		$widget = new \UBC\Press\Plugins\SiteBuilder\Widgets\AddReading\AddReadingWidget;
+
+		static::$registered_ubc_press_widgets[] = 'AddReadingWidget';
 
 	}/* add_reading_widget() */
 
@@ -98,7 +137,13 @@ class Setup {
 	 */
 	public function add_link_widget() {
 
+		if ( ! $this->check_dependencies() ) {
+			return;
+		}
+
 		$widget = new \UBC\Press\Plugins\SiteBuilder\Widgets\AddLink\AddLinkWidget;
+
+		static::$registered_ubc_press_widgets[] = 'AddLinkWidget';
 
 	}/* add_link_widget() */
 

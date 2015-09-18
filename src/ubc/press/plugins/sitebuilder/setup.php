@@ -67,6 +67,8 @@ class Setup {
 		add_action( 'init', array( $this, 'init__register_custom_fields' ), 0 );
 		add_action( 'init', array( $this, 'init__register_custom_widgets' ), 0 );
 
+		add_action( 'save_post', array( $this, 'save_post__link_section_with_components' ), 99 );
+
 	}/* setup_actions() */
 
 
@@ -379,5 +381,143 @@ class Setup {
 		return __( 'Add a 1{component}, 2{row} or 3{prebuilt layout} to get started.', \UBC\Press::get_text_domain() );
 
 	}/* gettext__change_no_component_message() */
+
+
+
+	/**
+	 * When a section is saved and it contains components from SiteBuilder, we
+	 * create a link between the components and the section
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $post_id - The ID of the post being saved
+	 * @return null
+	 */
+
+	public function save_post__link_section_with_components( $post_id ) {
+
+		// If this is just a revision, don't send the email.
+		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		// Ensure it's a section being saved
+		if ( 'section' !== get_post_type( $post_id ) ) {
+			return;
+		}
+
+		// Panels data (components) is stored in post meta ['panels_data']
+		$panels_data = get_post_meta( $post_id, 'panels_data', true );
+
+		if ( empty( $panels_data ) || ! isset( $panels_data['widgets'] ) ) {
+			return;
+		}
+
+		$associations = array();
+
+		foreach ( $panels_data['widgets'] as $id => $panel_widget ) {
+
+			$class = $panel_widget['panels_info']['class'];
+			// Determine which type of widget this is
+			$widget_type = $this->get_panels_widget_type( $class );
+			if ( false === $widget_type ) {
+				continue;
+			}
+
+			$post_id_from_widget = $this->get_post_id_from_widget( $widget_type, $panel_widget );
+			$associations[] = $post_id_from_widget;
+		}
+
+		if ( empty( $associations ) ) {
+			return;
+		}
+
+		// Now, $associations is an array of post IDs which are associated with this section
+		foreach ( $associations as $id => $post_id ) {
+
+			$current_associations = get_post_meta( $post_id, 'section_associations', true );
+			if ( ! is_array( $current_associations ) ) {
+				$current_associations = array();
+			}
+
+			$current_associations[] = $post_id;
+			update_post_meta( $post_id, 'section_associations', $current_associations );
+		}
+
+	}/* save_post__link_section_with_components() */
+
+
+
+	/**
+	 * Get the widget type from the widget class, allows us to know what to do
+	 * or get from the other data
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $class - The class used to generate the widget
+	 * @return (string|false) The type of widget, i.e. 'AddAssignmentWidget' or 'AddLinkWidget' or false if it's not a custom UBC Press widget
+	 */
+
+	private function get_panels_widget_type( $class = '' ) {
+
+		// List of UBCPress widgets
+		$ubc_press_widgets = \UBC\Press\Plugins\SiteBuilder\Widgets\Setup::$registered_ubc_press_widgets;
+
+		foreach ( $ubc_press_widgets as $id => $widget_class ) {
+			if ( strpos( $class, $widget_class ) ) {
+				return $widget_class;
+			}
+		}
+
+		return false;
+
+	}/* get_panels_widget_type() */
+
+
+
+	/**
+	 * Our custom widgets stored a post ID, but in a separate field depending on their type
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $widget_type - The type of widget
+	 * @param (array) $panel_widget - the widget we're looking through
+	 * @return (int|false) The Post ID associated with the widget, or false if none
+	 */
+
+	private function get_post_id_from_widget( $widget_type = '', $panel_widget ) {
+
+		$post_id_key = false;
+
+		switch ( $widget_type ) {
+
+			case 'AddAssignmentWidget':
+				$post_id_key = 'assignment_post_id';
+				break;
+
+			case 'AddHandoutWidget':
+				$post_id_key = 'handout_post_id';
+				break;
+
+			case 'AddReadingWidget':
+				$post_id_key = 'reading_post_id';
+				break;
+
+			case 'AddLinkWidget':
+				$post_id_key = 'link_post_id';
+				break;
+
+			default:
+				break;
+		}
+
+		if ( false === $post_id_key ) {
+			return false;
+		}
+
+		return $panel_widget[ $post_id_key ];
+
+	}/* get_post_id_from_widget() */
+
 
 }/* class Setup */
