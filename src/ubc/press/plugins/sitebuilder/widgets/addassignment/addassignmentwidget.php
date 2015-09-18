@@ -7,6 +7,10 @@ Author: Richard Tape
 Author URI: http://ubc.ca/
 */
 
+if ( ! class_exists( 'SiteOrigin_Widget' ) ) {
+	return;
+}
+
 class AddAssignmentWidget extends \SiteOrigin_Widget {
 
 	function __construct() {
