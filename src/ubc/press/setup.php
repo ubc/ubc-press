@@ -54,6 +54,9 @@ class Setup {
 		// Set up changes we make for the theme
 		self::setup_theme();
 
+		// Setup help text, widgets etc.
+		self::setup_help();
+
 	}/* init() */
 
 
@@ -165,6 +168,25 @@ class Setup {
 		$theme->init();
 
 	}/* setup_theme() */
+
+
+
+	/**
+	 * Set up the class which deals with all of the help text we have across
+	 * various screens
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function setup_help() {
+
+		$help = new \UBC\Press\Help\Setup;
+		$help->init();
+
+	}/* setup_help() */
 
 
 	/**
