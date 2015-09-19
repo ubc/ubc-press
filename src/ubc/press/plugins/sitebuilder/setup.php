@@ -432,17 +432,46 @@ class Setup {
 			return;
 		}
 
-		// Now, $associations is an array of post IDs which are associated with this section
-		foreach ( $associations as $id => $post_id ) {
+		// Now, $associations is an array of post IDs (of components) which are associated with this section
+		foreach ( $associations as $id => $component_post_id ) {
 
-			$current_associations = get_post_meta( $post_id, 'section_associations', true );
+			$current_associations = get_post_meta( $component_post_id, 'section_associations', true );
 			if ( ! is_array( $current_associations ) ) {
 				$current_associations = array();
 			}
 
-			$current_associations[] = $post_id;
-			update_post_meta( $post_id, 'section_associations', $current_associations );
+			// Add post meta to the component saying it's associated with this section just been saved
+			if ( ! in_array( $post_id, $current_associations ) ) {
+				$current_associations[] = $post_id;
+			}
+			update_post_meta( $component_post_id, 'section_associations', $current_associations );
 		}
+
+		// Now mark associations within this post too and remove associations no longer present
+		$section_associations = get_post_meta( $post_id, 'component_associations', true );
+
+		if ( ! is_array( $section_associations ) ) {
+			// No need to delete anything as there aren't any set
+			// so just add the new ones
+			update_post_meta( $post_id, 'component_associations', $associations );
+			return;
+		}
+
+		// There already are associations made on this section, so we need to check
+		// if any of the *existing* associations are NOT in the list that's just been
+		// saved, if so, we need to remove that association from the component
+		foreach ( $section_associations as $key => $section_assoc_post_id ) {
+			if ( ! in_array( $section_assoc_post_id, $associations ) ) {
+				// Remove from the component
+				$component_assoc = get_post_meta( $section_assoc_post_id, 'section_associations', true );
+				$key_on_comp = array_search( $section_assoc_post_id, $component_assoc );
+				unset( $component_assoc[ $key_on_comp ] );
+				update_post_meta( $section_assoc_post_id, 'section_associations', $component_assoc );
+			}
+		}
+
+		// Now overwrite the existing component_associations in the section's postmeta with what's just been saved
+		update_post_meta( $post_id, 'component_associations', $associations );
 
 	}/* save_post__link_section_with_components() */
 
