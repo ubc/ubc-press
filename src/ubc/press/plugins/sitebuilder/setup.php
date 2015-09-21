@@ -67,7 +67,14 @@ class Setup {
 		add_action( 'init', array( $this, 'init__register_custom_fields' ), 0 );
 		add_action( 'init', array( $this, 'init__register_custom_widgets' ), 0 );
 
+		// When a section is saved, make a link between it and its components
 		add_action( 'save_post', array( $this, 'save_post__link_section_with_components' ), 99 );
+
+		// Fill content of components admin column
+		add_action( 'manage_pages_custom_column', array( $this, 'manage_pages_custom_column__section_components_content' ), 10, 2 );
+
+		// Display section links on components listing screen
+		add_action( 'manage_assignment_posts_custom_column', array( $this, 'manage_component_posts_custom_column__component_sections_content' ), 10, 2 );
 
 	}/* setup_actions() */
 
@@ -95,6 +102,12 @@ class Setup {
 
 		// When there's no components, there's a Add a +widget, []row or &prebuilt layout message. Change it
 		add_filter( 'gettext', array( $this, 'gettext__change_no_component_message' ), 10, 3 );
+
+		// Section admin column to add components
+		add_filter( 'manage_section_posts_columns' , array( $this, 'manage_section_posts_columns__add_components' ) );
+
+		// Componenents listing screen, show attached section
+		add_filter( 'manage_assignment_posts_columns' , array( $this, 'manage_assignment_posts_columns__add_section' ) );
 
 	}/* setup_filters() */
 
@@ -548,5 +561,117 @@ class Setup {
 
 	}/* get_post_id_from_widget() */
 
+	/**
+	 * Add a components column to the sections listing
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $columns - Preset columns
+	 * @return (array) Modified columns
+	 */
+
+	public function manage_section_posts_columns__add_components( $columns ) {
+
+		$columns = array_slice( $columns, 0, 2, true ) + array( 'components' => __( 'Components', \UBC\Press::get_text_domain() ) ) + array_slice( $columns, 2, count( $columns ) - 1, true );
+
+		return $columns;
+
+	}/* manage_section_posts_columns__add_components() */
+
+
+
+	/**
+	 * Fill the content of the components admin column. This fetches the components
+	 * added via the SiteBuilder
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $column - Which column are we adding content to
+	 * @param (int) $post_id - the ID for the post for each row
+	 * @return null
+	 */
+
+	public function manage_pages_custom_column__section_components_content( $column, $post_id ) {
+
+		switch ( $column ) {
+
+			case 'components':
+
+				$panel_meta = get_post_meta( $post_id, 'panels_data', true );
+
+				if ( empty( $panel_meta ) || ! isset( $panel_meta['widgets'] ) ) {
+					echo esc_html__( 'No Components', \UBC\Press::get_text_domain() );
+					return;
+				}
+
+				$widgets = $panel_meta['widgets'];
+
+				foreach ( $widgets as $id => $widget_data ) {
+
+					if ( ! isset( $widget_data['text'] ) ) {
+						continue;
+					}
+
+					echo esc_html__( $widget_data['text'] ) . '<br />';
+				}
+
+			break;
+
+		}
+
+	}/* manage_pages_custom_column__section_components_content() */
+
+
+	/**
+	 * Fill the content of the section admin column. This fetches the attached
+	 * sections for the component (stored as post meta)
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $column - Which column are we adding content to
+	 * @param (int) $post_id - the ID for the post for each row
+	 * @return null
+	 */
+	public function manage_component_posts_custom_column__component_sections_content( $column, $post_id ) {
+
+		switch ( $column ) {
+
+			case 'sections':
+
+				$section_associations = get_post_meta( $post_id, 'section_associations', true );
+
+				if ( ! $section_associations || empty( $section_associations ) ) {
+					echo esc_html__( 'No associated sections', \UBC\Press::get_text_domain() );
+					return;
+				}
+
+				foreach ( $section_associations as $key => $section_post_id ) {
+					$title = get_the_title( $section_post_id );
+					$permalink = get_permalink( $section_post_id );
+					echo wp_kses_post( '<p><a href="' . $permalink . '" title="' . $title . '">' . $title . '</a></p>' );
+				}
+
+			break;
+
+		}
+
+	}/* manage_component_posts_custom_column__component_sections_content() */
+
+	/**
+	 * Add a components column to the sections listing
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $columns - Preset columns
+	 * @return (array) Modified columns
+	 */
+
+	public function manage_assignment_posts_columns__add_section( $columns ) {
+
+		$columns = array_slice( $columns, 0, 2, true ) + array( 'sections' => __( 'Sections', \UBC\Press::get_text_domain() ) ) + array_slice( $columns, 2, count( $columns ) - 1, true );
+
+		return $columns;
+
+	}/* manage_assignment_posts_columns__add_section() */
 
 }/* class Setup */

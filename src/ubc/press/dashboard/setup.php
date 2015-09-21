@@ -123,9 +123,6 @@ class Setup {
 		// 'Media' menu becomes 'Files' and shifts down
 		add_action( 'admin_menu', array( $this, 'admin_menu__adjust_media_menu' ) );
 
-		// Fill content of components admin column
-		add_action( 'manage_pages_custom_column', array( $this, 'manage_pages_custom_column__components_content' ), 10, 2 );
-
 		// Create the 'Course Options' Page
 		add_action( 'admin_init', array( $this, 'admin_init__register_setting' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu__add_course_options_page' ) );
@@ -149,9 +146,6 @@ class Setup {
 
 		// Admin footer text
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text__change_footer_text' ) );
-
-		// Section admin column to add components
-		add_filter( 'manage_section_posts_columns' , array( $this, 'manage_section_posts_columns__add_components' ) );
 
 	}/* setup_actions() */
 
@@ -753,68 +747,6 @@ class Setup {
 		unset( $menu[10] );
 
 	}/* admin_menu__adjust_media_menu() */
-
-
-
-	/**
-	 * Add a components column to the sections listing
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param (array) $columns - Preset columns
-	 * @return (array) Modified columns
-	 */
-
-	public function manage_section_posts_columns__add_components( $columns ) {
-
-		$columns = array_slice( $columns, 0, 2, true ) + array( 'components' => __( 'Components', \UBC\Press::get_text_domain() ) ) + array_slice( $columns, 2, count( $columns ) - 1, true );
-
-		return $columns;
-
-	}/* manage_section_posts_columns__add_components() */
-
-
-
-	/**
-	 * Fill the content of the components admin column. This fetches the components
-	 * added via the SiteBuilder
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param (string) $column - Which column are we adding content to
-	 * @param (int) $post_id - the ID for the post for each row
-	 * @return null
-	 */
-
-	public function manage_pages_custom_column__components_content( $column, $post_id ) {
-
-		switch ( $column ) {
-
-			case 'components':
-
-				$panel_meta = get_post_meta( $post_id, 'panels_data', true );
-
-				if ( empty( $panel_meta ) || ! isset( $panel_meta['widgets'] ) ) {
-					echo esc_html__( 'No Components', \UBC\Press::get_text_domain() );
-					return;
-				}
-
-				$widgets = $panel_meta['widgets'];
-
-				foreach ( $widgets as $id => $widget_data ) {
-
-					if ( ! isset( $widget_data['text'] ) ) {
-						continue;
-					}
-
-					echo esc_html__( $widget_data['text'] ) . '<br />';
-				}
-
-			break;
-
-		}
-
-	}/* manage_pages_custom_column__components_content() */
 
 
 	/**
