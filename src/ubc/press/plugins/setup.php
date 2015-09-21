@@ -30,6 +30,9 @@ class Setup {
 
 		// $this->setup_poststoposts();
 
+		// Members/WP User Groups
+		$this->setup_members();
+
 	}/* init() */
 
 
@@ -53,5 +56,23 @@ class Setup {
 		$sitebuilder->init();
 
 	}/* setup_sitebuilder() */
+
+
+
+	/**
+	 * Justin Tadlock's members plugin mods
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function setup_members() {
+
+		$members = new \UBC\Press\Plugins\Members\Setup;
+		$members->init();
+
+	}/* setup_members() */
 
 }/* class Setup */
