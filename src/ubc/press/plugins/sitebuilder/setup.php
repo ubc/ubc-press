@@ -3,11 +3,11 @@
 namespace UBC\Press\Plugins\SiteBuilder;
 
 /**
- * Setup for our custom meta boxes
+ * Setup for our SiteBuilder plugin mods
  *
  * @since 1.0.0
  * @package UBCPress
- * @subpackage Metaboxes
+ * @subpackage SiteBuilder
  *
  */
 
