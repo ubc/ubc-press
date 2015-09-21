@@ -75,6 +75,11 @@ class Setup {
 
 		// Display section links on components listing screen
 		add_action( 'manage_assignment_posts_custom_column', array( $this, 'manage_component_posts_custom_column__component_sections_content' ), 10, 2 );
+		add_action( 'manage_handout_posts_custom_column', array( $this, 'manage_component_posts_custom_column__component_sections_content' ), 10, 2 );
+		add_action( 'manage_note_posts_custom_column', array( $this, 'manage_component_posts_custom_column__component_sections_content' ), 10, 2 );
+		add_action( 'manage_reading_posts_custom_column', array( $this, 'manage_component_posts_custom_column__component_sections_content' ), 10, 2 );
+		add_action( 'manage_link_posts_custom_column', array( $this, 'manage_component_posts_custom_column__component_sections_content' ), 10, 2 );
+		add_action( 'manage_post_posts_custom_column', array( $this, 'manage_component_posts_custom_column__component_sections_content' ), 10, 2 );
 
 	}/* setup_actions() */
 
@@ -108,6 +113,11 @@ class Setup {
 
 		// Componenents listing screen, show attached section
 		add_filter( 'manage_assignment_posts_columns' , array( $this, 'manage_assignment_posts_columns__add_section' ) );
+		add_filter( 'manage_handout_posts_columns' , array( $this, 'manage_assignment_posts_columns__add_section' ) );
+		add_filter( 'manage_note_posts_columns' , array( $this, 'manage_assignment_posts_columns__add_section' ) );
+		add_filter( 'manage_reading_posts_columns' , array( $this, 'manage_assignment_posts_columns__add_section' ) );
+		add_filter( 'manage_link_posts_columns' , array( $this, 'manage_assignment_posts_columns__add_section' ) );
+		add_filter( 'manage_post_posts_columns' , array( $this, 'manage_assignment_posts_columns__add_section' ) );
 
 	}/* setup_filters() */
 
