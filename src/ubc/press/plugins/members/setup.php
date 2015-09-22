@@ -52,7 +52,7 @@ class Setup {
 		add_action( 'save_post', array( $this, 'save_post__save_user_groups' ), 10, 2 );
 
 		// Add user-group visibility settings to members_can_user_view_post
-		add_filter( 'members_can_user_view_post', array( $this, 'members_can_user_view_post__add_user_groups_visibility' ), 10, 3 );
+		add_filter( 'members_can_user_view_post', array( $this, 'members_can_user_view_post__add_user_groups_visibility' ), 15, 3 );
 
 	}/* setup_actions() */
 
@@ -231,8 +231,10 @@ class Setup {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param   -
-	 * @return (bool)
+	 * @param (bool) $can_view - Can the user (with user ID, $user_id) view this post
+	 * @param (int) $user_id - The ID of the user we're checking if they can see the post
+	 * @param (int) $post_id - The ID of the post we're looking to see if $user_id $can_view
+	 * @return (bool) Whether the user can see the post
 	 */
 
 	public function members_can_user_view_post__add_user_groups_visibility( $can_view, $user_id, $post_id ) {
