@@ -49,4 +49,46 @@ class Utils {
 
 	}/* get_array_of_posts_for_cpt() */
 
+
+
+	/**
+	 * The templates for our widgets mainly load a single post of a specified
+	 * post type and then load a template for that post type. This is a wrapper
+	 * method which does just that
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param   -
+	 * @return
+	 */
+
+	public static function show_template_for_post_of_post_type( $template_start, $template_path, $post_id, $post_type ) {
+
+		$post_id = absint( $post_id );
+		$post_type = sanitize_text_field( $post_type );
+
+		$args = array(
+			'post__in' => array( $post_id ),
+			'posts_per_page' => 1,
+			'post_type' => $post_type,
+		);
+
+		$the_query = new \WP_Query( $args );
+
+		if ( $the_query->have_posts() ) :
+
+			while ( $the_query->have_posts() ) :
+
+				$the_query->the_post();
+
+					\UBC\Helpers::locate_template_part_in_plugin( $template_start, $template_path, true );
+
+				endwhile;
+			wp_reset_postdata();
+		endif;
+
+	}/* show_template_for_post_of_post_type() */
+
+
+
 }/* class Utils */
