@@ -205,6 +205,22 @@ class Press {
 	}/* get_text_domain() */
 
 
+	/**
+	 * Quick getter for the plugin path
+	 * Usage: \UBC\Press::get_plugin_path()
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return (string) The path of this plugin
+	 */
+
+	public static function get_plugin_path() {
+
+		return static::$plugin_path;
+
+	}/* get_plugin_path() */
+
 }/* class \UBC\Press */
 
 // Fire it up
