@@ -15,19 +15,4 @@ if ( ! $post_id ) {
 	return;
 }
 
-// Fetch the content for this handout
-// $content 	= \UBC\Press\Utils::get_handout_content( $post_id );
-$title 		= get_the_title( $post_id );
-$permalink = get_permalink( $post_id );
-
-// Should now contain $content['fields'], $content['taxonomies']
-// $fields 	= $content['fields']; //
-// $taxonomies = $content['taxonomies'];
-?>
-
-<p>
-	<span class="dashicons dashicons-media-text"></span>
-	<a href="<?php echo esc_url( $permalink ); ?>" title="<?php the_title_attribute( array( 'post' => $post_id ) ); ?>">
-		<?php echo esc_html( $title ); ?>
-	</a>
-</p>
+\UBC\Press\Plugins\SiteBuilder\Widgets\Utils::show_template_for_post_of_post_type( \UBC\Press::get_plugin_path() . 'src/ubc/press/theme/templates/', 'single-handout.php', $post_id, 'handout' );
