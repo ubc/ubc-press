@@ -75,53 +75,23 @@ class Setup {
 
 	public function setup_actions() {
 
+		// All the actions for editing the default menu are in one method
+		// $this->edit_default_dashboard_menu();
+
 		// Register our scripts
 		add_action( 'init', array( $this, 'init__register_assets' ), 5 );
-
-		// We don't want no stinking admin bar
-		add_action( 'init', array( $this, 'init__hide_admin_bar' ), 10 );
 
 		// Remove dashboard widgets
 		add_action( 'wp_dashboard_setup', array( $this, 'wp_dashboard_setup__remove_dashboard_widgets' ), 999 );
 
-		// Tools/Settings menu unnecessary for everyone but those who can manage_options
-		add_action( 'admin_menu', array( $this, 'admin_menu__remove_tools_options_menus' ) );
-
-		// Remove Profile from main menu
-		add_action( 'admin_menu', array( $this, 'admin_menu__remove_profile' ) );
-
-		// Remove the Media menu from all but those who can manage_options
-		add_action( 'admin_menu', array( $this, 'admin_menu__remove_media' ) );
-
-		// Comments now lives in the Blog menu
-		add_action( 'admin_menu', array( $this, 'admin_menu__remove_comments' ) );
-
-		// Add a new menu item called 'Blog' which will contain posts/comments
-		add_action( 'admin_menu', array( $this, 'admin_menu__add_blog_menu' ), 15 );
-
-		// Now add the submenu items for the Blog menu
-		add_action( 'admin_menu', array( $this, 'admin_menu__add_blog_submenu' ), 9999 );
-
 		// Remove 'Blog' menu for student role
 		add_action( 'admin_menu', array( $this, 'admin_menu__hide_blog_for_students' ), 20 );
-
-		// Rename 'Pages' to 'Course Info'
-		add_action( 'admin_menu', array( $this, 'admin_menu__rename_pages_menu' ) );
-
-		// Adjust the 'Appearance' menu
-		add_action( 'admin_menu', array( $this, 'admin_menu__adjust_appearance_menu' ) );
-
-		// Hide the site settings menu for students/tas
-		add_action( 'admin_menu', array( $this, 'admin_menu__hide_site_settings_as_appropriate' ) );
 
 		// Remove the WordPress version from the admin footer
 		add_action( 'admin_menu', array( $this, 'admin_menu__remove_wp_version' ) );
 
 		// Add logout to the dashboard menu
 		add_action( 'admin_menu', array( $this, 'admin_menu__add_logout_to_dashboard' ) );
-
-		// 'Media' menu becomes 'Files' and shifts down
-		add_action( 'admin_menu', array( $this, 'admin_menu__adjust_media_menu' ) );
 
 		// Create the 'Course Options' Page
 		add_action( 'admin_init', array( $this, 'admin_init__register_setting' ) );
@@ -148,6 +118,55 @@ class Setup {
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text__change_footer_text' ) );
 
 	}/* setup_actions() */
+
+
+
+	/**
+	 * To make this easier, we're putting all of the actions which affect the defaul main menu in one
+	 * method - should make it more manageable to edit and turn on/off
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param   -
+	 * @return
+	 */
+
+	public function edit_default_dashboard_menu() {
+
+		// We don't want no stinking admin bar
+		add_action( 'init', array( $this, 'init__hide_admin_bar' ), 10 );
+
+		// Tools/Settings menu unnecessary for everyone but those who can manage_options
+		add_action( 'admin_menu', array( $this, 'admin_menu__remove_tools_options_menus' ) );
+
+		// Remove Profile from main menu
+		add_action( 'admin_menu', array( $this, 'admin_menu__remove_profile' ) );
+
+		// Remove the Media menu from all but those who can manage_options
+		add_action( 'admin_menu', array( $this, 'admin_menu__remove_media' ) );
+
+		// Comments now lives in the Blog menu
+		add_action( 'admin_menu', array( $this, 'admin_menu__remove_comments' ) );
+
+		// Add a new menu item called 'Blog' which will contain posts/comments
+		add_action( 'admin_menu', array( $this, 'admin_menu__add_blog_menu' ), 15 );
+
+		// Now add the submenu items for the Blog menu
+		add_action( 'admin_menu', array( $this, 'admin_menu__add_blog_submenu' ), 9999 );
+
+		// Rename 'Pages' to 'Course Info'
+		add_action( 'admin_menu', array( $this, 'admin_menu__rename_pages_menu' ) );
+
+		// Adjust the 'Appearance' menu
+		add_action( 'admin_menu', array( $this, 'admin_menu__adjust_appearance_menu' ) );
+
+		// Hide the site settings menu for students/tas
+		add_action( 'admin_menu', array( $this, 'admin_menu__hide_site_settings_as_appropriate' ) );
+
+		// 'Media' menu becomes 'Files' and shifts down
+		add_action( 'admin_menu', array( $this, 'admin_menu__adjust_media_menu' ) );
+
+	}/* edit_default_dashboard_menu() */
 
 
 	/**
