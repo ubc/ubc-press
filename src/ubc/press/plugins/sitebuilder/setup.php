@@ -559,6 +559,10 @@ class Setup {
 				$post_id_key = 'link_post_id';
 				break;
 
+			case 'AddDiscussionForumWidget':
+				$post_id_key = 'discussion_forum_post_id';
+				break;
+
 			default:
 				break;
 		}

@@ -47,16 +47,31 @@ class Setup {
 		// Add a link
 		$this->add_link_widget();
 
+		// Discusion forums (bb-press)
+		$this->add_discussion_forum_widget();
+
 	}/* init() */
 
 
-	public function check_dependencies() {
+	public function check_dependencies( $other_class = false ) {
+
+		$default = false;
 
 		if ( ! class_exists( 'SiteOrigin_Widget' ) ) {
-			return false;
+			return $default;
 		}
 
-		return true;
+		$default = true;
+
+		if ( false === $other_class ) {
+			return $default;
+		}
+
+		if ( ! class_exists( $other_class ) ){
+			$default = false;
+		}
+
+		return $default;
 
 	}/* check_dependencies() */
 
@@ -146,5 +161,29 @@ class Setup {
 		static::$registered_ubc_press_widgets[] = 'AddLinkWidget';
 
 	}/* add_link_widget() */
+
+
+
+	/**
+	 * If we have bbPress installed, add a widget enabling the display of a
+	 * discussion forum as part of a section
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function add_discussion_forum_widget() {
+
+		if ( ! $this->check_dependencies( 'bbPress' ) ) {
+			return;
+		}
+
+		$widget = new \UBC\Press\Plugins\SiteBuilder\Widgets\AddDiscussionForum\AddDiscussionForumWidget;
+
+		static::$registered_ubc_press_widgets[] = 'AddDiscussionForumWidget';
+
+	}/* add_discussion_forum_widget() */
 
 }/* class Setup */
