@@ -67,7 +67,7 @@ class Setup {
 			return $default;
 		}
 
-		if ( ! class_exists( $other_class ) ){
+		if ( ! class_exists( $other_class ) ) {
 			$default = false;
 		}
 
