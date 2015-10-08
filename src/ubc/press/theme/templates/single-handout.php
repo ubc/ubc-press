@@ -9,10 +9,29 @@
  *
  */
 
+$post_id 		= get_the_ID();
+$content 		= \UBC\Press\Utils::get_handout_content( $post_id );
+
+$description 	= ( isset( $content['fields']['_handout_details_description'] ) ) ? $content['fields']['_handout_details_description'] : false;
+$files 			= isset( $content['fields']['_handout_details_file_list'] ) ? $content['fields']['_handout_details_file_list'] : array();
 ?>
 
-<h3><?php the_title(); ?></h3>
+<h3><?php echo get_the_title( $post_id ); ?></h3>
 
 <div class="handout-content">
-	<?php the_content(); ?>
+
+	<?php if ( $description ) : ?>
+		<div class="handout-description">
+			<?php echo wp_kses_post( $description ); ?>
+		</div>
+	<?php endif; ?>
+
+	<?php if ( ! empty( $files ) ) : ?>
+		<ul class="hanfout-file-list">
+		<?php foreach ( $files as $id => $file_path ) : ?>
+			<li><a href="<?php echo esc_url( $file_path ); ?>" title="<?php echo esc_url( $file_path ); ?>"><?php echo esc_url( $file_path ); ?></a></li>
+		<?php endforeach; ?>
+		</ul>
+	<?php endif; ?>
+
 </div><!-- .assignment-content -->
