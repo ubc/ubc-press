@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Template for the Choose Discussion Forum SiteOrigin Widget
+ * Template for the Choose Forum SiteOrigin Widget
  *
  * @since 1.0.0
  *
- * @param (array) $instance - contains data stored for this widget including 'discussion_forum_post_id'
+ * @param (array) $instance - contains data stored for this widget including 'assignment_post_id'
  * @return null
  */
 
@@ -15,14 +15,4 @@ if ( ! $post_id ) {
 	return;
 }
 
-// Fetch the content for this forum
-$title 		= get_the_title( $post_id );
-$permalink = get_permalink( $post_id );
-?>
-
-<p>
-	<span class="dashicons dashicons-groups"></span>
-	<a href="<?php echo esc_url( $permalink ); ?>" title="<?php the_title_attribute( array( 'post' => $post_id ) ); ?>">
-		<?php echo esc_html( $title ); ?>
-	</a>
-</p>
+\UBC\Press\Plugins\SiteBuilder\Widgets\Utils::show_template_for_post_of_post_type( \UBC\Press::get_plugin_path() . 'src/ubc/press/theme/templates/', 'single-forum.php', $post_id, 'forum' );
