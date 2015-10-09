@@ -304,4 +304,116 @@ class Utils {
 	}/* get_department_list() */
 
 
+	/**
+	 * Sanitize a date only allowing 0-9 and a forward slash
+	 * Usage: \UBC\Press\Utils::sanitize_date( $date );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $date - The date to sanitize
+	 * @return (string) Sanitized date
+	 */
+
+	public static function sanitize_date( $date ) {
+
+		// Store a reference to what is passed in to pass to filter
+		$_date = $date;
+
+		$date = preg_replace( '([^0-9/])', '', $date );
+
+		/**
+		 * Filters a sanitized date
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param (string) $date - The sanitized date
+		 * @param (string) $_date - The date that was passed in to the method
+		 */
+
+		return apply_filters( 'ubc_press_sanitized_date', $date, $_date );
+
+	}/* sanitize_date() */
+
+
+	/**
+	 * Sanitize a time only allowing 0-9, the letters a, p and m,
+	 * a colon and a space
+	 * Usage: \UBC\Press\Utils::sanitize_time( $time );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $time - The time to sanitize
+	 * @return (string) Sanitized time
+	 */
+
+	public static function sanitize_time( $time ) {
+
+		// Store a reference to what is passed in to pass to filter
+		$_time = $time;
+
+		$time = preg_replace( '[^ampAMP:0-9\s]', '', $time );
+
+		/**
+		 * Filters a sanitized time
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param (string) $time - The sanitized time
+		 * @param (string) $_time - The time that was passed in to the method
+		 */
+
+		return apply_filters( 'ubc_press_sanitized_time', $time, $_time );
+
+	}/* sanitize_time() */
+
+	/**
+	 * Generic method to retrieve a specific value from the specified key
+	 * in the passed in array
+	 * Usage: \UBC\Press\Utils::get_data_from_post( $key, $post );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $key - The array key we want to get the value for
+	 * @param (array) $post - The array ($_POST) from which the $key resides
+	 * @return (mixed) The *unsanitized* value of $post[$key] if it exists
+	 */
+
+	public static function get_data_from_post( $key = false, $post = array() ) {
+
+		// Bail early if no key set
+		if ( ! $key ) {
+			return false;
+		}
+
+		// If $post isn't an array, go away
+		if ( ! is_array( $post ) ) {
+			return false;
+		}
+
+		// And again if $post is empty
+		if ( empty( $post ) ) {
+			return false;
+		}
+
+		// And if $key is not a key in $post, bail
+		if ( ! array_key_exists( $key, $post ) ) {
+			return false;
+		}
+
+		$value = $post[ $key ];
+
+		/**
+		 * Filters a value returned from a $post array
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param (mixed) $value - The value of $post[ $key ]
+		 * @param (string) $key - The key in the $post array we looked for
+		 * @param (array) $post - The array containing $key
+		 */
+
+		return apply_filters( 'ubc_press_get_data_from_post', $value, $key, $post );
+
+	}/* get_data_from_post() */
+
 }/* Utils */
