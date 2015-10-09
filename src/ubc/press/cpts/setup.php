@@ -93,6 +93,26 @@ class Setup {
 			'icon' => 'dashicons-welcome-add-page',
 		);
 
+		$post_types_to_set_up['lecture'] = array(
+			'label_args' => array(
+				'post_type_name' 	=> 'lecture',
+				'singular' 			=> 'Lecture',
+				'plural' 			=> 'Lectures',
+				'slug' 				=> 'lecture',
+			),
+			'wp_args' => array(
+				'capability_type' => 'lecture',
+				'map_meta_cap' => true,
+				'rewrite' => array(
+					'with_front' => false,
+					'slug' => 'lecture',
+				),
+				'hierarchical' => false,
+				'has_archive' => 'lectures',
+			),
+			'icon' => 'dashicons-megaphone',
+		);
+
 		$post_types_to_set_up['assignment'] = array(
 			'label_args' => array(
 				'post_type_name' 	=> 'assignment',
