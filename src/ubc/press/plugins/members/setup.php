@@ -158,6 +158,10 @@ class Setup {
 			$post = get_post();
 		}
 
+		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
 		// Verify the nonce.
 		if ( ! isset( $_POST['members_cp_meta'] ) || ! wp_verify_nonce( $_POST['members_cp_meta'], 'members_cp_meta_nonce' ) ) {
 			return;
