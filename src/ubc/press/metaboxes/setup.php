@@ -339,10 +339,17 @@ class Setup {
 			'type'       => 'text_date',
 		) );
 
-		$text_time = $item_date->add_field( array(
-			'name'       => __( 'Time', \UBC\Press::get_text_domain() ),
-			'desc'       => __( 'e.g. 03:15 AM', \UBC\Press::get_text_domain() ),
-			'id'         => $prefix . 'item_time',
+		$text_time_start = $item_date->add_field( array(
+			'name'       => __( 'Start Time', \UBC\Press::get_text_domain() ),
+			'desc'       => __( 'e.g. 09:00 AM', \UBC\Press::get_text_domain() ),
+			'id'         => $prefix . 'item_time_start',
+			'type'       => 'text_time',
+		) );
+
+		$text_time_end = $item_date->add_field( array(
+			'name'       => __( 'End Time', \UBC\Press::get_text_domain() ),
+			'desc'       => __( 'e.g. 10:30 AM', \UBC\Press::get_text_domain() ),
+			'id'         => $prefix . 'item_time_end',
 			'type'       => 'text_time',
 		) );
 
@@ -351,7 +358,7 @@ class Setup {
 		}
 		$grid_layout = new \Cmb2Grid\Grid\Cmb2Grid( $item_date );
 		$row_1 = $grid_layout->addRow();
-		$row_1->addColumns( array( $title, $text_date, $text_time ) );
+		$row_1->addColumns( array( $title, $text_date, $text_time_start, $text_time_end ) );
 
 	}/* cmb2_init__date() */
 
