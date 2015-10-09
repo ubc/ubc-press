@@ -42,8 +42,8 @@ class Setup {
 
 	public function setup_actions() {
 
-		// When a lecture is saved, create/edit a calendar entry if we need to
-		add_action( 'save_post', array( $this, 'save_post__link_lecture_with_calendar' ), 10, 2 );
+		// When a lecture/assignment is saved, create/edit a calendar entry if we need to
+		add_action( 'save_post', array( $this, 'save_post__link_post_with_calendar' ), 10, 2 );
 
 		// When a lecture is deleted/trashed, we'll delete any calendar entry associated with it
 		add_action( 'wp_trash_post', array( $this, 'wp_trash_delete_post__delete_linked_calendar_post' ), 10, 1 );
@@ -79,16 +79,21 @@ class Setup {
 	 * @return null
 	 */
 
-	public function save_post__link_lecture_with_calendar( $post_id, $post = '' ) {
+	public function save_post__link_post_with_calendar( $post_id, $post = '' ) {
 
 		if ( wp_is_post_revision( $post_id ) ) {
 			return;
 		}
 
-		// Bail early if we're not saving a lecture
+		// Bail early if we're not saving something we add a date to
 		$post_type = get_post_type( $post_id );
 
-		if ( 'lecture' !== $post_type ) {
+		$post_types_we_have_dates = array(
+			'lecture',
+			'assignment',
+		);
+
+		if ( ! in_array( $post_type, $post_types_we_have_dates ) ) {
 			return;
 		}
 
@@ -105,32 +110,32 @@ class Setup {
 			return;
 		}
 
-		// We'll need the post ID of the lecture being saved
-		$lecture_post_id = absint( $_POST['post_ID'] );
+		// We'll need the post ID of the post being saved
+		$saved_post_id = absint( $_POST['post_ID'] );
 
 		// Sanitize the date only allowing 0-9 and a forward slash
-		$lecture_date = \UBC\Press\Utils::sanitize_date( $this->get_date_from_post( $_POST ) );
+		$saved_post_date = \UBC\Press\Utils::sanitize_date( $this->get_date_from_post( $_POST ) );
 
 		// Sanitize the time
-		$lecture_time_start = \UBC\Press\Utils::sanitize_time( $this->get_time_from_post( $_POST, 'start' ) );
-		$lecture_time_end 	= \UBC\Press\Utils::sanitize_time( $this->get_time_from_post( $_POST, 'end' ) );
+		$saved_post_time_start = \UBC\Press\Utils::sanitize_time( $this->get_time_from_post( $_POST, 'start' ) );
+		$saved_post_time_end 	= \UBC\Press\Utils::sanitize_time( $this->get_time_from_post( $_POST, 'end' ) );
 
 		// Now we look to see if there's an associated calendar post for this post
-		$has_calendar_post = $this->get_associated_calendar_post( $lecture_post_id );
+		$has_calendar_post = $this->get_associated_calendar_post( $saved_post_id );
 
 		// If there's already a calendar post, we need to check if the date has changed, if so update
 		// If there isn't a calendar post, we go ahead and create one
 		if ( $has_calendar_post ) {
-			$this->check_dates_and_update_if_necessary( $has_calendar_post, $lecture_date, $lecture_time_start, $lecture_time_end );
+			$this->check_dates_and_update_if_necessary( $has_calendar_post, $saved_post_date, $saved_post_time_start, $saved_post_time_end );
 			return;
 		} else {
-			$calendar_post_id = $this->create_calendar_post( $lecture_post_id, $lecture_date, $lecture_time_start, $lecture_time_end, 'lecture' );
+			$calendar_post_id = $this->create_calendar_post( $saved_post_id, $saved_post_date, $saved_post_time_start, $saved_post_time_end, $post_type );
 		}
 
-		// As we've just created a new calendar post we need to associate this lecture with that new post
-		update_post_meta( $lecture_post_id, $this->get_associated_calendar_post_meta_key(), $calendar_post_id );
+		// As we've just created a new calendar post we need to associate this post with that new post
+		update_post_meta( $saved_post_id, $this->get_associated_calendar_post_meta_key(), $calendar_post_id );
 
-	}/* save_post__link_lecture_with_calendar() */
+	}/* save_post__link_post_with_calendar() */
 
 
 	/**
