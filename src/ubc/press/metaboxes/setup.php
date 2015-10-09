@@ -92,6 +92,9 @@ class Setup {
 		// Course settings metabox
 		add_action( 'cmb2_init', array( $this, 'cmb2_init__course_settings' ) );
 
+		// Add a date metabox to most post types
+		add_action( 'cmb2_init', array( $this, 'cmb2_init__date' ) );
+
 		// add_action( 'cmb2_init', array( $this, 'cmb2_init__test' ) );
 
 	}/* create() */
@@ -257,14 +260,14 @@ class Setup {
 		$prefix = 'ubc_course_settings_';
 
 		$course_settings = new_cmb2_box( array(
-			'id'		=> $prefix . 'metabox',
-			'title'		=> __( 'Course Settings', \UBC\Press::get_text_domain() ),
-			'show_on'	=> array(
-				'key'   => 'options-page',
-				'value' => array( 'ubc_course_settings' ),
+			'id'			=> $prefix . 'metabox',
+			'title'			=> __( 'Course Settings', \UBC\Press::get_text_domain() ),
+			'show_on'		=> array(
+				'key'   	=> 'options-page',
+				'value' 	=> array( 'ubc_course_settings' ),
 			),
-			'cmb_styles'=> false,
-			'hookup' 	=> false,
+			'cmb_styles' 	=> false,
+			'hookup' 		=> false,
 		) );
 
 		$course_settings->add_field( array(
@@ -298,6 +301,59 @@ class Setup {
 		}
 
 	}/* cmb2_init__course_settings() */
+
+
+	/**
+	 * We have dates for posts like Lectures, Assignments etc.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function cmb2_init__date() {
+
+		$prefix = 'ubc_item_date_';
+
+		$item_date = new_cmb2_box( array(
+			'id'			=> $prefix . 'metabox',
+			'title'			=> __( 'Date/Time', \UBC\Press::get_text_domain() ),
+			'object_types'  => array( 'lecture', 'assignment' ),
+			'context'    	=> 'normal',
+			'priority' 		=> 'low',
+			'show_names'	=> false,
+		) );
+
+		$title = $item_date->add_field( array(
+			'name' => __( '', \UBC\Press::get_text_domain() ),
+			'id'   => $prefix . 'date_title',
+			'desc' => __( 'Adding a date and time will add this item to the calendar automatically.', \UBC\Press::get_text_domain() ),
+			'type' => 'title',
+		) );
+
+		$text_date = $item_date->add_field( array(
+			'name'       => __( 'Date', \UBC\Press::get_text_domain() ),
+			'desc'       => __( 'e.g. MM/DD/YYYY', \UBC\Press::get_text_domain() ),
+			'id'         => $prefix . 'item_date',
+			'type'       => 'text_date',
+		) );
+
+		$text_time = $item_date->add_field( array(
+			'name'       => __( 'Time', \UBC\Press::get_text_domain() ),
+			'desc'       => __( 'e.g. 03:15 AM', \UBC\Press::get_text_domain() ),
+			'id'         => $prefix . 'item_time',
+			'type'       => 'text_time',
+		) );
+
+		if ( ! is_admin() ) {
+			return;
+		}
+		$grid_layout = new \Cmb2Grid\Grid\Cmb2Grid( $item_date );
+		$row_1 = $grid_layout->addRow();
+		$row_1->addColumns( array( $title, $text_date, $text_time ) );
+
+	}/* cmb2_init__date() */
 
 
 	function cmb2_init__test() {
