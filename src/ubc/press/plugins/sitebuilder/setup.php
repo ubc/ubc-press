@@ -620,10 +620,10 @@ class Setup {
 				}
 
 				$widgets = $panel_meta['widgets'];
-
+				// wp_die( '<pre>' . print_r( $panel_meta, true ) . '</pre>' );
 				foreach ( $widgets as $id => $widget_data ) {
 
-					if ( ! isset( $widget_data['text'] ) ) {
+					if ( ! isset( $widget_data['text'] ) || ( isset( $widget_data['type'] ) && 'visual' === $widget_data['type'] ) ) {
 						continue;
 					}
 
