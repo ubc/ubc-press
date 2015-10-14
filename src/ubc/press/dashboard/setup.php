@@ -97,6 +97,12 @@ class Setup {
 		add_action( 'admin_init', array( $this, 'admin_init__register_setting' ) );
 		add_action( 'admin_menu', array( $this, 'admin_menu__add_course_options_page' ) );
 
+		// Topics/Replies go into the main forums menu
+		add_action( 'admin_menu', array( $this, 'admin_menu__move_forum_components' ) );
+
+		// Events should be Calendar and many of the menu items need removing
+		add_action( 'admin_menu', array( $this, 'admin_menu__edit_events_menu_for_calendar' ), 15 );
+
 	}/* setup_actions() */
 
 
@@ -607,6 +613,85 @@ class Setup {
 		unset( $submenu['themes.php'][20] );
 
 	}/* admin_menu__adjust_appearance_menu() */
+
+
+	/**
+	 * Organize the forums menu
+	 * Topics and Replies get moved into the main Forums menu
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function admin_menu__move_forum_components() {
+
+		global $menu, $submenu;
+
+		// Add topic to forum menu
+		$submenu['edit.php?post_type=forum'][20] = array(
+			0 => __( 'All Topics', \UBC\Press::get_text_domain() ),
+			'edit_topics',
+			'edit.php?post_type=topic'
+		);
+
+		// Add replies to forum menu
+		$submenu['edit.php?post_type=forum'][25] = array(
+			0 => __( 'All Replies', \UBC\Press::get_text_domain() ),
+			'edit_replies',
+			'edit.php?post_type=reply'
+		);
+
+		// Remove top level topic menu
+		unset( $menu[555556] );
+
+		// Remove top level replies menu
+		unset( $menu[555557] );
+
+		// And there's a separator
+		unset( $menu[555558] );
+
+	}/* admin_menu__move_forum_components() */
+
+
+	/**
+	 * The 'Events' menu needs to be 'Calendar' and most of the submenu items
+	 * need to go away
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function admin_menu__edit_events_menu_for_calendar() {
+
+		global $menu, $submenu;
+
+		if ( 'edit.php?post_type=event' !== $menu[44][2] ) {
+			return;
+		}
+
+		// Events gets added as '44' but links to the events listing. We need to
+		// change it to be Calendar and link to edit.php?post_type=event&page=event-calendar
+		$menu[44][0] = __( 'Calendar', \UBC\Press::get_text_domain() );
+		$menu[44][2] = 'edit.php?post_type=event&page=event-calendar';
+
+		// Let's move it to the top menu item up
+		$menu[5] = $menu[44];
+		unset( $menu[44] );
+
+		// Add a separator
+		$menu[6] = array( '', 'read', 'separator0', '', 'wp-menu-separator' );
+
+		unset( $submenu['edit.php?post_type=event'][5] );
+		unset( $submenu['edit.php?post_type=event'][10] );
+		unset( $submenu['edit.php?post_type=event'][15] );
+		unset( $submenu['edit.php?post_type=event'][16] );
+		unset( $submenu['edit.php?post_type=event'][17] );
+
+	}/* admin_menu__edit_events_menu_for_calendar() */
 
 
 	/**
