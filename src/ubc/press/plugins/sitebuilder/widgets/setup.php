@@ -50,6 +50,9 @@ class Setup {
 		// Discusion forums (bb-press)
 		$this->add_discussion_forum_widget();
 
+		// Add a lecture
+		$this->add_lecture_widget();
+
 	}/* init() */
 
 
@@ -163,7 +166,6 @@ class Setup {
 	}/* add_link_widget() */
 
 
-
 	/**
 	 * If we have bbPress installed, add a widget enabling the display of a
 	 * discussion forum as part of a section
@@ -185,5 +187,27 @@ class Setup {
 		static::$registered_ubc_press_widgets[] = 'AddDiscussionForumWidget';
 
 	}/* add_discussion_forum_widget() */
+
+
+	/**
+	 * Register the Add Lecture widget
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+	public function add_lecture_widget() {
+
+		if ( ! $this->check_dependencies() ) {
+			return;
+		}
+
+		$widget = new \UBC\Press\Plugins\SiteBuilder\Widgets\AddLecture\AddLectureWidget;
+
+		static::$registered_ubc_press_widgets[] = 'AddLectureWidget';
+
+	}/* add_link_widget() */
+
 
 }/* class Setup */
