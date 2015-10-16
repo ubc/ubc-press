@@ -488,6 +488,9 @@ class Setup {
 			if ( ! in_array( $section_assoc_post_id, $associations ) ) {
 				// Remove from the component
 				$component_assoc = get_post_meta( $section_assoc_post_id, 'section_associations', true );
+				if ( empty( $component_assoc ) ) {
+					continue;
+				}
 				$key_on_comp = array_search( $section_assoc_post_id, $component_assoc );
 				unset( $component_assoc[ $key_on_comp ] );
 				update_post_meta( $section_assoc_post_id, 'section_associations', $component_assoc );
