@@ -57,7 +57,7 @@ class Setup {
 
 	public function setup_hooks() {
 
-		$this->setup_actions();
+		// $this->setup_actions();
 
 		$this->setup_filters();
 
@@ -76,7 +76,7 @@ class Setup {
 	public function setup_actions() {
 
 		// All the actions for editing the default menu are in one method
-		// $this->edit_default_dashboard_menu();
+		$this->edit_default_dashboard_menu();
 
 		// Register our scripts
 		add_action( 'init', array( $this, 'init__register_assets' ), 5 );
