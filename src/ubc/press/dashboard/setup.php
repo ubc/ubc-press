@@ -57,7 +57,7 @@ class Setup {
 
 	public function setup_hooks() {
 
-		// $this->setup_actions();
+		$this->setup_actions();
 
 		$this->setup_filters();
 
@@ -171,6 +171,9 @@ class Setup {
 
 		// 'Media' menu becomes 'Files' and shifts down
 		add_action( 'admin_menu', array( $this, 'admin_menu__adjust_media_menu' ) );
+
+		// 'Quiz' menu
+		add_action( 'admin_menu', array( $this, 'admin_menu__adjust_quiz_menu' ), 100 );
 
 	}/* edit_default_dashboard_menu() */
 
@@ -851,6 +854,33 @@ class Setup {
 		unset( $menu[10] );
 
 	}/* admin_menu__adjust_media_menu() */
+
+
+	/**
+	 * WP Pro Quiz menu
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param   -
+	 * @return
+	 */
+
+	public function admin_menu__adjust_quiz_menu() {
+
+		global $menu, $submenu;
+
+		// http://cmslocalhost.dev/wp-admin/admin.php?page=wpProQuiz
+		$menu[55] = array(
+			0 => 'Quizzes',
+			1 => 'wpProQuiz_show',
+			2 => 'admin.php?page=wpProQuiz',
+			3 => '',
+			4 => 'menu-top menu-icon-star-half',
+			5 => 'menu-quizzes',
+			6 => 'dashicons-star-half',
+		);
+
+	}/* admin_menu__adjust_quiz_menu() */
 
 
 	/**
