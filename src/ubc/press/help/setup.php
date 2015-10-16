@@ -68,6 +68,11 @@ class Setup {
 		// index.php is the dashboard
 		add_action( 'load-index.php', array( $this, 'load__dashboard_help_tabs' ), 20 );
 
+		// The calendar help
+		add_action( 'load-event_page_event-calendar', array( $this, 'load__calendar_help_tabs' ), 20 );
+
+		// add_action( 'current_screen', array( $this, 'load__calendar_help_tabs' ) );
+
 	}/* setup_actions() */
 
 
@@ -138,7 +143,7 @@ class Setup {
 
 		$tabs = array(
 			'PRESSDASHBOARDHELP' => array(
-				'title'   => 'UBC Press',
+				'title'   => __( 'UBC Press', \UBC\Press::get_text_domain() ),
 				'content' => __( '
 					<h3>About</h3>
 					<p>UBC Press is a focused teaching and learning platform powered by WordPress. It is designed to provide a consistent experience for students on the front-end and a straightforward user interface for instructors and TAs.</p>
@@ -159,6 +164,31 @@ class Setup {
 		}
 
 	}/* load__dashboard_help_tabs() */
+
+
+	public function load__calendar_help_tabs() {
+
+		$tabs = array(
+			'PRESSCALENDARHELP' => array(
+				'title'   => __( 'UBC Press Calendar', \UBC\Press::get_text_domain() ),
+				'content' => __( '
+					<h3>Course Calendar</h3>
+					<p>This is your course calendar. It will auto populate based on the times you enter for the different components (i.e. lectures or assignments).</p>
+					' , \UBC\Press::get_text_domain()
+				),
+			),
+		);
+
+		foreach ( $tabs as $id => $data ) {
+
+			get_current_screen()->add_help_tab( array(
+				 'id'       => $id,
+				 'title'    => __( $data['title'], \UBC\Press::get_text_domain() ),
+				 'content'  => __( $data['content'], \UBC\Press::get_text_domain() ),
+			) );
+		}
+
+	}/* load__calendar_help_tabs() */
 
 
 	/**
