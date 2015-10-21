@@ -89,6 +89,7 @@ class Setup {
 
 		if ( ! $user_groups || ! is_array( $user_groups ) || empty( $user_groups ) ) {
 			echo esc_html_e( 'No user groups set up or users not added to groups.', \UBC\Press::get_text_domain() );
+			return;
 		}
 
 		// Currently selected user groups for this post
