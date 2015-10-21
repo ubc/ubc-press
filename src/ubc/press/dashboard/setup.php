@@ -270,7 +270,10 @@ class Setup {
 
 		$version = (string) \UBC\Press::get_version();
 
-		return __( 'UBC Press version ' . $version . ' and powered by WordPress', \UBC\Press::get_text_domain() );
+		$sign_out_url = wp_logout_url( network_home_url() );
+		$sign_out_link = '<a href="' . esc_url( $sign_out_url ) . '" title="' . esc_attr__( 'Sign Out', \UBC\Press::get_text_domain() ) . '">' . esc_attr__( 'Sign Out', \UBC\Press::get_text_domain() ) . '</a>';
+
+		return __( 'UBC Press version ' . $version . ' and powered by WordPress. ' . $sign_out_link, \UBC\Press::get_text_domain() );
 
 	}/* admin_footer_text__change_footer_text() */
 
