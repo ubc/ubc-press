@@ -88,7 +88,7 @@ class Setup {
 		$user_groups = get_terms( 'user-group' );
 
 		if ( ! $user_groups || ! is_array( $user_groups ) || empty( $user_groups ) ) {
-			return;
+			echo esc_html_e( 'No user groups set up or users not added to groups.', \UBC\Press::get_text_domain() );
 		}
 
 		// Currently selected user groups for this post
