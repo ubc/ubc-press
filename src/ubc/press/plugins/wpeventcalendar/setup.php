@@ -54,7 +54,7 @@ class Setup {
 
 
 	/**
-	 * Filters to modify items in SiteBuilder
+	 * Filters to modify items in WP Event Calendar
 	 *
 	 * @since 1.0.0
 	 *
