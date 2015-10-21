@@ -28,13 +28,14 @@ class Setup {
 
 		$this->setup_sitebuilder();
 
-		// $this->setup_poststoposts();
-
 		// Members/WP User Groups
 		$this->setup_members();
 
 		// wp-event-calendar
 		$this->setup_wp_event_calendar();
+
+		// WP User Groups by JJJ
+		$this->setup_wp_user_groups();
 
 	}/* init() */
 
@@ -98,5 +99,26 @@ class Setup {
 		$wpeventcalendar->init();
 
 	}/* setup_wp_event_calendar() */
+
+
+	/**
+	 * JJJ's WP User Groups plugin.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function setup_wp_user_groups() {
+
+		if ( ! function_exists( '_wp_user_groups' ) ) {
+			return;
+		}
+
+		$wpusergroups = new \UBC\Press\Plugins\WPUserGroups\Setup;
+		$wpusergroups->init();
+
+	}/* setup_wp_user_groups() */
 
 }/* class Setup */
