@@ -86,7 +86,7 @@ class Setup {
 
 		// Lecture date column (rather than published date)
 		add_action( 'manage_lecture_posts_custom_column', array( $this, 'manage_lecture_posts_custom_column__date_column' ), 10, 2 );
-		add_action( 'pre_get_posts', array( $this, 'pre_get_posts__make_lecture_date_sortable' ) );
+		add_action( 'pre_get_posts', array( $this, 'pre_get_posts__make_lecture_date_sortable' ), 9 );
 
 	}/* setup_actions() */
 
@@ -1023,14 +1023,25 @@ class Setup {
 			return;
 		}
 
+		if ( ! $query->is_main_query() || 'lecture' !== $query->get( 'post_type' )  ) {
+			return;
+		}
+
 		$orderby = $query->get( 'orderby' );
 
-		if ( 'lecturedate' === $orderby ) {
+		switch ( $orderby ) {
 
-			$query->set( 'meta_key', 'ubc_item_date_hidden_timestamp' );
-			$query->set( 'orderby', 'meta_value_num' );
-			// $query->set( 'meta_type', 'DATETIME' );
+			case 'lecturedate':
+			case '':
+			default:
+				$query->set( 'meta_key', 'ubc_item_date_hidden_timestamp' );
+				$query->set( 'orderby', 'meta_value_num' );
+				$query->set( 'order', 'ASC' );
+			break;
+
 		}
+
+		// wp_die( '<pre>' . print_r( $query, true ) . '</pre>' );
 
 	}/* pre_get_posts__make_lecture_date_sortable() */
 
