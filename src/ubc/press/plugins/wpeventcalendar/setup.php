@@ -229,10 +229,17 @@ class Setup {
 
 	protected function format_datetime( $date, $time ) {
 
-		// Date comes in as MM/DD/YYYY
+		// Date comes in as MM/DD/YYYY or Unix Timestamp
 		// Time comes in as HH:MM (A|P)M
 		$converted_time = \DateTime::createFromFormat( 'g:i A', $time )->format( 'H:i:s' );
-		$converted_date = \DateTime::createFromFormat( 'm/d/Y', $date )->format( 'Y-m-d' );
+		// $converted_date = \DateTime::createFromFormat( 'm/d/Y', $date )->format( 'Y-m-d' );
+
+		// Test if we have a timestamp of a date
+		if ( $this->is_timestamp( $date ) ) {
+			$converted_date = \DateTime::createFromFormat( 'U', $date )->format( 'Y-m-d' );
+		} else {
+			$converted_date = \DateTime::createFromFormat( 'm/d/Y', $date )->format( 'Y-m-d' );
+		}
 
 		// Put them together with a space in between date and time
 		$datetime = $converted_date . ' ' . $converted_time;
@@ -240,6 +247,16 @@ class Setup {
 		return $datetime;
 
 	}/* format_datetime() */
+
+	function is_timestamp( $timestamp ) {
+
+		if ( ctype_digit( $timestamp ) && strtotime( date( 'Y-m-d H:i:s', $timestamp ) ) === (int) $timestamp ) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}/* is_timestamp() */
 
 	/**
 	 * Return the sanitized date from the $_POST
@@ -363,7 +380,7 @@ class Setup {
 	 * @return (string) The slug of the calendar post type
 	 */
 
-	protected function get_calendar_post_type() {
+	public function get_calendar_post_type() {
 
 		/**
 		 * Filters the calendar post type slug
@@ -387,7 +404,7 @@ class Setup {
 	 * @return (string) The slug of the event type taxonomy
 	 */
 
-	protected function get_calendar_event_type() {
+	public function get_calendar_event_type() {
 
 		/**
 		 * Filters the calendar event type slug
@@ -410,7 +427,7 @@ class Setup {
 	 * @return (string) The name of the meta key that we use to store the associated cal post
 	 */
 
-	protected function get_associated_calendar_post_meta_key() {
+	public function get_associated_calendar_post_meta_key() {
 
 		/**
 		 * Filters the name of the meta key we use to store the associated calendar post

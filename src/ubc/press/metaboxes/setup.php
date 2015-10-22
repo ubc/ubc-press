@@ -95,7 +95,13 @@ class Setup {
 		// Add a date metabox to most post types
 		add_action( 'cmb2_init', array( $this, 'cmb2_init__date' ) );
 
+		// This is the front-end notes submission form
+		add_action( 'cmb2_init', array( $this, 'cmbs_init__user_notes' ) );
+
 		// add_action( 'cmb2_init', array( $this, 'cmb2_init__test' ) );
+		// When a post is saved that contains the date/time, we need to save the date as a hidden timestamp
+		add_action( 'save_post', array( $this, 'save_post__save_hidden_timestamp' ), 100, 2 );
+		add_action( 'publish_post', array( $this, 'save_post__save_hidden_timestamp' ), 100, 2 );
 
 	}/* create() */
 
@@ -339,6 +345,13 @@ class Setup {
 			'type'       => 'text_date',
 		) );
 
+		$hidden_timestamp = $item_date->add_field( array(
+			'name'       => __( 'Hidden Timestamp', \UBC\Press::get_text_domain() ),
+			'desc'       => __( '', \UBC\Press::get_text_domain() ),
+			'id'         => $prefix . 'hidden_timestamp',
+			'type'       => 'hidden',
+		) );
+
 		$text_time_start = $item_date->add_field( array(
 			'name'       => __( 'Start Time', \UBC\Press::get_text_domain() ),
 			'desc'       => __( 'e.g. 09:00 AM', \UBC\Press::get_text_domain() ),
@@ -361,6 +374,106 @@ class Setup {
 		$row_1->addColumns( array( $title, $text_date, $text_time_start, $text_time_end ) );
 
 	}/* cmb2_init__date() */
+
+
+
+	/**
+	 * When we save a lecture/assignment, we have a 'ubc_item_date_item_date' field
+	 * That shows a nice user readable date, but to sort by that is a nightmare. So we
+	 * use a hidden field which stores a unix timestamp of the value saved. We then use
+	 * that value to orderby
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $post_id - The post ID being saved
+	 * @param (object) $post - the WP_Post object being saved
+	 * @return null
+	 */
+
+	public function save_post__save_hidden_timestamp( $post_id, $post ) {
+		// If this is just a revision, bail
+		if ( wp_is_post_revision( $post_id ) ) {
+			return;
+		}
+
+		if ( ! isset( $_POST['nonce_CMB2phpubc_item_date_metabox'] ) ) {
+			return;
+		}
+
+		// See if $_POST contains ubc_item_date_item_date
+		if ( ! wp_verify_nonce( $_POST['nonce_CMB2phpubc_item_date_metabox'], 'nonce_CMB2phpubc_item_date_metabox' ) || ! isset( $_POST['ubc_item_date_item_date'] ) ) {
+			return;
+		}
+
+		// Convert the format to a timestamp and sanitize it
+		$date = \UBC\Press\Utils::sanitize_date( $_POST['ubc_item_date_item_date'] );
+
+		if ( empty( $date ) ) {
+			return;
+		}
+
+		// Convert that date into a timestamp
+		$timestamp = \DateTime::createFromFormat( 'm/d/Y', $date )->format( 'U' );
+
+		// When publishing the post, we have to modify the $_POST directly otherwise it gets blanked
+		$_POST['ubc_item_date_hidden_timestamp'] = $timestamp;
+
+		// can't rely on $post_id apparently
+		$saved_post_id = absint( $_POST['post_ID'] );
+		$updated = update_post_meta( $saved_post_id, 'ubc_item_date_hidden_timestamp', $timestamp );
+
+	}/* save_post__save_hidden_timestamp() */
+
+
+	/**
+	 * On the front-end we allow users to create notes about the page/post
+	 * that they are currently viewing.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function cmbs_init__user_notes() {
+
+		$prefix = 'ubc_user_notes_';
+
+		$user_notes = new_cmb2_box( array(
+			'id'			=> $prefix . 'metabox',
+			'title'			=> __( 'Your notes', \UBC\Press::get_text_domain() ),
+			'object_types'  => array( 'any' ),
+			'context'    	=> 'normal',
+			'priority' 		=> 'low',
+		) );
+
+		$notes = $user_notes->add_field( array(
+			'name' => __( '', \UBC\Press::get_text_domain() ),
+			'id'   => $prefix . 'content',
+			'desc' => __( '', \UBC\Press::get_text_domain() ),
+			'type' => 'textarea',
+			'default' => array( $this, 'user_notes_default_content' ),
+		) );
+
+	}/* cmbs_init__user_notes() */
+
+
+	/**
+	 * By default the content of the notes field is empty, however, if
+	 * the currently signed in user has made notes for this post already,
+	 * then we show them
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function user_notes_default_content() {
+
+		return 'weeee';
+
+	}/* user_notes_default_content */
 
 
 	function cmb2_init__test() {

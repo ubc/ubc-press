@@ -76,7 +76,7 @@ class Setup {
 	public function setup_actions() {
 
 		// All the actions for editing the default menu are in one method
-		$this->edit_default_dashboard_menu();
+		// $this->edit_default_dashboard_menu();
 
 		// Register our scripts
 		add_action( 'init', array( $this, 'init__register_assets' ), 5 );
@@ -84,24 +84,9 @@ class Setup {
 		// Remove dashboard widgets
 		add_action( 'wp_dashboard_setup', array( $this, 'wp_dashboard_setup__remove_dashboard_widgets' ), 999 );
 
-		// Remove 'Blog' menu for student role
-		add_action( 'admin_menu', array( $this, 'admin_menu__hide_blog_for_students' ), 20 );
-
-		// Remove the WordPress version from the admin footer
-		add_action( 'admin_menu', array( $this, 'admin_menu__remove_wp_version' ) );
-
-		// Add logout to the dashboard menu
-		add_action( 'admin_menu', array( $this, 'admin_menu__add_logout_to_dashboard' ) );
-
-		// Create the 'Course Options' Page
-		add_action( 'admin_init', array( $this, 'admin_init__register_setting' ) );
-		add_action( 'admin_menu', array( $this, 'admin_menu__add_course_options_page' ) );
-
-		// Topics/Replies go into the main forums menu
-		add_action( 'admin_menu', array( $this, 'admin_menu__move_forum_components' ) );
-
-		// Events should be Calendar and many of the menu items need removing
-		add_action( 'admin_menu', array( $this, 'admin_menu__edit_events_menu_for_calendar' ), 15 );
+		// Lecture date column (rather than published date)
+		add_action( 'manage_lecture_posts_custom_column', array( $this, 'manage_lecture_posts_custom_column__date_column' ), 10, 2 );
+		add_action( 'pre_get_posts', array( $this, 'pre_get_posts__make_lecture_date_sortable' ) );
 
 	}/* setup_actions() */
 
@@ -122,6 +107,10 @@ class Setup {
 
 		// Admin footer text
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text__change_footer_text' ) );
+
+		// Lecture date column (rather than published date)
+		add_filter( 'manage_lecture_posts_columns' , array( $this, 'manage_lecture_posts_columns__date_column' ) );
+		add_filter( 'manage_edit-lecture_sortable_columns', array( $this, 'manage_edit_lecture_sortable_columns__make_lecture_date_srotable' ) );
 
 	}/* setup_actions() */
 
@@ -174,6 +163,25 @@ class Setup {
 
 		// 'Quiz' menu
 		add_action( 'admin_menu', array( $this, 'admin_menu__adjust_quiz_menu' ), 100 );
+
+		// Remove 'Blog' menu for student role
+		add_action( 'admin_menu', array( $this, 'admin_menu__hide_blog_for_students' ), 20 );
+
+		// Remove the WordPress version from the admin footer
+		add_action( 'admin_menu', array( $this, 'admin_menu__remove_wp_version' ) );
+
+		// Add logout to the dashboard menu
+		add_action( 'admin_menu', array( $this, 'admin_menu__add_logout_to_dashboard' ) );
+
+		// Create the 'Course Options' Page
+		add_action( 'admin_init', array( $this, 'admin_init__register_setting' ) );
+		add_action( 'admin_menu', array( $this, 'admin_menu__add_course_options_page' ) );
+
+		// Topics/Replies go into the main forums menu
+		add_action( 'admin_menu', array( $this, 'admin_menu__move_forum_components' ) );
+
+		// Events should be Calendar and many of the menu items need removing
+		add_action( 'admin_menu', array( $this, 'admin_menu__edit_events_menu_for_calendar' ), 15 );
 
 	}/* edit_default_dashboard_menu() */
 
@@ -860,19 +868,18 @@ class Setup {
 
 
 	/**
-	 * WP Pro Quiz menu
+	 * WP Pro Quiz menu as 'Quizzes'
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param   -
-	 * @return
+	 * @param null
+	 * @return null
 	 */
 
 	public function admin_menu__adjust_quiz_menu() {
 
 		global $menu, $submenu;
 
-		// http://cmslocalhost.dev/wp-admin/admin.php?page=wpProQuiz
 		$menu[55] = array(
 			0 => 'Quizzes',
 			1 => 'wpProQuiz_show',
@@ -927,6 +934,105 @@ class Setup {
 
 	}/* admin_page_display() */
 
+
+	/**
+	 * Output for lecture date column
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $column - Which column are we adding content to
+	 * @param (int) $post_id - the ID for the post for each row
+	 * @return null
+	 */
+
+	public function manage_lecture_posts_custom_column__date_column( $column, $post_id ) {
+
+		switch ( $column ) {
+
+			case 'lecturedate':
+
+				// Stored as post meta
+				$lecture_date = get_post_meta( $post_id, 'ubc_item_date_item_date', true );
+				$lecture_time_start = get_post_meta( $post_id, 'ubc_item_date_item_time_start', true );
+
+				if ( ! isset( $lecture_date ) ) {
+					return;
+				}
+
+				echo esc_html( $lecture_date );
+
+			break;
+
+		}
+
+	}/* manage_lecture_posts_custom_column__date_column() */
+
+	/**
+	 * Add Lecture Date column
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $columns - Preset columns
+	 * @return (array) Modified columns
+	 */
+
+	public function manage_lecture_posts_columns__date_column( $columns ) {
+
+		// Date should be Published Date
+		unset( $columns['date'] );
+		// $columns['date'] = __( 'Published Date', \UBC\Press::get_text_domain() );
+
+		$columns['lecturedate'] = __( 'Lecture Date', \UBC\Press::get_text_domain() );
+
+		return $columns;
+
+	}/* manage_lecture_posts_columns__date_column() */
+
+
+
+	/**
+	 * Make the lecture date column sortable
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $columns - Registered columns
+	 * @return (array) Modified registered columns
+	 */
+
+	public function manage_edit_lecture_sortable_columns__make_lecture_date_srotable( $columns ) {
+
+		$columns['lecturedate'] = 'lecturedate';
+
+		return $columns;
+
+	}/* manage_edit_lecture_sortable_columns__make_lecture_date_srotable() */
+
+
+	/**
+	 * Make lecture date column sortable
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (object) $query - The current WP_Query
+	 * @return null
+	 */
+
+	public function pre_get_posts__make_lecture_date_sortable( $query ) {
+
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$orderby = $query->get( 'orderby' );
+
+		if ( 'lecturedate' === $orderby ) {
+
+			$query->set( 'meta_key', 'ubc_item_date_hidden_timestamp' );
+			$query->set( 'orderby', 'meta_value_num' );
+			// $query->set( 'meta_type', 'DATETIME' );
+		}
+
+	}/* pre_get_posts__make_lecture_date_sortable() */
 
 	/**
 	 * Run before we run our dashboard setup. Simply runs an action which we can
