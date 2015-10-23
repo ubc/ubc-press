@@ -235,7 +235,7 @@ class Setup {
 		// $converted_date = \DateTime::createFromFormat( 'm/d/Y', $date )->format( 'Y-m-d' );
 
 		// Test if we have a timestamp of a date
-		if ( $this->is_timestamp( $date ) ) {
+		if ( \UBC\Press\Utils::is_timestamp( $date ) ) {
 			$converted_date = \DateTime::createFromFormat( 'U', $date )->format( 'Y-m-d' );
 		} else {
 			$converted_date = \DateTime::createFromFormat( 'm/d/Y', $date )->format( 'Y-m-d' );
@@ -248,15 +248,6 @@ class Setup {
 
 	}/* format_datetime() */
 
-	function is_timestamp( $timestamp ) {
-
-		if ( ctype_digit( $timestamp ) && strtotime( date( 'Y-m-d H:i:s', $timestamp ) ) === (int) $timestamp ) {
-			return true;
-		} else {
-			return false;
-		}
-
-	}/* is_timestamp() */
 
 	/**
 	 * Return the sanitized date from the $_POST

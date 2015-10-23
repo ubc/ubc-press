@@ -272,8 +272,8 @@ class Utils {
 	public static function get_faculty_list() {
 
 		$faculties = array(
-			'Arts',
-			'Medicine',
+		 	'arts' => 'Arts',
+			'medicine' => 'Medicine',
 		);
 
 		return apply_filters( 'ubc_press_faculities_list', $faculties );
@@ -295,8 +295,8 @@ class Utils {
 	public static function get_department_list() {
 
 		$departments = array(
-			'Arts' => array( 'Philosophy', 'Drama' ),
-			'Medicine' => array( 'Nursing', 'Midwifery' ),
+			'arts' => array( 'Philosophy', 'Drama' ),
+			'medicine' => array( 'Nursing', 'Midwifery' ),
 		);
 
 		return apply_filters( 'ubc_press_departments_list', $departments );
@@ -415,5 +415,26 @@ class Utils {
 		return apply_filters( 'ubc_press_get_data_from_post', $value, $key, $post );
 
 	}/* get_data_from_post() */
+
+
+	/**
+	 * Test if the passed string is a timestamp
+	 * Usage: \UBC\Press\Utils::is_timestamp( $timestamp );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $timestamp - The string to test if it's a timestamp or not
+	 * @return (bool) True if $timestamp is a timestamp. False otherwise.
+	 */
+
+	public static function is_timestamp( $timestamp ) {
+
+		if ( ctype_digit( $timestamp ) && strtotime( date( 'Y-m-d H:i:s', $timestamp ) ) === (int) $timestamp ) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}/* is_timestamp() */
 
 }/* Utils */
