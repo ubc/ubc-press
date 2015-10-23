@@ -221,6 +221,23 @@ class Press {
 
 	}/* get_plugin_path() */
 
+
+	/**
+	 * Quick getter for the plugin URL
+	 * Usage: \UBC\Press::get_plugin_url()
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return (string) The url to this plugin root
+	 */
+
+	public static function get_plugin_url() {
+
+		return static::$plugin_url;
+
+	}/* get_plugin_url() */
+
 }/* class \UBC\Press */
 
 // Fire it up
