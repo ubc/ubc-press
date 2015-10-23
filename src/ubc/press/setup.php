@@ -57,6 +57,9 @@ class Setup {
 		// Setup help text, widgets etc.
 		self::setup_help();
 
+		// onboarding
+		self::setup_onboarding();
+
 	}/* init() */
 
 
@@ -187,6 +190,23 @@ class Setup {
 		$help->init();
 
 	}/* setup_help() */
+
+
+	/**
+	 * Set up the class which deals with all of the onboarding procedures
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function setup_onboarding() {
+
+		$onboarding = new \UBC\Press\Onboarding\Setup;
+		$onboarding->init();
+
+	}/* setup_onboarding() */
 
 
 	/**

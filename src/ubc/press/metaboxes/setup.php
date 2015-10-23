@@ -96,12 +96,17 @@ class Setup {
 		add_action( 'cmb2_init', array( $this, 'cmb2_init__date' ) );
 
 		// This is the front-end notes submission form
-		add_action( 'cmb2_init', array( $this, 'cmbs_init__user_notes' ) );
+		add_action( 'cmb2_init', array( $this, 'cmb2_init__user_notes' ) );
+
+		// The form we need for user onboarding
+		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init__onboarding' ) );
 
 		// add_action( 'cmb2_init', array( $this, 'cmb2_init__test' ) );
 		// When a post is saved that contains the date/time, we need to save the date as a hidden timestamp
 		add_action( 'save_post', array( $this, 'save_post__save_hidden_timestamp' ), 100, 2 );
 		add_action( 'publish_post', array( $this, 'save_post__save_hidden_timestamp' ), 100, 2 );
+
+		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init__save_onboarding_options' ) );
 
 	}/* create() */
 
@@ -435,7 +440,7 @@ class Setup {
 	 * @return null
 	 */
 
-	public function cmbs_init__user_notes() {
+	public function cmb2_init__user_notes() {
 
 		$prefix = 'ubc_user_notes_';
 
@@ -455,7 +460,128 @@ class Setup {
 			'default' => array( $this, 'user_notes_default_content' ),
 		) );
 
-	}/* cmbs_init__user_notes() */
+	}/* cmb2_init__user_notes() */
+
+
+	/**
+	 * The form for our user onboarding
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function cmb2_admin_init__onboarding() {
+
+		$prefix = 'ubc_press_onboarding_';
+
+		$onboarding = new_cmb2_box( array(
+			'id'			=> $prefix . 'metabox',
+			'title'			=> __( 'Course Details', \UBC\Press::get_text_domain() ),
+			'object_types'  => array( 'all' ),
+			'context'    	=> 'normal',
+			'priority' 		=> 'low',
+		) );
+
+		$session = $onboarding->add_field( array(
+			'name' => __( 'Session', \UBC\Press::get_text_domain() ),
+			'id'   => $prefix . 'session',
+			'type' => 'select',
+			'default'          => 'winter',
+		    'options'          => array(
+		        'winter' => __( 'Winter', \UBC\Press::get_text_domain() ),
+		        'summer' => __( 'Summer', \UBC\Press::get_text_domain() ),
+		        'other'   => __( 'Other', \UBC\Press::get_text_domain() ),
+		    ),
+		) );
+
+		$year = $onboarding->add_field( array(
+			'name' => __( 'Year', \UBC\Press::get_text_domain() ),
+			'id'   => $prefix . 'year',
+			'type' => 'text_small',
+			'attributes' => array(
+				'placeholder' => date( 'Y' ),
+			),
+		) );
+
+		$faculty = $onboarding->add_field( array(
+			'name' => __( 'Faculty', \UBC\Press::get_text_domain() ),
+			'id'   => $prefix . 'faculty',
+			'type' => 'select',
+			'default' => '',
+		    'options' => \UBC\Press\Utils::get_faculty_list(),
+		) );
+
+		$dept = $onboarding->add_field( array(
+			'name' => __( 'Department', \UBC\Press::get_text_domain() ),
+			'id'   => $prefix . 'department',
+			'type' => 'select',
+			'default' => '',
+		    'options' => array(
+				'dep1' => __( 'Dept1', \UBC\Press::get_text_domain() ),
+		        'dep2' => __( 'Dept2', \UBC\Press::get_text_domain() ),
+		        'dep3'   => __( 'Dept3', \UBC\Press::get_text_domain() ),
+			),
+		) );
+
+		$course_num = $onboarding->add_field( array(
+			'name' => __( 'Course Number', \UBC\Press::get_text_domain() ),
+			'id'   => $prefix . 'course_num',
+			'type' => 'text_small',
+			'attributes' => array(
+				'placeholder' => '1234',
+			),
+		) );
+
+		$section_num = $onboarding->add_field( array(
+			'name' => __( 'Section Number', \UBC\Press::get_text_domain() ),
+			'id'   => $prefix . 'section_num',
+			'type' => 'text_small',
+			'attributes' => array(
+				'placeholder' => '1234',
+			),
+		) );
+
+	}/* cmb2_admin_init__onboarding() */
+
+
+	public function cmb2_admin_init__save_onboarding_options() {
+
+		if ( ! isset( $_POST['nonce_CMB2phpubc_press_onboarding_metabox'] ) || ! wp_verify_nonce( $_POST['nonce_CMB2phpubc_press_onboarding_metabox'], 'nonce_CMB2phpubc_press_onboarding_metabox' ) ) {
+			return;
+		}
+
+		$session 		= sanitize_text_field( $_POST['ubc_press_onboarding_session'] );
+		$year 			= absint( $_POST['ubc_press_onboarding_year'] );
+		$faculty 		= sanitize_text_field( $_POST['ubc_press_onboarding_faculty'] );
+		$department 	= sanitize_text_field( $_POST['ubc_press_onboarding_department'] );
+		$course_num 	= sanitize_text_field( $_POST['ubc_press_onboarding_course_num'] );
+		$section_num	= sanitize_text_field( $_POST['ubc_press_onboarding_section_num'] );
+
+		$option_name 	= 'ubc_press_course_details';
+
+		$data_to_save = array(
+			'session' 		=> $session,
+			'course_dept' 	=> $department,
+			'course_num' 	=> $course_num,
+			'section_num'	=> $section_num,
+			'year' 			=> $year,
+			'course_fac' 	=> $faculty,
+		);
+
+		update_option( $option_name, $data_to_save );
+
+		// Test if we have all of the required details. If so, we also declare that we're done with onboarding
+		$have_all_details = \UBC\Press\Onboarding\Setup::have_all_course_details( $data_to_save );
+
+		if ( ! $have_all_details ) {
+			return;
+		}
+
+		update_option( 'ubc_press_onboarded', date( 'U' ) );
+
+	}/* cmb2_admin_init__save_onboarding_options() */
 
 
 	/**

@@ -1,0 +1,8 @@
+/*
+	Styles for UBC Press User Onboarding
+*/
+
+/* We hide it by default, we reveal in JS */
+#welcome-panel {
+	display: none;
+}
