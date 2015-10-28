@@ -516,7 +516,7 @@ class Setup {
 
 	private function get_panels_widget_type( $class = '' ) {
 
-		// List of UBCPress widgets
+		// List of ubc-press widgets
 		$ubc_press_widgets = \UBC\Press\Plugins\SiteBuilder\Widgets\Setup::$registered_ubc_press_widgets;
 
 		foreach ( $ubc_press_widgets as $id => $widget_class ) {
@@ -525,10 +525,32 @@ class Setup {
 			}
 		}
 
+		// It isn't one of ours, so let's get the answer from the default widgets
+		$default_widget_class = $this->get_default_panels_widget_type( $class );
+
+		if ( $default_widget_class ) {
+			return $default_widget_class;
+		}
+
 		return false;
 
 	}/* get_panels_widget_type() */
 
+
+	/**
+	 * From the default set of widgets, return the type
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $class - The class used to generate the widget
+	 * @return (string|false) The type of widget
+	 */
+
+	public function get_default_panels_widget_type( $class ) {
+
+		return $class;
+
+	}/* get_default_panels_widget_type() */
 
 
 	/**
@@ -621,24 +643,22 @@ class Setup {
 
 				$panel_meta = get_post_meta( $post_id, 'panels_data', true );
 
+				// No panels or no widgets
 				if ( empty( $panel_meta ) || ! isset( $panel_meta['widgets'] ) || empty( $panel_meta['widgets'] ) ) {
 					echo esc_html__( 'No Components', \UBC\Press::get_text_domain() );
 					return;
 				}
 
 				$widgets = $panel_meta['widgets'];
-				// wp_die( '<pre>' . print_r( $panel_meta, true ) . '</pre>' );
+
+				// Need to get the component type. If it's one of ours, link to it.
 				foreach ( $widgets as $id => $widget_data ) {
 
-					if ( ! isset( $widget_data['text'] ) || ( isset( $widget_data['type'] ) && 'visual' === $widget_data['type'] ) ) {
-						continue;
-					}
 					$widget_type = $this->get_panels_widget_type( $widget_data['panels_info']['class'] );
-					$component_post_id = $this->get_post_id_from_widget( $widget_type, $widget_data );
+					$component_column_content = $this->build_component_column_content( $widget_type, $widget_data );
 
-					$component_permalink = get_permalink( $component_post_id );
-					$content = '<a href="' . esc_url( $component_permalink ) . '" title="' . esc_html( $widget_data['text'] ) . '">' . esc_html( $widget_data['text'] ) . '</a>';
-					echo wp_kses_post( $content ) . '<br />';
+					echo wp_kses_post( $component_column_content ) . '<br />';
+
 				}
 
 			break;
@@ -646,6 +666,119 @@ class Setup {
 		}
 
 	}/* manage_pages_custom_column__section_components_content() */
+
+
+
+	/**
+	 * Build the content for the Components panel for Sections
+	 * If it's a linkable component, we link to it. Prepend the compoent
+	 * with the type, i.e. Lecture: Lecture 1
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $widget_type - What type of SO Panel widget is it (the class)
+	 * @param (array) $widget_data - The full set of widget data for this widget
+	 * @return (string) The content for the column
+	 */
+
+	public function build_component_column_content( $widget_type, $widget_data ) {
+
+		$widget_nicename	= $this->get_panels_widget_nice_name( $widget_type );
+
+		// See if this component has a linkable ID
+		$component_post_id	= $this->get_post_id_from_widget( $widget_type, $widget_data );
+
+		// Start fresh
+		$content = '';
+
+		// Always prepend with the type
+		$content .= $widget_nicename;
+
+		if ( $component_post_id && isset( $widget_data['text'] ) ) {
+			$component_permalink = get_permalink( $component_post_id );
+			$content .= ': <a href="' . esc_url( $component_permalink ) . '" title="' . esc_html( $widget_data['text'] ) . '">' . esc_html( $widget_data['text'] ) . '</a>';
+		}
+
+		return $content;
+
+	}/* build_component_column_content() */
+
+
+	/**
+	 * Get the nice name of a panels widget
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $class - The class name
+	 * @return (string) The nice name
+	 */
+
+	public function get_panels_widget_nice_name( $class = '' ) {
+
+		$nice_name = false;
+
+		switch ( $class ) {
+
+			case 'AddLectureWidget':
+				$nice_name = __( 'Lecture', \UBC\Press::get_text_domain() );
+				break;
+			case 'AddAssignmentWidget':
+				$nice_name = __( 'Assignment', \UBC\Press::get_text_domain() );
+				break;
+			case 'AddReadingWidget':
+				$nice_name = __( 'Reading', \UBC\Press::get_text_domain() );
+				break;
+			case 'AddLinkWidget':
+				$nice_name = __( 'Link', \UBC\Press::get_text_domain() );
+				break;
+			case 'AddDiscussionForumWidget':
+				$nice_name = __( 'Forum', \UBC\Press::get_text_domain() );
+				break;
+			case 'AddHandoutWidget':
+				$nice_name = __( 'Handout', \UBC\Press::get_text_domain() );
+				break;
+
+			case 'WP_Widget_Black_Studio_TinyMCE':
+				$nice_name = __( 'Text', \UBC\Press::get_text_domain() );
+				break;
+
+			case 'SiteOrigin_Widget_Editor_Widget':
+				$nice_name = __( 'Text', \UBC\Press::get_text_domain() );
+				break;
+
+			case 'SiteOrigin_Widget_GoogleMap_Widget':
+				$nice_name = __( 'Map', \UBC\Press::get_text_domain() );
+				break;
+
+			case 'SiteOrigin_Widget_Button_Widget':
+				$nice_name = __( 'Button', \UBC\Press::get_text_domain() );
+				break;
+
+			case 'SiteOrigin_Widget_Features_Widget':
+				$nice_name = __( 'Feature', \UBC\Press::get_text_domain() );
+				break;
+
+			case 'SiteOrigin_Widget_Image_Widget':
+				$nice_name = __( 'Image', \UBC\Press::get_text_domain() );
+				break;
+
+			case 'SiteOrigin_Widget_PostCarousel_Widget':
+				$nice_name = __( 'Posts', \UBC\Press::get_text_domain() );
+				break;
+
+			case 'SiteOrigin_Widget_Slider_Widget':
+				$nice_name = __( 'Slider', \UBC\Press::get_text_domain() );
+				break;
+
+			default:
+
+				break;
+
+		}
+
+		return $nice_name;
+
+	}/* get_panels_widget_nice_name() */
 
 
 	/**
