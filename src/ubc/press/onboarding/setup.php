@@ -163,6 +163,11 @@ class Setup {
 
 	public function current_screen__redirect_to_dashboard_when_not_onboarded() {
 
+		// If it's a super admin, bail
+		if ( is_super_admin() ) {
+			return;
+		}
+
 		// If this is not a TA/Instructor/Admin/Network Admin/Super Admin, bail
 		// @TODO: Determine this level of access. (Custom perm? "can_onboard" ?)
 
