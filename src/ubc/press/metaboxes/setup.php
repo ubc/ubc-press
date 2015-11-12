@@ -101,6 +101,9 @@ class Setup {
 		// The form we need for user onboarding
 		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init__onboarding' ) );
 
+		// The metabox which combines network level program objectives and course objectives taxonomies
+		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init__program_course_objectives' ) );
+
 		// add_action( 'cmb2_init', array( $this, 'cmb2_init__test' ) );
 		// When a post is saved that contains the date/time, we need to save the date as a hidden timestamp
 		add_action( 'save_post', array( $this, 'save_post__save_hidden_timestamp' ), 100, 2 );
@@ -147,7 +150,7 @@ class Setup {
 			'id'      => $prefix . 'content',
 			'type'    => 'wysiwyg',
 			'options' => array(
-				'textarea_rows' => 5,
+				'textarea_rows' => 8,
 				'media_buttons' => false,
 				'teeny' => true,
 			),
@@ -543,8 +546,86 @@ class Setup {
 			),
 		) );
 
+		// The main site in this network will have a post type 'programs'. This course
+		// must be part of a program (so we're able to get the program objectives). So
+		// we ask what program they're part of. This is a list of posts from the main site
+		$available_programs = \UBC\Press\Utils::get_programs_for_current_site( true );
+
+		if ( empty( $available_programs ) ) {
+			return;
+		}
+
+		$program = $onboarding->add_field( array(
+			'name' => __( 'Program', \UBC\Press::get_text_domain() ),
+			'id'   => $prefix . 'program',
+			'type' => 'select',
+			'default' => '',
+		    'options' => $available_programs,
+		) );
+
 	}/* cmb2_admin_init__onboarding() */
 
+
+	/**
+	 * The meta box for the Program and Course objectives.
+	 * Program objectives are set at the network level.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function cmb2_admin_init__program_course_objectives() {
+
+		$prefix = 'ubc_press_learning_objectives_';
+
+		$objectives = new_cmb2_box( array(
+			'id'			=> $prefix . 'metabox',
+			'title'			=> __( 'Learning Objectives', \UBC\Press::get_text_domain() ),
+			'object_types'  => array( 'section' ),
+			'context'    	=> 'side',
+			'priority' 		=> 'low',
+		) );
+
+		// We need Network-level program objectives and site-specific course objectives
+		// Course-specific is easy...
+		$course_objectives = \UBC\Press\Utils::get_course_objectives( true );
+
+		// Network-level
+		$program_objectives = \UBC\Press\Utils::get_program_objectives( true );
+
+		if ( ! empty( $course_objectives ) ) {
+			$course_objectives = $objectives->add_field( array(
+				'name'    => null,
+				'id'      => $prefix . 'course_objectives',
+				'type'    => 'multicheck',
+				'select_all_button' => false,
+				'options' => $course_objectives,
+			) );
+		}
+
+		if ( ! empty( $program_objectives ) ) {
+			$program_objectives = $objectives->add_field( array(
+				'name'    => null,
+				'id'      => $prefix . 'program_objectives',
+				'type'    => 'multicheck',
+				'select_all_button' => false,
+				'options' => $program_objectives,
+			) );
+		}
+
+	}/* cmb2_admin_init__program_course_objectives() */
+
+
+	/**
+	 * Save the onboarding form when it's filled in
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
 
 	public function cmb2_admin_init__save_onboarding_options() {
 
@@ -558,6 +639,7 @@ class Setup {
 		$department 	= sanitize_text_field( $_POST['ubc_press_onboarding_department'] );
 		$course_num 	= sanitize_text_field( $_POST['ubc_press_onboarding_course_num'] );
 		$section_num	= sanitize_text_field( $_POST['ubc_press_onboarding_section_num'] );
+		$program		= sanitize_text_field( $_POST['ubc_press_onboarding_program'] );
 
 		$option_name 	= 'ubc_press_course_details';
 
@@ -568,6 +650,7 @@ class Setup {
 			'section_num'	=> $section_num,
 			'year' 			=> $year,
 			'course_fac' 	=> $faculty,
+			'program'		=> $program,
 		);
 
 		update_option( $option_name, $data_to_save );
