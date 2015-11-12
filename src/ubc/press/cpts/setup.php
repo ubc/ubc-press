@@ -28,7 +28,6 @@ class Setup {
 	static $post_types_to_set_up = array();
 
 
-
 	/**
 	 * Our initializer which determines and then creates our custom post types
 	 * Also runs methods before and after creation which run actions enabling us
@@ -153,7 +152,7 @@ class Setup {
 			'icon' => 'dashicons-portfolio',
 		);
 
-		$post_types_to_set_up['note'] = array(
+		/*$post_types_to_set_up['note'] = array(
 			'label_args' => array(
 				'post_type_name' 	=> 'note',
 				'singular' 			=> 'Note',
@@ -170,7 +169,7 @@ class Setup {
 				'has_archive' => 'notes',
 			),
 			'icon' => 'dashicons-edit',
-		);
+		);*/
 
 		$post_types_to_set_up['reading'] = array(
 			'label_args' => array(
@@ -247,6 +246,22 @@ class Setup {
 		}
 
 	}/* create() */
+
+
+	/**
+	 * Getter method for our post types
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function get_post_types_to_setup() {
+
+		return static::$post_types_to_set_up;
+
+	}/* get_post_types_to_setup */
 
 
 	/**
