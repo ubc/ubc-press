@@ -64,6 +64,7 @@ class Setup {
 	public function setup_actions() {
 
 		// On all admin pages we redirect to the dashboard if the user hasn't onboarded
+		add_action( 'current_screen', array( $this, 'current_screen__redirect_to_dashboard_when_not_onboarded' ) );
 
 		// On the dashboard, we show the onboarding if necessary
 		add_action( 'admin_head-index.php', array( $this, 'admin_head_index__onboarding' ) );
@@ -144,6 +145,56 @@ class Setup {
 
 	}/* admin_head_index__onboarding() */
 
+
+	/**
+	 * When an instructor or TA or NA first logs into the site, we onboard
+	 * them. It's a bit like waterboarding, but with less water. And more
+	 * on. Actually it's not anything like waterboarding. I digress.
+	 * By default people are sent to the dashboard (and will therefore see
+	 * the onboarding). However, if they are either sent to another admin page
+	 * or try to be sneaky, we'll redirect them right back. This method handles
+	 * that redirection.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function current_screen__redirect_to_dashboard_when_not_onboarded() {
+
+		// If this is not a TA/Instructor/Admin/Network Admin/Super Admin, bail
+		// @TODO: Determine this level of access. (Custom perm? "can_onboard" ?)
+
+		// If this is the main site in the network, don't do it
+		if ( is_main_site_for_network( get_current_blog_id() ) ) {
+			return;
+		}
+
+		// Test and bail early if we are not to show the onboarding
+		if ( ! $this->show_onboarding() ) {
+			return;
+		}
+
+		// If we're on the dashboard, we don't redirect to the dashboard. That would be silly.
+		$screen = get_current_screen();
+
+		// Bail if for some reason we don't get a screen. We need a screen.
+		if ( ! is_a( $screen, 'WP_Screen' ) ) {
+			return;
+		}
+
+		// Bail if we're on the dashboard.
+		if ( 'dashboard' === $screen->id ) {
+			return;
+		}
+
+		// OK, we're not on the dashboard, we haven't been onboarded, back to the dashboard with you
+		wp_redirect( admin_url() );
+		exit;
+
+	}/* current_screen__redirect_to_dashboard_when_not_onboarded() */
+
 	/**
 	 * Determine if we should show the onboarding procedure. If we don't have the
 	 * requisite details about this site (i.e. course ID, faculty, etc.) then we
@@ -158,6 +209,11 @@ class Setup {
 	 */
 
 	public function show_onboarding() {
+
+		// If we're on the main site dashboard, no.
+		if ( is_main_site_for_network( get_current_blog_id() ) ) {
+			return false;
+		}
 
 		// If we don't have these, we definitely must show it
 		$course_details = $this->get_course_details();
