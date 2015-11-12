@@ -493,7 +493,11 @@ class Utils {
 		// Now we need to know what program the current blog is attached to. That's stored
 		// in the onboarding options ubc_press_course_details::program
 		$course_details	= get_option( 'ubc_press_course_details' );
-		$program 		= $course_details['program'];
+		$program 		= ( isset( $course_details['program'] ) ) ? $course_details['program'] : false;
+
+		if ( false === $program ) {
+			return array();
+		}
 
 		// Now we have that, we can look at the terms assoc
 		$program_objectives = static::get_program_objectives_for_post_of_site( $program, $main_site_id );
