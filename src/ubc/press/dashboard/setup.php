@@ -76,7 +76,7 @@ class Setup {
 	public function setup_actions() {
 
 		// All the actions for editing the default menu are in one method
-		// $this->edit_default_dashboard_menu();
+		$this->edit_default_dashboard_menu();
 
 		// Register our scripts
 		add_action( 'init', array( $this, 'init__register_assets' ), 5 );
@@ -152,36 +152,39 @@ class Setup {
 		// Rename 'Pages' to 'Course Info'
 		add_action( 'admin_menu', array( $this, 'admin_menu__rename_pages_menu' ) );
 
-		// Adjust the 'Appearance' menu
-		add_action( 'admin_menu', array( $this, 'admin_menu__adjust_appearance_menu' ) );
-
-		// Hide the site settings menu for students/tas
-		add_action( 'admin_menu', array( $this, 'admin_menu__hide_site_settings_as_appropriate' ) );
-
+		// // Adjust the 'Appearance' menu
+		// add_action( 'admin_menu', array( $this, 'admin_menu__adjust_appearance_menu' ) );
+		//
+		// // Hide the site settings menu for students/tas
+		// add_action( 'admin_menu', array( $this, 'admin_menu__hide_site_settings_as_appropriate' ) );
+		//
 		// 'Media' menu becomes 'Files' and shifts down
 		add_action( 'admin_menu', array( $this, 'admin_menu__adjust_media_menu' ) );
-
-		// 'Quiz' menu
+		//
+		// // 'Quiz' menu
 		add_action( 'admin_menu', array( $this, 'admin_menu__adjust_quiz_menu' ), 100 );
 
 		// Remove 'Blog' menu for student role
 		add_action( 'admin_menu', array( $this, 'admin_menu__hide_blog_for_students' ), 20 );
-
+		//
 		// Remove the WordPress version from the admin footer
 		add_action( 'admin_menu', array( $this, 'admin_menu__remove_wp_version' ) );
 
 		// Add logout to the dashboard menu
 		add_action( 'admin_menu', array( $this, 'admin_menu__add_logout_to_dashboard' ) );
 
-		// Create the 'Course Options' Page
-		add_action( 'admin_init', array( $this, 'admin_init__register_setting' ) );
-		add_action( 'admin_menu', array( $this, 'admin_menu__add_course_options_page' ) );
+		// // Create the 'Course Options' Page
+		// add_action( 'admin_init', array( $this, 'admin_init__register_setting' ) );
+		// add_action( 'admin_menu', array( $this, 'admin_menu__add_course_options_page' ) );
 
 		// Topics/Replies go into the main forums menu
 		add_action( 'admin_menu', array( $this, 'admin_menu__move_forum_components' ) );
 
 		// Events should be Calendar and many of the menu items need removing
 		add_action( 'admin_menu', array( $this, 'admin_menu__edit_events_menu_for_calendar' ), 15 );
+
+		// gForms, you're not as important as you think you are
+		add_action( 'admin_menu', array( $this, 'admin_menu__gravity_forms_no' ), 100 );
 
 	}/* edit_default_dashboard_menu() */
 
@@ -511,7 +514,7 @@ class Setup {
 			return;
 		}
 
-		$menu[20][0] = __( 'Course Info', \UBC\Press::get_text_domain() ); // Change Posts to Recipes
+		$menu[20][0] = __( 'Course Info', \UBC\Press::get_text_domain() );
 
 		// Shuffle it down
 		$menu[50] = $menu[20];
@@ -523,6 +526,7 @@ class Setup {
 
 	/**
 	 * Adjust the appearance menu
+	 * @TODO Look at the madness that is this method
 	 *
 	 * @since 1.0.0
 	 *
@@ -683,7 +687,7 @@ class Setup {
 
 		global $menu, $submenu;
 
-		if ( 'edit.php?post_type=event' !== $menu[44][2] ) {
+		if ( ! isset( $menu[44] ) || 'edit.php?post_type=event' !== $menu[44][2] ) {
 			return;
 		}
 
@@ -706,6 +710,30 @@ class Setup {
 		unset( $submenu['edit.php?post_type=event'][17] );
 
 	}/* admin_menu__edit_events_menu_for_calendar() */
+
+
+	/**
+	 * Gravity Forms insists on being at the top. I think otherwise. It needs
+	 * to be taught some humility.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function admin_menu__gravity_forms_no() {
+
+		global $menu;
+
+		if ( ! isset( $menu['16.9'] ) || 'gf_edit_forms' !== $menu['16.9']['2'] ) {
+			return;
+		}
+
+		$menu[100] = $menu['16.9'];
+		unset( $menu['16.9'] );
+
+	}/* admin_menu__gravity_forms_no() */
 
 
 	/**
@@ -861,7 +889,7 @@ class Setup {
 
 		$menu[10][0] = __( 'Files', \UBC\Press::get_text_domain() );
 
-		$menu[80] = $menu[10];
+		$menu[85] = $menu[10];
 		unset( $menu[10] );
 
 	}/* admin_menu__adjust_media_menu() */
