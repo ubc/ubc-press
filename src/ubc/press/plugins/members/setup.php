@@ -135,6 +135,12 @@ class Setup {
 
 	public function members_cp_metabox_after__close_tabs( $post ) {
 
+		$user_groups = get_terms( 'user-group' );
+
+		if ( ! $user_groups || ! is_array( $user_groups ) || empty( $user_groups ) ) {
+			return;
+		}
+
 		?>
 		</div><!-- .members-cp-tabs-wrap -->
 		<?php
