@@ -464,6 +464,9 @@ class Utils {
 
 		$usable_course_objectives = array();
 		foreach ( $course_objectives as $id => $term_details ) {
+			if ( ! is_object( $term_details ) ) {
+				continue;
+			}
 			$usable_course_objectives[ $term_details->term_id ] = $term_details->name;
 		}
 
