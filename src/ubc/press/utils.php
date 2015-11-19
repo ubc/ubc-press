@@ -677,4 +677,167 @@ class Utils {
 
 	}/* get_id_for_networks_main_site_of_blog_id() */
 
+
+	/**
+	 * Determine if a component is marked as complete for the passed user ID
+	 * Each user has a meta-key 'ubc_press_completed'. They keys in the array
+	 * are the user ID and the values are an array of details, right now just the
+	 * timestamp of when it was marked as complete.
+	 *
+	 * Usage: \UBC\Press\Utils::component_is_completed( $post_id, $user_id );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $post_id - The ID of the post that holds this component
+	 * @param (int) $user_id - The ID of the user for whom we're checking if this component is complete
+	 * @return (bool) True if this user has marked this component as complete, false otherwise
+	 */
+
+	public static function component_is_completed( $post_id, $user_id = false ) {
+
+		// If no user ID is passed, default to the current user
+		if ( false === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		// Sanitize
+		$post_id = absint( $post_id );
+		$user_id = absint( $user_id );
+
+		// i.e. array( 23 => array( 'when' => 345676543 ), 54 => array( 'when' => 34567123 ) )
+		$completed = get_user_meta( $user_id, 'ubc_press_completed', true );
+
+		if ( ! is_array( $completed ) ) {
+			$completed = array();
+		}
+
+		if ( array_key_exists( $post_id, $completed ) ) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}/* component_is_completed() */
+
+
+	/**
+	 * Mark a component as being completed by the passed user.
+	 * Adds to user meta 'ubc_press_completed'. If already exists, will
+	 * override the set timestamp
+	 *
+	 * Usage: \UBC\Press\Utils::set_component_as_complete( $post_id, $user_id );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $post_id - The ID of the post that holds this component
+	 * @param (int) $user_id - The ID of the user for whom we're marking as complete
+	 * @return (bool) The return of update_post_meta()
+	 */
+
+	public static function set_component_as_complete( $post_id, $user_id ) {
+
+		// If no user ID is passed, default to the current user
+		if ( false === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		// Sanitize
+		$post_id = absint( $post_id );
+		$user_id = absint( $user_id );
+
+		// Current meta saved for this component
+		$current_completed = get_user_meta( $user_id, 'ubc_press_completed', true );
+
+		// Ensure it's an array
+		if ( ! is_array( $current_completed ) ) {
+			$current_completed = array();
+		}
+
+		// Add our completion
+		$current_completed[ $post_id ] = array( 'when' => time() );
+
+		return (bool) update_user_meta( $user_id, 'ubc_press_completed', $current_completed );
+
+	}/* set_component_as_complete() */
+
+
+	/**
+	 * Mark a component as incomplete.
+	 *
+	 * Removes the key/value pair from the user meta for the component requested
+	 *
+	 * Usage: \UBC\Press\Utils::set_component_as_incomplete( $post_id, $user_id );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $post_id - The ID of the post that holds this component
+	 * @param (int) $user_id - The ID of the user for whom we're marking as complete
+	 * @return (bool) The return of update_post_meta()
+	 */
+
+	public static function set_component_as_incomplete( $post_id, $user_id = false ) {
+
+		// If no user ID is passed, default to the current user
+		if ( false === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		// Sanitize
+		$post_id = absint( $post_id );
+		$user_id = absint( $user_id );
+
+		// Current meta saved for this component
+		$current_completed = get_user_meta( $user_id, 'ubc_press_completed', true );
+
+		// Ensure it's an array
+		if ( ! is_array( $current_completed ) ) {
+			$current_completed = array();
+		}
+
+		if ( array_key_exists( $post_id, $current_completed ) ) {
+			unset( $current_completed[ $post_id ] );
+		}
+
+		return (bool) update_user_meta( $user_id, 'ubc_press_completed', $current_completed );
+
+	}/* set_component_as_incomplete() */
+
+
+	/**
+	 * Retrieve WHEN a user completed a component.
+	 *
+	 * Looks at the post meta for the specified post ID and user ID, then
+	 * fetches the 'when' key of the sub-array
+	 *
+	 * Usage: \UBC\Press\Utils::get_when_component_was_completed( $post_id, $user_id );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $post_id - The ID of the post that holds this component
+	 * @param (int) $user_id - The ID of the user for whom we're marking as complete
+	 * @return (string) The timestamp of when this component was completed
+	 */
+
+	public static function get_when_component_was_completed( $post_id, $user_id = false ) {
+
+		// If no user ID is passed, default to the current user
+		if ( false === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		// Sanitize
+		$post_id = absint( $post_id );
+		$user_id = absint( $user_id );
+
+		// Current meta saved for this component
+		$current_completed = get_user_meta( $user_id, 'ubc_press_completed', true );
+
+		if ( ! isset( $current_completed[ $post_id ] ) ) {
+			return '';
+		}
+
+		return $current_completed[ $post_id ]['when'];
+
+	}/* get_when_component_was_completed() */
+
 }/* Utils */
