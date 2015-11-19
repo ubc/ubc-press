@@ -680,7 +680,8 @@ class Utils {
 
 	/**
 	 * Determine if a component is marked as complete for the passed user ID
-	 * Each user has a meta-key 'ubc_press_completed'. They keys in the array
+	 * Each user has a meta-key 'ubc_press_completed'. They keys in the outer array
+	 * are the site IDs. The keys in each inner array
 	 * are the user ID and the values are an array of details, right now just the
 	 * timestamp of when it was marked as complete.
 	 *
@@ -703,15 +704,20 @@ class Utils {
 		// Sanitize
 		$post_id = absint( $post_id );
 		$user_id = absint( $user_id );
+		$site_id = get_current_blog_id();
 
-		// i.e. array( 23 => array( 'when' => 345676543 ), 54 => array( 'when' => 34567123 ) )
+		// i.e. array( '1' => array( 23 => array( 'when' => 345676543 ), 54 => array( 'when' => 34567123 ) ) )
 		$completed = get_user_meta( $user_id, 'ubc_press_completed', true );
 
 		if ( ! is_array( $completed ) ) {
 			$completed = array();
 		}
 
-		if ( array_key_exists( $post_id, $completed ) ) {
+		if ( ! array_key_exists( $site_id, $completed ) ) {
+			return false;
+		}
+
+		if ( array_key_exists( $post_id, $completed[ $site_id ] ) ) {
 			return true;
 		} else {
 			return false;
@@ -744,6 +750,7 @@ class Utils {
 		// Sanitize
 		$post_id = absint( $post_id );
 		$user_id = absint( $user_id );
+		$site_id = get_current_blog_id();
 
 		// Current meta saved for this component
 		$current_completed = get_user_meta( $user_id, 'ubc_press_completed', true );
@@ -753,8 +760,12 @@ class Utils {
 			$current_completed = array();
 		}
 
+		if ( ! array_key_exists( $site_id, $current_completed ) ) {
+			$current_completed[ $site_id ] = array();
+		}
+
 		// Add our completion
-		$current_completed[ $post_id ] = array( 'when' => time() );
+		$current_completed[ $site_id ][ $post_id ] = array( 'when' => time() );
 
 		return (bool) update_user_meta( $user_id, 'ubc_press_completed', $current_completed );
 
@@ -785,6 +796,7 @@ class Utils {
 		// Sanitize
 		$post_id = absint( $post_id );
 		$user_id = absint( $user_id );
+		$site_id = get_current_blog_id();
 
 		// Current meta saved for this component
 		$current_completed = get_user_meta( $user_id, 'ubc_press_completed', true );
@@ -794,8 +806,12 @@ class Utils {
 			$current_completed = array();
 		}
 
-		if ( array_key_exists( $post_id, $current_completed ) ) {
-			unset( $current_completed[ $post_id ] );
+		if ( ! array_key_exists( $site_id, $current_completed ) ) {
+			$current_completed[ $site_id ] = array();
+		}
+
+		if ( array_key_exists( $post_id, $current_completed[ $site_id ] ) ) {
+			unset( $current_completed[ $site_id ][ $post_id ] );
 		}
 
 		return (bool) update_user_meta( $user_id, 'ubc_press_completed', $current_completed );
@@ -828,15 +844,16 @@ class Utils {
 		// Sanitize
 		$post_id = absint( $post_id );
 		$user_id = absint( $user_id );
+		$site_id = get_current_blog_id();
 
 		// Current meta saved for this component
 		$current_completed = get_user_meta( $user_id, 'ubc_press_completed', true );
 
-		if ( ! isset( $current_completed[ $post_id ] ) ) {
+		if ( ! isset( $current_completed[ $site_id ] ) || ! isset( $current_completed[ $site_id ][ $post_id ] ) ) {
 			return '';
 		}
 
-		return $current_completed[ $post_id ]['when'];
+		return $current_completed[ $site_id ][ $post_id ]['when'];
 
 	}/* get_when_component_was_completed() */
 
