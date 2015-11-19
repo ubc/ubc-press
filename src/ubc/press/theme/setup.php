@@ -69,6 +69,9 @@ class Setup {
 		// Section archive page should reflect page order not published date
 		add_action( 'pre_get_posts', array( $this, 'pre_get_posts__section_archive_order' ) );
 
+		// Load our custom AJAX js
+		add_action( 'init', array( $this, 'init__load_ubc_press_ajax' ) );
+
 	}/* setup_actions() */
 
 
@@ -88,7 +91,7 @@ class Setup {
 
 
 	/**
-	 * Adjust the section archive order so that it reflects the custom page oci_free_descriptor
+	 * Adjust the section archive order so that it reflects the custom page order
 	 * rather than the published date
 	 *
 	 * @since 1.0.0
@@ -111,6 +114,41 @@ class Setup {
 		$query->set( 'order', 'ASC' );
 
 	}/* pre_get_posts__section_archive_order() */
+
+
+	/**
+	 * Register, localize and enqueue our custom UBC Press AJAX
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function init__load_ubc_press_ajax() {
+
+		// Front-end only
+		if ( is_admin() ) {
+			return;
+		}
+
+		wp_register_script( 'ubc_press_ajax', \UBC\Press::get_plugin_url() . 'src/ubc/press/theme/assets/js/ubc-press-ajax.js', array( 'jquery' ) );
+
+		$localized_data = array(
+			'ajax_url'	=> \UBC\Press\Ajax\Utils::get_ubc_press_ajax_url(),
+			'text'		=> array(
+				'loading' => __( 'Loading', \UBC\Press::get_text_domain() ),
+				'completed' => __( 'Completed', \UBC\Press::get_text_domain() ),
+				'mark_as_complete' => __( 'Mark as complete', \UBC\Press::get_text_domain() ),
+				'completed_just_now' => __( 'Completed just now', \UBC\Press::get_text_domain() ),
+			),
+		);
+
+		wp_localize_script( 'ubc_press_ajax', 'ubc_press_ajax', $localized_data );
+
+		wp_enqueue_script( 'ubc_press_ajax' );
+
+	}/* init__load_ubc_press_ajax() */
 
 
 	/**

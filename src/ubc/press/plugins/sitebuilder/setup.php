@@ -81,6 +81,12 @@ class Setup {
 		add_action( 'manage_link_posts_custom_column', array( $this, 'manage_component_posts_custom_column__component_sections_content' ), 10, 2 );
 		add_action( 'manage_post_posts_custom_column', array( $this, 'manage_component_posts_custom_column__component_sections_content' ), 10, 2 );
 
+		// Output a 'mark as complete' button before the components
+		add_action( 'ubc_press_show_template_for_post_of_post_type_before', array( $this, 'ubc_press_show_template_for_post_of_post_type_before__add_mark_as_complete' ), 10, 4 );
+
+		// Our custom AJAX implementation gives us ubcpressajax_mark_component_complete
+		add_action( 'ubcpressajax_mark_as_complete', array( $this, 'ubcpressajax_mark_as_complete__process' ) );
+
 	}/* setup_actions() */
 
 
@@ -832,5 +838,82 @@ class Setup {
 		return $columns;
 
 	}/* manage_assignment_posts_columns__add_section() */
+
+
+	/**
+	 * Add a mark as complete button to each component
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $template_start -
+	 * @param (string) $template_path -
+	 * @param (int) $post_id -
+	 * @param (string) $post_type -
+	 * @return null
+	 */
+
+	public function ubc_press_show_template_for_post_of_post_type_before__add_mark_as_complete( $template_start, $template_path, $post_id, $post_type ) {
+
+		// Kiiinda pointless for someone who isn't signed in
+		if ( ! is_user_logged_in() ) {
+			return;
+		}
+
+		// Sanitize
+		$post_id	= absint( $post_id );
+		$post_type	= sanitize_text_field( $post_type );
+
+		// Start fresh with data
+		$data = array();
+
+		// Determine if we're marking as complete or incomplete
+		$user_id	= get_current_user_id();
+		$completed	= \UBC\Press\Utils::component_is_completed( $post_id, $user_id );
+
+		$data['post_id']	= $post_id;
+		$data['post_type']	= $post_type;
+		$data['completed']	= $completed;
+
+		// If completed, we'll also send the timestamp
+		if ( $completed ) {
+			$data['when_completed'] = \UBC\Press\Utils::get_when_component_was_completed( $post_id, $user_id );
+		}
+
+		\UBC\Helpers::locate_template_part_in_plugin( \UBC\Press::get_plugin_path() . 'src/ubc/press/theme/templates/', 'mark-as-complete.php', true, false, $data );
+
+	}/* ubc_press_show_template_for_post_of_post_type_before__add_mark_as_complete() */
+
+
+	/**
+	 * Handle the custom AJAX call to make a component as complete. Must send either
+	 * wp_send_json_success or wp_send_json_failure, or if neither *must* use exit; at end
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $request_data - the $_REQUEST data
+	 * @return null
+	 */
+
+	public function ubcpressajax_mark_as_complete__process( $request_data ) {
+
+		// The nonce is already checked for us, still need to sanitize data
+		$post_id = absint( $request_data['post_id'] );
+		$user_id = get_current_user_id();
+
+		$is_completed = \UBC\Press\Utils::component_is_completed( $post_id, $user_id );
+
+		if ( true === $is_completed ) {
+			$complete = \UBC\Press\Utils::set_component_as_incomplete( $post_id, $user_id );
+		} else {
+			$complete = \UBC\Press\Utils::set_component_as_complete( $post_id, $user_id );
+		}
+
+		if ( false === (bool) $complete ) {
+			wp_send_json_error( array( 'message' => $complete ) );
+		}
+
+		wp_send_json_success( array( 'completed' => ! $is_completed ) );
+
+	}/* ubcpressajax_mark_as_complete__process() */
 
 }/* class Setup */
