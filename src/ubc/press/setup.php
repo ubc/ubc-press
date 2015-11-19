@@ -33,6 +33,9 @@ class Setup {
 
 		self::$instance = new self;
 
+		// Custom AJAX Endpoint creation
+		self::setup_ajax();
+
 		// Setup plugin tieups
 		self::setup_plugins();
 
@@ -207,6 +210,25 @@ class Setup {
 		$onboarding->init();
 
 	}/* setup_onboarding() */
+
+
+	/**
+	 * Set up the custom AJAX endpoints creation.
+	 *
+	 * This enables us to not use admin-ajax from the front-end.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function setup_ajax() {
+
+		$ajax = new \UBC\Press\Ajax\Setup;
+		$ajax->init();
+
+	}/* setup_ajax() */
 
 
 	/**
