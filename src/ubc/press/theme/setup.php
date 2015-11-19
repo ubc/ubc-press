@@ -72,6 +72,9 @@ class Setup {
 		// Load our custom AJAX js
 		add_action( 'init', array( $this, 'init__load_ubc_press_ajax' ) );
 
+		// Load custom CSS. @TODO: Place this into the main theme stylesheet
+		add_action( 'init', array( $this, 'init__load_temp_stylesheet' ) );
+
 	}/* setup_actions() */
 
 
@@ -150,6 +153,25 @@ class Setup {
 
 	}/* init__load_ubc_press_ajax() */
 
+
+	/**
+	 * Temporary:
+	 *
+	 * Load the temp stylesheet
+	 *
+	 * @since 1.0.0
+	 * @TODO Move this into the main stylesheet
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function init__load_temp_stylesheet() {
+
+		wp_register_style( 'ubc-press-temp', \UBC\Press::get_plugin_url() . 'src/ubc/press/theme/assets/css/temp.css' );
+		wp_enqueue_style( 'ubc-press-temp' );
+
+	}/* init__load_temp_stylesheet() */
 
 	/**
 	 * Run before we make any theme changes. Simply runs an action which we can

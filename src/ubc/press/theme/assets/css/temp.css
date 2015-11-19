@@ -1,0 +1,31 @@
+/*
+This file is temporary. It will be backed into the main stylesheet
+ */
+
+/* Ensure the 'Mark as complete'/Completed buttons are the same size */
+.button.mark-as-complete {
+	min-width: 202px;
+}
+
+/* dashicon only shown on hover */
+.dashicons.onhover {
+	display: none;
+}
+
+.button.mark-as-complete:hover .dashicons.onhover{
+	display: inline-block;
+	height: 15px;
+	position: absolute;
+	top: 11px;
+}
+
+/* When completed and hovering, colour should be a warning colour */
+.button.mark-as-complete.success:hover {
+	background: #dc750f;
+	border-color: #dc750f;
+}
+
+.button.mark-as-complete.success:hover::after {
+	background: #dc750f;
+	border-color: #dc750f;
+}

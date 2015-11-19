@@ -4,6 +4,19 @@ jQuery( document ).ready( function( $ ) {
 
 	$( 'body' ).on( 'click', '.mark-as-complete', click_mark_as_complete__process_completion );
 
+
+	/**
+	 * When a .mark-as-complete button is clicked, we do the appropriate action.
+	 * If they've just completed it, we set the user meta (via AJAX), change the button
+	 * text and add when it was completed (just now). If they've already completed it and
+	 * they are marking it as incomplete, we revert the above.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (object) event - The click event from jQuery
+	 * @return null
+	 */
+
 	function click_mark_as_complete__process_completion( event ) {
 
 		event.preventDefault();
@@ -28,7 +41,8 @@ jQuery( document ).ready( function( $ ) {
 				if( response.success ) {
 					switch_completed_state( thisButton, response.data.completed );
 				} else {
-					console.log( 'bums' );
+					console.log( response );
+					alert( 'Could not mark as complete. Please refresh and try again' );
 				}
 			},
 			complete: function( jqXHR, textStatus ) {
@@ -103,10 +117,12 @@ jQuery( document ).ready( function( $ ) {
 		element.removeClass( 'disabled' );
 
 		if ( element.hasClass( 'secondary' ) ) {
-			element.text( localized_data.text.mark_as_complete );
+			element.html( localized_data.text.mark_as_complete + '<span class="dashicons dashicons-yes onhover"></span>' );
 		} else {
-			element.text( localized_data.text.completed );
+			element.html( localized_data.text.completed + '<span class="dashicons dashicons-no onhover"></span>' );
 		}
+
+		element.blur();
 
 	}/* stop_loading() */
 
@@ -131,5 +147,6 @@ jQuery( document ).ready( function( $ ) {
 		}
 
 	}/* change_completed_message() */
+
 
 } );
