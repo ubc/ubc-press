@@ -215,6 +215,11 @@ class Setup {
 
 	public function show_onboarding() {
 
+		// We need the WP Multi Network plugin to continue
+		if ( ! function_exists( 'is_main_site_for_network' ) ) {
+			return false;
+		}
+
 		// If we're on the main site dashboard, no.
 		if ( is_main_site_for_network( get_current_blog_id() ) ) {
 			return false;
