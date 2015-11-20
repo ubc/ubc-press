@@ -57,7 +57,7 @@ class AddHandoutWidget extends \SiteOrigin_Widget {
 	}
 
 	function get_template_name( $instance ) {
-		return 'handout-widget';
+		return null;
 	}
 
 	function get_style_name( $instance ) {
