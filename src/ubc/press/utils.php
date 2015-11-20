@@ -696,6 +696,11 @@ class Utils {
 
 	public static function component_is_completed( $post_id, $user_id = false ) {
 
+		// Bail if user isn't logged in
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
 		// If no user ID is passed, default to the current user
 		if ( false === $user_id ) {
 			$user_id = get_current_user_id();
@@ -707,7 +712,7 @@ class Utils {
 		$site_id = get_current_blog_id();
 
 		// i.e. array( '1' => array( 23 => array( 'when' => 345676543 ), 54 => array( 'when' => 34567123 ) ) )
-		$completed = get_user_meta( $user_id, 'ubc_press_completed', true );
+		$completed = \UBC\Press\Utils::get_completed_components_for_user( $user_id );
 
 		if ( ! is_array( $completed ) ) {
 			$completed = array();
@@ -742,6 +747,11 @@ class Utils {
 
 	public static function set_component_as_complete( $post_id, $user_id ) {
 
+		// Bail if user isn't logged in
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
 		// If no user ID is passed, default to the current user
 		if ( false === $user_id ) {
 			$user_id = get_current_user_id();
@@ -753,7 +763,7 @@ class Utils {
 		$site_id = get_current_blog_id();
 
 		// Current meta saved for this component
-		$current_completed = get_user_meta( $user_id, 'ubc_press_completed', true );
+		$current_completed = \UBC\Press\Utils::get_completed_components_for_user( $user_id );
 
 		// Ensure it's an array
 		if ( ! is_array( $current_completed ) ) {
@@ -788,6 +798,11 @@ class Utils {
 
 	public static function set_component_as_incomplete( $post_id, $user_id = false ) {
 
+		// Bail if user isn't logged in
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
 		// If no user ID is passed, default to the current user
 		if ( false === $user_id ) {
 			$user_id = get_current_user_id();
@@ -799,7 +814,7 @@ class Utils {
 		$site_id = get_current_blog_id();
 
 		// Current meta saved for this component
-		$current_completed = get_user_meta( $user_id, 'ubc_press_completed', true );
+		$current_completed = \UBC\Press\Utils::get_completed_components_for_user( $user_id );
 
 		// Ensure it's an array
 		if ( ! is_array( $current_completed ) ) {
@@ -836,6 +851,11 @@ class Utils {
 
 	public static function get_when_component_was_completed( $post_id, $user_id = false ) {
 
+		// Bail if user isn't logged in
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
 		// If no user ID is passed, default to the current user
 		if ( false === $user_id ) {
 			$user_id = get_current_user_id();
@@ -847,7 +867,7 @@ class Utils {
 		$site_id = get_current_blog_id();
 
 		// Current meta saved for this component
-		$current_completed = get_user_meta( $user_id, 'ubc_press_completed', true );
+		$current_completed = \UBC\Press\Utils::get_completed_components_for_user( $user_id );
 
 		if ( ! isset( $current_completed[ $site_id ] ) || ! isset( $current_completed[ $site_id ][ $post_id ] ) ) {
 			return '';
@@ -856,5 +876,272 @@ class Utils {
 		return $current_completed[ $site_id ][ $post_id ]['when'];
 
 	}/* get_when_component_was_completed() */
+
+
+	/**
+	 * A simple getter for the currently completed components for a user
+	 *
+	 * Usage: \UBC\Press\Utils::get_completed_components_for_user( $user_id );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $user_id - The ID of the user for whom we're looking for completed components
+	 * @return (array) The completed components for the user
+	 */
+
+	public static function get_completed_components_for_user( $user_id = false ) {
+
+		// Bail if user isn't logged in
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		// If no user ID is passed, default to the current user
+		if ( false === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		// Sanitize
+		$user_id = absint( $user_id );
+
+		// Current meta saved for this component
+		$current_completed = get_user_meta( $user_id, 'ubc_press_completed', true );
+
+		return $current_completed;
+
+	}/* get_completed_components_for_user() */
+
+
+	/**
+	 * Fetch the completed components for a section for the given user
+	 *
+	 * Usage: \UBC\Press\Utils::completed_components_for_section( $post_id, $user_id );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $post_id - The ID of the post that holds the components (the section)
+	 * @param (int) $user_id - The ID of the user for whom we're checking
+	 * @return (array) The completed component IDs for the section including a count of total components in the section
+	 */
+
+	public static function completed_components_for_section( $post_id, $user_id = false ) {
+
+		// Bail if user isn't logged in
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		// If no user ID is passed, default to the current user
+		if ( false === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		// Sanitize
+		$post_id = absint( $post_id );
+		$user_id = absint( $user_id );
+		$site_id = get_current_blog_id();
+
+		// Start our output
+		$completed_components = array();
+		$completed_components['completed_components'] = array();
+
+		$component_associations = get_post_meta( $post_id, 'component_associations', true );
+
+		// No panels or no widgets therefore no completed components
+		if ( empty( $component_associations ) ) {
+			$completed_components['total_components'] = 0;
+			return $completed_components;
+		}
+
+		// The number of total completable components on this section
+		$completable_components = array();
+		foreach ( $component_associations as $key => $cpost_id ) {
+			if ( \UBC\Press\Utils::component_can_be_completed( $cpost_id ) ) {
+				$completable_components[] = $cpost_id;
+			}
+		}
+
+		$completed_components['total_components'] = count( $completable_components );
+
+		// For each of these components, we look in user meta to determine if they're completed
+		$user_completed_components = \UBC\Press\Utils::get_completed_components_for_user( $user_id );
+		$sites_completed_components = ( is_array( $user_completed_components ) && isset( $user_completed_components[ $site_id ] ) ) ? $user_completed_components[ $site_id ] : false;
+
+		// No completed components for this site
+		if ( false === $sites_completed_components ) {
+			return $completed_components;
+		}
+
+		foreach ( $component_associations as $key => $component_post_id ) {
+
+			if ( array_key_exists( $component_post_id, $sites_completed_components ) ) {
+				$completed_components['completed_components'][] = $component_post_id;
+			}
+		}
+
+		return $completed_components;
+
+	}/* completed_components_for_section() */
+
+
+
+	/**
+	 * Some components are 'completable'. This means that a user can "Mark as complete".
+	 * Not all components are - mainly because they don't have an associated ID.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return (array) A list of completable components
+	 */
+
+	public static function get_completable_component_types() {
+
+		$completables = array(
+			'assignment',
+			'handout',
+			'reading',
+			'link',
+			'lecture',
+			'post',
+			'page',
+		);
+
+		return apply_filters( 'ubc_press_completable_component_types', $completables );
+
+	}/* get_completable_component_types() */
+
+
+
+	/**
+	 * Test whether a component can be completed. Expects the Post ID
+	 * of a component which is used to determine the type of component.
+	 * That type is then compared to the list in get_completable_component_types()
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $post_id - The post ID of a component
+	 * @return (bool) True if the component can be marked as completed. False otherwise.
+	 */
+
+	public static function component_can_be_completed( $post_id ) {
+
+		$post_id 		= absint( $post_id );
+
+		$post_type 		= get_post_type( $post_id );
+
+		$completables	= \UBC\Press\Utils::get_completable_component_types();
+
+		if ( in_array( $post_type, $completables ) ) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}/* component_can_be_completed() */
+
+
+	/**
+	 * Our custom widgets stored a post ID, but in a separate field depending on their type
+	 *
+	 * Usage: \UBC\Press\Utils::get_post_id_from_widget( $widget_type, $panel_widget );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $widget_type - The type of widget
+	 * @param (array) $panel_widget - the widget we're looking through
+	 * @return (int|false) The Post ID associated with the widget, or false if none
+	 */
+
+	public static function get_post_id_from_widget( $widget_type = '', $panel_widget ) {
+
+		$post_id_key = false;
+
+		switch ( $widget_type ) {
+
+			case 'AddAssignmentWidget':
+				$post_id_key = 'assignment_post_id';
+				break;
+
+			case 'AddHandoutWidget':
+				$post_id_key = 'handout_post_id';
+				break;
+
+			case 'AddReadingWidget':
+				$post_id_key = 'reading_post_id';
+				break;
+
+			case 'AddLinkWidget':
+				$post_id_key = 'link_post_id';
+				break;
+
+			case 'AddDiscussionForumWidget':
+				$post_id_key = 'discussion_forum_post_id';
+				break;
+
+			case 'AddLectureWidget':
+				$post_id_key = 'lecture_post_id';
+				break;
+
+			default:
+				break;
+		}
+
+		if ( false === $post_id_key ) {
+			return false;
+		}
+
+		return $panel_widget[ $post_id_key ];
+
+	}/* get_post_id_from_widget() */
+
+
+	/**
+	 * Get the widget type from the widget class, allows us to know what to do
+	 * or get from the other data
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $class - The class used to generate the widget
+	 * @return (string|false) The type of widget, i.e. 'AddAssignmentWidget' or 'AddLinkWidget' or false if it's not a custom UBC Press widget
+	 */
+
+	public static function get_panels_widget_type( $class = '' ) {
+
+		// List of ubc-press widgets
+		$ubc_press_widgets = \UBC\Press\Plugins\SiteBuilder\Widgets\Setup::$registered_ubc_press_widgets;
+
+		foreach ( $ubc_press_widgets as $id => $widget_class ) {
+			if ( strpos( $class, $widget_class ) ) {
+				return $widget_class;
+			}
+		}
+
+		// It isn't one of ours, so let's get the answer from the default widgets
+		$default_widget_class = \UBC\Press\Utils::get_default_panels_widget_type( $class );
+
+		if ( $default_widget_class ) {
+			return $default_widget_class;
+		}
+
+		return false;
+
+	}/* get_panels_widget_type() */
+
+
+	/**
+	 * From the default set of widgets, return the type
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $class - The class used to generate the widget
+	 * @return (string|false) The type of widget
+	 */
+
+	public static function get_default_panels_widget_type( $class ) {
+
+		return $class;
+
+	}/* get_default_panels_widget_type() */
 
 }/* Utils */

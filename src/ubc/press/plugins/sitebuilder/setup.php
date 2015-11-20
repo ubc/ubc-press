@@ -447,14 +447,14 @@ class Setup {
 
 		foreach ( $panels_data['widgets'] as $id => $panel_widget ) {
 
-			$class = $panel_widget['panels_info']['class'];
+			$class = ( isset( $panel_widget['panels_info'] ) && isset( $panel_widget['panels_info']['class'] ) ) ? $panel_widget['panels_info']['class'] : false;
 			// Determine which type of widget this is
-			$widget_type = $this->get_panels_widget_type( $class );
+			$widget_type = \UBC\Press\Utils::get_panels_widget_type( $class );
 			if ( false === $widget_type ) {
 				continue;
 			}
 
-			$post_id_from_widget = $this->get_post_id_from_widget( $widget_type, $panel_widget );
+			$post_id_from_widget = \UBC\Press\Utils::get_post_id_from_widget( $widget_type, $panel_widget );
 			$associations[] = $post_id_from_widget;
 		}
 
@@ -509,108 +509,6 @@ class Setup {
 	}/* save_post__link_section_with_components() */
 
 
-
-	/**
-	 * Get the widget type from the widget class, allows us to know what to do
-	 * or get from the other data
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param (string) $class - The class used to generate the widget
-	 * @return (string|false) The type of widget, i.e. 'AddAssignmentWidget' or 'AddLinkWidget' or false if it's not a custom UBC Press widget
-	 */
-
-	private function get_panels_widget_type( $class = '' ) {
-
-		// List of ubc-press widgets
-		$ubc_press_widgets = \UBC\Press\Plugins\SiteBuilder\Widgets\Setup::$registered_ubc_press_widgets;
-
-		foreach ( $ubc_press_widgets as $id => $widget_class ) {
-			if ( strpos( $class, $widget_class ) ) {
-				return $widget_class;
-			}
-		}
-
-		// It isn't one of ours, so let's get the answer from the default widgets
-		$default_widget_class = $this->get_default_panels_widget_type( $class );
-
-		if ( $default_widget_class ) {
-			return $default_widget_class;
-		}
-
-		return false;
-
-	}/* get_panels_widget_type() */
-
-
-	/**
-	 * From the default set of widgets, return the type
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param (string) $class - The class used to generate the widget
-	 * @return (string|false) The type of widget
-	 */
-
-	public function get_default_panels_widget_type( $class ) {
-
-		return $class;
-
-	}/* get_default_panels_widget_type() */
-
-
-	/**
-	 * Our custom widgets stored a post ID, but in a separate field depending on their type
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param (string) $widget_type - The type of widget
-	 * @param (array) $panel_widget - the widget we're looking through
-	 * @return (int|false) The Post ID associated with the widget, or false if none
-	 */
-
-	private function get_post_id_from_widget( $widget_type = '', $panel_widget ) {
-
-		$post_id_key = false;
-
-		switch ( $widget_type ) {
-
-			case 'AddAssignmentWidget':
-				$post_id_key = 'assignment_post_id';
-				break;
-
-			case 'AddHandoutWidget':
-				$post_id_key = 'handout_post_id';
-				break;
-
-			case 'AddReadingWidget':
-				$post_id_key = 'reading_post_id';
-				break;
-
-			case 'AddLinkWidget':
-				$post_id_key = 'link_post_id';
-				break;
-
-			case 'AddDiscussionForumWidget':
-				$post_id_key = 'discussion_forum_post_id';
-				break;
-
-			case 'AddLectureWidget':
-				$post_id_key = 'lecture_post_id';
-				break;
-
-			default:
-				break;
-		}
-
-		if ( false === $post_id_key ) {
-			return false;
-		}
-
-		return $panel_widget[ $post_id_key ];
-
-	}/* get_post_id_from_widget() */
-
 	/**
 	 * Add a components column to the sections listing
 	 *
@@ -660,7 +558,7 @@ class Setup {
 				// Need to get the component type. If it's one of ours, link to it.
 				foreach ( $widgets as $id => $widget_data ) {
 
-					$widget_type = $this->get_panels_widget_type( $widget_data['panels_info']['class'] );
+					$widget_type = \UBC\Press\Utils::get_panels_widget_type( $widget_data['panels_info']['class'] );
 					$component_column_content = $this->build_component_column_content( $widget_type, $widget_data );
 
 					echo wp_kses_post( $component_column_content ) . '<br />';
@@ -692,7 +590,7 @@ class Setup {
 		$widget_nicename	= $this->get_panels_widget_nice_name( $widget_type );
 
 		// See if this component has a linkable ID
-		$component_post_id	= $this->get_post_id_from_widget( $widget_type, $widget_data );
+		$component_post_id	= \UBC\Press\Utils::get_post_id_from_widget( $widget_type, $widget_data );
 
 		// Start fresh
 		$content = '';
@@ -862,6 +760,11 @@ class Setup {
 		// Sanitize
 		$post_id	= absint( $post_id );
 		$post_type	= sanitize_text_field( $post_type );
+
+		// Determine if this is a component that can be completed or not
+		if ( ! \UBC\Press\Utils::component_can_be_completed( $post_id ) ) {
+			return;
+		}
 
 		// Start fresh with data
 		$data = array();

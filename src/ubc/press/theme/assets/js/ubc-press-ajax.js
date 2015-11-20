@@ -40,6 +40,7 @@ jQuery( document ).ready( function( $ ) {
 
 				if( response.success ) {
 					switch_completed_state( thisButton, response.data.completed );
+					update_count_in_section_list( response.data.completed );
 				} else {
 					console.log( response );
 					alert( 'Could not mark as complete. Please refresh and try again' );
@@ -134,8 +135,9 @@ jQuery( document ).ready( function( $ ) {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param   -
-	 * @return
+	 * @param (object) element - a jQuery object of a HTML element
+	 * @param (bool) completed - Whether we've completed or uncompleted
+	 * @return null
 	 */
 
 	function change_completed_message( element, completed ) {
@@ -148,5 +150,34 @@ jQuery( document ).ready( function( $ ) {
 
 	}/* change_completed_message() */
 
+
+	/**
+	 * Also update the completed count in the sidebar
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (bool) completed - Whether we've completed or uncompleted
+	 * @return null
+	 */
+
+	function update_count_in_section_list( completed ) {
+
+		// Find the completed class and the number of already completed
+		var updateSpan = $( '.current_page_item .completed-components-details .completed-components' );
+		var prevValue = parseInt( updateSpan.text() );
+
+		var newValue;
+
+		// Calculate new value
+		if ( completed ) {
+			newValue = prevValue + 1;
+		} else {
+			newValue = prevValue - 1;
+		}
+
+		// Update the value
+		updateSpan.text( newValue );
+
+	}/* update_count_in_section_list() */
 
 } );
