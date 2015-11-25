@@ -1144,4 +1144,98 @@ class Utils {
 
 	}/* get_default_panels_widget_type() */
 
+
+	/**
+	 * Add user notes for a specific section
+	 *
+	 * Usage: \UBC\Press\Utils::add_user_notes_for_object( $user_id, $post_id, $notes_content );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $user_id - The ID of the user for which we're adding the notes
+	 * @param (int) $object_id - The object ID, probably Post ID of a section
+	 * @param (int) $notes_content - The content of the note to add
+	 * @return (bool) The return of add_user_meta
+	 */
+
+	public static function add_user_notes_for_object( $user_id = false, $object_id = false, $notes_content = '' ) {
+
+		// Not signed in? No dice
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		// No user passed? Use the current user
+		if ( false === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		// No object passed? Assume in loop
+		if ( false === $object_id ) {
+			$object_id = get_the_ID();
+		}
+
+		// Bail early if we have neither
+		if ( empty( $user_id ) || empty( $object_id ) ) {
+			return false;
+		}
+
+		$user_id	= absint( $user_id );
+		$object_id	= absint( $object_id );
+		$site_id 	= absint( get_current_blog_id() );
+
+		// Check that the current user is able to update this user's notes
+		// Either a network admin, or the user themselves
+		if ( ! is_super_admin() || ( get_current_user_id() !== $user_id ) ) {
+			return false;
+		}
+
+		$notes_content = wp_kses_post( $notes_content );
+
+		$new_note = array( 'content' => $notes_content, 'when' => time() );
+
+		// Current notes for this user
+		$current_notes = \UBC\Press\Utils::get_user_notes( $user_id );
+
+		// Current user's notes total and... for this site
+		if ( ! isset( $current_notes ) || ! is_array( $current_notes ) ) {
+			$current_notes = array();
+		}
+
+		if ( ! isset( $current_notes[ $site_id ] ) || ! is_array( $current_notes[ $site_id ] ) ) {
+			$current_notes[ $site_id ] = array();
+		}
+
+		// Add this one (replacing any existing one for this object)
+		$current_notes[ $site_id ][ $object_id ] = $new_note;
+
+		// Save
+		return update_user_meta( $user_id, 'ubc_press_user_notes', $current_notes );
+
+	}/* add_user_notes_for_section() */
+
+
+	/**
+	 * A getter for all user notes
+	 *
+	 * Usage: \UBC\Utils::get_user_notes( $user_id );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $user_id - The ID of the user for whom we are getting notes
+	 * @return (array) An array of user notes, based on site and section
+	 */
+
+	public static function get_user_notes( $user_id = false ) {
+
+		if ( false === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		$user_id = absint( $user_id );
+
+		return get_user_meta( $user_id, 'ubc_press_user_notes', true );
+
+	}/* get_user_notes() */
+
 }/* Utils */

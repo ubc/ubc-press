@@ -98,6 +98,9 @@ class Setup {
 		// This is the front-end notes submission form
 		add_action( 'cmb2_init', array( $this, 'cmb2_init__user_notes' ) );
 
+		// Save user notes
+		add_action( 'cmb2_init', array( $this, 'cmb2_init__save_user_notes' ) );
+
 		// The form we need for user onboarding
 		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init__onboarding' ) );
 
@@ -453,6 +456,7 @@ class Setup {
 			'object_types'  => array( 'any' ),
 			'context'    	=> 'normal',
 			'priority' 		=> 'low',
+			'save_fields'	=> false,
 		) );
 
 		$notes = $user_notes->add_field( array(
@@ -460,11 +464,77 @@ class Setup {
 			'id'   => $prefix . 'content',
 			'desc' => __( '', \UBC\Press::get_text_domain() ),
 			'type' => 'textarea',
-			'default' => array( $this, 'user_notes_default_content' ),
+			// 'default' => array( $this, 'user_notes_default_content' ),
+			'escape_cb' => array( $this, 'user_notes_default_content' ),
 		) );
 
 	}/* cmb2_init__user_notes() */
 
+
+	/**
+	 * Save the user notes.
+	 *
+	 * Saved to user meta in key ubc_press_user_notes which is
+	 * array( <site id> => <section id> => <note content> )
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function cmb2_init__save_user_notes() {
+
+		// Test for nonce_CMB2phpubc_user_notes_metabox and verify
+		if ( ! isset( $_POST['nonce_CMB2phpubc_user_notes_metabox'] ) || ! wp_verify_nonce( $_POST['nonce_CMB2phpubc_user_notes_metabox'], 'nonce_CMB2phpubc_user_notes_metabox' ) ) {
+			return;
+		}
+
+		// Sanitize
+		$user_id		= absint( get_current_user_id() );
+		$section_id		= absint( $_POST['object_id'] );
+		$note_content	= wp_kses_post( $_POST['ubc_user_notes_content'] );
+
+		$added = \UBC\Press\Utils::add_user_notes_for_object( $user_id, $section_id, $note_content );
+
+	}/* cmb2_init__save_user_notes() */
+
+	/**
+	 * By default the content of the notes field is empty, however, if
+	 * the currently signed in user has made notes for this post already,
+	 * then we show them
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function user_notes_default_content( $field_array, $field_object ) {
+
+		if ( ! is_user_logged_in() ) {
+			return '';
+		}
+
+		$all_user_notes	= \UBC\Press\Utils::get_user_notes( get_current_user_id() );
+		$site_id	= get_current_blog_id();
+		$object 	= get_the_ID();
+
+		if ( empty( $all_user_notes ) || ! is_array( $all_user_notes ) ) {
+			return '';
+		}
+
+		if ( ! isset( $all_user_notes[ $site_id ] ) ) {
+			return '';
+		}
+
+		if ( ! isset( $all_user_notes[ $site_id ][ $object ] ) ) {
+			return '';
+		}
+
+		return wp_kses_post( $all_user_notes[ $site_id ][ $object ]['content'] );
+
+	}/* user_notes_default_content */
 
 	/**
 	 * The form for our user onboarding
@@ -667,22 +737,6 @@ class Setup {
 	}/* cmb2_admin_init__save_onboarding_options() */
 
 
-	/**
-	 * By default the content of the notes field is empty, however, if
-	 * the currently signed in user has made notes for this post already,
-	 * then we show them
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	public function user_notes_default_content() {
-
-		return 'weeee';
-
-	}/* user_notes_default_content */
 
 
 	function cmb2_init__test() {
