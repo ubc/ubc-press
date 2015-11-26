@@ -463,7 +463,13 @@ class Setup {
 			'name' => __( '', \UBC\Press::get_text_domain() ),
 			'id'   => $prefix . 'content',
 			'desc' => __( '', \UBC\Press::get_text_domain() ),
-			'type' => 'textarea',
+			'type' => 'wysiwyg',
+			'options' => array(
+				'media_buttons' => false,
+				'teeny' => true,
+				'quicktags' => false,
+				'editor_height' => 170,
+			),
 			// 'default' => array( $this, 'user_notes_default_content' ),
 			'escape_cb' => array( $this, 'user_notes_default_content' ),
 		) );
