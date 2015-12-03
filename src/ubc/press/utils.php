@@ -974,6 +974,10 @@ class Utils {
 
 		foreach ( $component_associations as $key => $component_post_id ) {
 
+			if ( empty ( $component_post_id ) ) {
+				continue;
+			}
+
 			if ( array_key_exists( $component_post_id, $sites_completed_components ) ) {
 				$completed_components['completed_components'][] = $component_post_id;
 			}
