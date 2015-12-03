@@ -53,8 +53,21 @@ class Setup {
 		// Add a lecture
 		$this->add_lecture_widget();
 
+		// Add WP Pro Quiz Widget
+		$this->add_wp_pro_quiz_widget();
+
 	}/* init() */
 
+
+	/**
+	 * Ensure we're able to extend widgets and, optionally for the existence of
+	 * an $other_class
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $other_class - The name of another class to check for existence
+	 * @return (bool) True if we have our dependencies
+	 */
 
 	public function check_dependencies( $other_class = false ) {
 
@@ -209,5 +222,27 @@ class Setup {
 
 	}/* add_link_widget() */
 
+
+	/**
+	 * A WP Pro Quiz Widget. WP Pro Quiz has shortcodes to output the quizzes. Our Widget
+	 * replicates that meaning people don't need to faff around with shortcodes.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function add_wp_pro_quiz_widget() {
+
+		if ( ! $this->check_dependencies( 'WpProQuiz_Controller_Admin' ) ) {
+			return;
+		}
+
+		$widget = new \UBC\Press\Plugins\SiteBuilder\Widgets\AddQuiz\AddQuizWidget;
+
+		static::$registered_ubc_press_widgets[] = 'AddQuizWidget';
+
+	}/* add_wp_pro_quiz_widget() */
 
 }/* class Setup */

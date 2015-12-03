@@ -37,6 +37,9 @@ class Setup {
 		// WP User Groups by JJJ
 		$this->setup_wp_user_groups();
 
+		// WP Pro Quiz
+		$this->setup_wp_pro_quiz();
+
 	}/* init() */
 
 
@@ -120,5 +123,26 @@ class Setup {
 		$wpusergroups->init();
 
 	}/* setup_wp_user_groups() */
+
+
+	/**
+	 * WP Pro Quiz setup
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function setup_wp_pro_quiz() {
+
+		if ( ! function_exists( 'wpProQuiz_autoload' ) ) {
+			return;
+		}
+
+		$wpproquiz = new \UBC\Press\Plugins\WPProQuiz\Setup;
+		$wpproquiz->init();
+
+	}/* setup_wp_pro_quiz() */
 
 }/* class Setup */

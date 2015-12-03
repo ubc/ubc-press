@@ -19,6 +19,10 @@ class Utils {
 
 		$cpt_name = sanitize_text_field( $cpt_name );
 
+		if ( 'quiz' === $cpt_name ) {
+			return static::get_array_of_quizzes();
+		}
+
 		$args = array(
 			'posts_per_page' => -1,
 			'post_type' => $cpt_name,
@@ -92,5 +96,43 @@ class Utils {
 	}/* show_template_for_post_of_post_type() */
 
 
+	/**
+	 * WP Pro Quiz doesn't use custom post types, so we have to do a little extra wrangling
+	 * to give it a list of quizzes for our widget
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return
+	 */
+
+	public static function get_array_of_quizzes() {
+
+		// We need to get the 'id' and 'name' from the prefix_wp_pro_quiz_master table
+		global $wpdb;
+		$prefix		= $wpdb->prefix;
+		$table_name	= $prefix . 'wp_pro_quiz_master';
+
+		$query = "SELECT id,name FROM $table_name WHERE %d";
+		$query = $wpdb->prepare(
+			$query,
+			1
+		);
+
+		$quiz_results = $wpdb->get_results( $query );
+
+		if ( empty( $quiz_results ) || ! is_array( $quiz_results ) ) {
+			return array( 'none_found', __( 'No quizzes found', \UBC\Press::get_text_domain() ) );
+		}
+
+		$quizzes = array();
+
+		foreach ( $quiz_results as $key => $quiz_object ) {
+			$quizzes[ $quiz_object->id ] = $quiz_object->name;
+		}
+
+		return $quizzes;
+
+	}/* get_array_of_quizzes() */
 
 }/* class Utils */
