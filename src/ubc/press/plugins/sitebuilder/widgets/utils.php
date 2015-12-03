@@ -82,7 +82,7 @@ class Utils {
 				$the_query->the_post();
 
 					do_action( 'ubc_press_show_template_for_post_of_post_type_before', $template_start, $template_path, $post_id, $post_type );
-					\UBC\Helpers::locate_template_part_in_plugin( $template_start, $template_path, true );
+					\UBC\Helpers::locate_template_part_in_plugin( $template_start, $template_path, true, false );
 					do_action( 'ubc_press_show_template_for_post_of_post_type_after', $template_start, $template_path, $post_id, $post_type );
 
 				endwhile;
