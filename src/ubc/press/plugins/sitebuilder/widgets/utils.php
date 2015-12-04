@@ -19,10 +19,6 @@ class Utils {
 
 		$cpt_name = sanitize_text_field( $cpt_name );
 
-		if ( 'quiz' === $cpt_name ) {
-			return static::get_array_of_quizzes();
-		}
-
 		$args = array(
 			'posts_per_page' => -1,
 			'post_type' => $cpt_name,

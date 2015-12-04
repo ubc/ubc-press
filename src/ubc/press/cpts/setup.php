@@ -152,25 +152,6 @@ class Setup {
 			'icon' => 'dashicons-portfolio',
 		);
 
-		/*$post_types_to_set_up['note'] = array(
-			'label_args' => array(
-				'post_type_name' 	=> 'note',
-				'singular' 			=> 'Note',
-				'plural' 			=> 'Notes',
-				'slug' 				=> 'note',
-			),
-			'wp_args' => array(
-				'capability_type' => 'note',
-				'map_meta_cap' => true,
-				'rewrite' => array(
-					'with_front' => false,
-					'slug' => 'note',
-				),
-				'has_archive' => 'notes',
-			),
-			'icon' => 'dashicons-edit',
-		);*/
-
 		$post_types_to_set_up['reading'] = array(
 			'label_args' => array(
 				'post_type_name' 	=> 'reading',
@@ -208,6 +189,23 @@ class Setup {
 				'has_archive' => 'links',
 			),
 			'icon' => 'dashicons-admin-links',
+		);
+
+		$post_types_to_set_up['hiddenquiz'] = array(
+			'label_args' => array(
+				'post_type_name' 	=> 'quiz',
+				'singular' 			=> 'quiz',
+				'plural' 			=> 'quizzes',
+				'slug' 				=> 'quiz',
+			),
+			'wp_args' => array(
+				'capability_type' 	=> 'hiddenquiz',
+				'map_meta_cap' 		=> true,
+				'supports' 			=> array( 'title' ),
+				'has_archive' 		=> false,
+				'public' => false,
+				'can_export' => false,
+			),
 		);
 
 		static::$post_types_to_set_up = $post_types_to_set_up;

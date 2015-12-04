@@ -5,20 +5,19 @@
  * a quiz and then forms a shortcode to output as WP Pro Quiz generates shortcodes
  * for the output of each quiz.
  *
+ * The passed post ID is the *fake* hiddenquiz post. We need to fetch the real
+ * quiz ID from that which is stored as post meta on that hiddenquiz post as
+ * ubc_press_associated_quiz
+ *
  * @since 1.0.0
  *
  */
 
-$template_data = get_query_var( 'template_data' );
-$quiz_post_id = ( isset( $template_data['quiz_post_id'] ) ) ? $template_data['quiz_post_id'] : false;
+$hidden_quiz_post_id = get_the_ID();
+$wp_pro_quiz_id = get_post_meta( $hidden_quiz_post_id, 'ubc_press_associated_quiz', true );
 
-if ( false === $quiz_post_id ) {
-	return;
-}
-
-$quiz_post_id = absint( $quiz_post_id );
 ?>
 
 <div class="quiz-content">
-	<?php echo do_shortcode( "[WpProQuiz $quiz_post_id]" ); ?>
+	<?php echo do_shortcode( "[WpProQuiz $wp_pro_quiz_id]" ); ?>
 </div><!-- .assignment-content -->

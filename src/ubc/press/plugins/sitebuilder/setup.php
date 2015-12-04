@@ -766,6 +766,11 @@ class Setup {
 			return;
 		}
 
+		// Quizzes are special. They are completeable, but not manually. Completed automatically when quiz is finished.
+		if ( \UBC\Press\Utils::component_is_completed_automatically( $post_id ) ) {
+			return;
+		}
+
 		// Start fresh with data
 		$data = array();
 

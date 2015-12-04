@@ -1009,12 +1009,34 @@ class Utils {
 			'lecture',
 			'post',
 			'page',
+			'quiz',
+			'hiddenquiz',
 		);
 
 		return apply_filters( 'ubc_press_completable_component_types', $completables );
 
 	}/* get_completable_component_types() */
 
+
+	/**
+	 * A list of components that are automatically (not manually) completable
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return (array) A list of automatically completable component types
+	 */
+
+	public static function get_automatic_completable_component_types() {
+
+		$automatic_completables = array(
+			'quiz',
+			'hiddenquiz',
+		);
+
+		return apply_filters( 'ubc_press_automatic_completable_component_types', $automatic_completables );
+
+	}/* get_automatic_completable_component_types() */
 
 
 	/**
@@ -1043,6 +1065,36 @@ class Utils {
 		}
 
 	}/* component_can_be_completed() */
+
+
+	/**
+	 * Certain post types, i.e. Quizzes are completed automatically when an action
+	 * happens. This means they're not completable 'manually' and shouldn't show
+	 * the 'mark as complete' button.
+	 *
+	 * Usage: \UBC\Press\Utils::component_is_completed_automatically( $post_id );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $post_id - The post ID of a component
+	 * @return (bool) True if this component has an automatic completion
+	 */
+
+	public static function component_is_completed_automatically( $post_id ) {
+
+		$post_id 		= absint( $post_id );
+
+		$post_type 		= get_post_type( $post_id );
+
+		$automatic_completables	= \UBC\Press\Utils::get_automatic_completable_component_types();
+
+		if ( in_array( $post_type, $automatic_completables ) ) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}/* component_is_completed_automatically() */
 
 
 	/**
@@ -1085,6 +1137,10 @@ class Utils {
 
 			case 'AddLectureWidget':
 				$post_id_key = 'lecture_post_id';
+				break;
+
+			case 'AddQuizWidget':
+				$post_id_key = 'quiz_post_id';
 				break;
 
 			default:

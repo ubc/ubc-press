@@ -26,7 +26,7 @@ class AddQuizWidget extends \SiteOrigin_Widget {
 					'type' => 'select',
 					'label' => __( 'Choose quiz', \UBC\Press::get_text_domain() ),
 					'prompt' => __( 'Choose quiz', \UBC\Press::get_text_domain() ),
-					'options' => \UBC\Press\Plugins\SiteBuilder\Widgets\Utils::get_array_of_posts_for_cpt( 'quiz' ),
+					'options' => \UBC\Press\Plugins\SiteBuilder\Widgets\Utils::get_array_of_posts_for_cpt( 'hiddenquiz' ),
 					'state_emitter' => array(
 						'callback' => 'set_this_value_to_other',
 						'args' => array(
