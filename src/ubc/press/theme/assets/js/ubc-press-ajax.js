@@ -2,8 +2,11 @@ jQuery( document ).ready( function( $ ) {
 
 	var localized_data = ubc_press_ajax;
 
+	// Mark a component as complete/incomplete when the button is pressed
 	$( 'body' ).on( 'click', '.mark-as-complete', click_mark_as_complete__process_completion );
 
+	// Hook in to AJAX success so we can trigger our own items when a quiz is completed
+	$( document ).ajaxSuccess( function( event, xhr, settings ) { ajax_success__update_sidebar_completion_counts_for_quiz_completion( event, xhr, settings ); } );
 
 	/**
 	 * When a .mark-as-complete button is clicked, we do the appropriate action.
@@ -179,5 +182,51 @@ jQuery( document ).ready( function( $ ) {
 		updateSpan.text( newValue );
 
 	}/* update_count_in_section_list() */
+
+
+	function ajax_success__update_sidebar_completion_counts_for_quiz_completion( event, xhr, settings ) {
+
+		if ( null === settings || false === settings || 'undefined' === settings ) {
+			return;
+		}
+
+		/**
+		 * OK, this is horrible. I *Really* hope there's a better way to do this
+		 * that I'm not seeing yet and someone will see this, barf a little, then
+		 * show me the way. However, the data sent to the AJAX request is here in
+		 * settings.data. Sadly, it's a string of some sort. That looks a little
+		 * like this:
+		 * action=wp_pro_quiz_admin_ajax&func=quizCheckLock&data%5BquizId%5D=13
+		 * Barf bag. In order to ensure that we're not running our code on every
+		 * AJAX success ever, we need to parse that and ensure it's when a quiz
+		 * is complete.
+		 * You don't even want to see the full string for a completedQuiz action.
+		 * Needless to say, it's a horror show. A disaster. An absolute nightmare.
+		 * Stephen King himself couldn't have written something so terrifying.
+		 * Please, sweet merciful Lord of baby hippopotamuses, let there be a
+		 * better way than this. Pretty please?
+		 */
+
+		var unserializedData = settings.data;
+		var iAmSoSorry = unserializedData.split( '&' );
+		var iHateEverything = {};
+
+		for ( var i = 0; i < iAmSoSorry.length; i++ ) {
+			var thisShower = iAmSoSorry[ i ];
+			var whyOhWhy = thisShower.split( '=' );
+			var stupidkey = whyOhWhy[0];
+			var stupidvalue = whyOhWhy[1];
+			iHateEverything[stupidkey] = stupidvalue;
+		}
+
+		// Test that we're completing a quiz
+		if ( typeof( iHateEverything.func ) === 'undefined' || 'completedQuiz' !== iHateEverything.func ) {
+			return;
+		}
+
+		// OK, this is a completed quiz. Increase the count.
+		update_count_in_section_list( true );
+
+	}/* ajax_success__update_sidebar_completion_counts_for_quiz_completion() */
 
 } );
