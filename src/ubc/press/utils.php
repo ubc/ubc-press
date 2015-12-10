@@ -1003,7 +1003,6 @@ class Utils {
 
 		$completables = array(
 			'assignment',
-			'handout',
 			'reading',
 			'link',
 			'lecture',
