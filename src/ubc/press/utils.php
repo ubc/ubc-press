@@ -272,8 +272,30 @@ class Utils {
 	public static function get_faculty_list() {
 
 		$faculties = array(
-		 	'arts' => 'Arts',
+			'' => 'Select Faculty',
+			'applied-science' => 'Applied Science',
+			'arts' => 'Arts',
+			'health-discplines' => 'College of Health Disciplines',
+			'dentistry' => 'Dentistry',
+			'education' => 'Education',
+			'forestry' => 'Forestry',
+			'grad-studies' => 'Graduate Studies and Post-doctoral Studies',
+			'mental-health' => 'Institute of Mental Health',
+			'land-food' => 'Land and Food System',
+			'law' => 'Law',
 			'medicine' => 'Medicine',
+			'president' => 'Office of the President',
+			'pharm-sci' => 'Pharmaceutical Sciences',
+			'sauder' => 'Sauder School of Business',
+			'science' => 'Science',
+			'vantage' => 'Vantage College',
+			'vp-academic' => 'VP Academic and Provost Office',
+			'vp-ccp' => 'VP Campus and Community Planning',
+			'vp-dae' => 'VP Development and Alumni Engagement',
+			'vp-fro' => 'VP Finance Resources and Operations',
+			'vp-hr' => 'VP Human Resources',
+			'vp-ri' => 'VP Research and International',
+			'vp-students' => 'VP Students',
 		);
 
 		return apply_filters( 'ubc_press_faculities_list', $faculties );
@@ -295,8 +317,21 @@ class Utils {
 	public static function get_department_list() {
 
 		$departments = array(
-			'arts' => array( 'Philosophy', 'Drama' ),
-			'medicine' => array( 'Nursing', 'Midwifery' ),
+
+			'arts' => array(
+				'philosophy' => 'Philosophy',
+				'drama' => 'Drama',
+			),
+
+			'medicine' => array(
+				'nursing' => 'Nursing',
+				'midwifery' => 'Midwifery',
+			),
+
+			'sauder' => array(
+				'sauder' => 'Sauder',
+			),
+
 		);
 
 		return apply_filters( 'ubc_press_departments_list', $departments );
