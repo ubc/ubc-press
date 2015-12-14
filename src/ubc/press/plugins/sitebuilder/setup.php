@@ -623,6 +623,9 @@ class Setup {
 
 		switch ( $class ) {
 
+			case 'AddQuizWidget':
+				$nice_name = __( 'Quiz', \UBC\Press::get_text_domain() );
+				break;
 			case 'AddLectureWidget':
 				$nice_name = __( 'Lecture', \UBC\Press::get_text_domain() );
 				break;
