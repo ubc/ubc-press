@@ -184,6 +184,18 @@ jQuery( document ).ready( function( $ ) {
 	}/* update_count_in_section_list() */
 
 
+	/**
+	 * When a quiz is finished, update the count in the sidebar of completed items
+	 * This is hooked into ajaxSuccess
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (Event) event -
+	 * @param (jqXHR) xhr -
+	 * @param (object) options -
+	 * @return null
+	 */
+
 	function ajax_success__update_sidebar_completion_counts_for_quiz_completion( event, xhr, settings ) {
 
 		if ( null === settings || false === settings || 'undefined' === settings ) {
