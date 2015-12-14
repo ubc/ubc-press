@@ -584,25 +584,37 @@ class Setup {
 			),
 		) );
 
+		$all_faculties = \UBC\Press\Utils::get_faculty_list();
+
 		$faculty = $onboarding->add_field( array(
 			'name' => __( 'Faculty', \UBC\Press::get_text_domain() ),
 			'id'   => $prefix . 'faculty',
 			'type' => 'select',
 			'default' => '',
-		    'options' => \UBC\Press\Utils::get_faculty_list(),
+		    'options' => $all_faculties,
 		) );
 
-		$dept = $onboarding->add_field( array(
-			'name' => __( 'Department', \UBC\Press::get_text_domain() ),
-			'id'   => $prefix . 'department',
-			'type' => 'select',
-			'default' => '',
-		    'options' => array(
-				'dep1' => __( 'Dept1', \UBC\Press::get_text_domain() ),
-		        'dep2' => __( 'Dept2', \UBC\Press::get_text_domain() ),
-		        'dep3'   => __( 'Dept3', \UBC\Press::get_text_domain() ),
-			),
-		) );
+		// Departments are stored by school/fac, so we'll need a list. We'll
+		// then hide them all in JS and only show the relevant one when a fac
+		// is selected
+		$all_departments = \UBC\Press\Utils::get_department_list();
+
+		if ( $all_departments && is_array( $all_departments ) ) {
+
+			foreach ( $all_departments as $fac => $depts ) {
+
+				$faculty_real_name = $all_faculties[ $fac ];
+
+				$dept = $onboarding->add_field( array(
+					'name' => __( $faculty_real_name . ' Departments', \UBC\Press::get_text_domain() ),
+					'id'   => $prefix . $fac . '_department',
+					'type' => 'select',
+					'default' => '',
+				    'options' => $depts,
+					'row_classes' => 'ubc_press_dept_list',
+				) );
+			}
+		}
 
 		$course_num = $onboarding->add_field( array(
 			'name' => __( 'Course Number', \UBC\Press::get_text_domain() ),
@@ -709,10 +721,19 @@ class Setup {
 			return;
 		}
 
+		/*
+		 * Departments are a little tricky. Each faculty has their own list
+		 * of departments. In order to get the dept. list field, we look at
+		 * the faculty saved value and use that to get the relevant dept. field
+		 */
+		$faculty 		= sanitize_text_field( $_POST['ubc_press_onboarding_faculty'] );
+
+		$dept_field 	= $_POST['ubc_press_onboarding_' . $faculty . '_department'];
+
+		$department 	= sanitize_text_field( $dept_field );
+
 		$session 		= sanitize_text_field( $_POST['ubc_press_onboarding_session'] );
 		$year 			= absint( $_POST['ubc_press_onboarding_year'] );
-		$faculty 		= sanitize_text_field( $_POST['ubc_press_onboarding_faculty'] );
-		$department 	= sanitize_text_field( $_POST['ubc_press_onboarding_department'] );
 		$course_num 	= sanitize_text_field( $_POST['ubc_press_onboarding_course_num'] );
 		$section_num	= sanitize_text_field( $_POST['ubc_press_onboarding_section_num'] );
 		$program		= sanitize_text_field( $_POST['ubc_press_onboarding_program'] );
@@ -732,7 +753,7 @@ class Setup {
 		update_option( $option_name, $data_to_save );
 
 		// Test if we have all of the required details. If so, we also declare that we're done with onboarding
-		$have_all_details = \UBC\Press\Onboarding\Setup::have_all_course_details( $data_to_save );
+		$have_all_details = \UBC\Press\Onboarding\Utils::have_all_course_details( $data_to_save );
 
 		if ( ! $have_all_details ) {
 			return;
