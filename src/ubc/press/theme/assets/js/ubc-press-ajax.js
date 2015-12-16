@@ -1,5 +1,9 @@
 jQuery( document ).ready( function( $ ) {
 
+	$.fn.hasAttr = function(name) {
+		return this.attr(name) !== undefined;
+	};
+
 	var localized_data = ubc_press_ajax;
 
 	// Mark a component as complete/incomplete when the button is pressed
@@ -22,11 +26,25 @@ jQuery( document ).ready( function( $ ) {
 
 	function click_mark_as_complete__process_completion( event ) {
 
+		event.stopPropagation();
 		event.preventDefault();
 		var thisButton	= $( this );
-		var url 		= thisButton.attr( 'href' );
+
+		// Do our best to prevent double clicking.
+		if ( thisButton.hasAttr( 'disabled' ) || thisButton.hasClass( 'disabled' ) ) {
+			return;
+		}
+
+		// First things first; disable the button
+		thisButton.attr( 'disabled', 'disabled' );
+		thisButton.addClass( 'disabled' );
+		var originalHref = thisButton.attr( 'href' );
+
+		var url 		= originalHref;
 		var post_id 	= thisButton.data( 'post_id' );
 		var nonce 		= thisButton.data( 'nonce' );
+
+		thisButton.attr( 'href', '' );
 
 		jQuery.ajax( {
 			type : "post",
@@ -41,20 +59,22 @@ jQuery( document ).ready( function( $ ) {
 			},
 			success: function( response ) {
 
-				if( response.success ) {
+				if ( response.success ) {
 					switch_completed_state( thisButton, response.data.completed );
 					update_progress_bar( response.data.completed );
 					update_count_in_section_list( response.data.completed );
-				} else {
-					alert( 'Could not mark as complete. Please refresh and try again' );
 				}
 			},
 			complete: function( jqXHR, textStatus ) {
-				stop_loading( thisButton );
+				stop_loading( thisButton, originalHref );
+			},
+			error: function( jqXHR, textStatus, errorThrown ) {
+				return;
 			}
 		} );
 
 	}/* click_mark_as_complete__process_completion() */
+
 
 	/**
 	 * Switch the completed classes for the button. If it already has a
@@ -93,10 +113,6 @@ jQuery( document ).ready( function( $ ) {
 
 	function start_loading( element ) {
 
-		// First things first; disable the button
-		element.attr( 'disabled', 'disabled' );
-		element.addClass( 'disabled' );
-
 		// Change the text to be 'Loading' but store the current text as a data-attribute
 		var currentValue = element.text();
 
@@ -115,7 +131,7 @@ jQuery( document ).ready( function( $ ) {
 	 * @return null
 	 */
 
-	function stop_loading( element ) {
+	function stop_loading( element, originalHref ) {
 
 		element.removeAttr( 'disabled' );
 		element.removeClass( 'disabled' );
@@ -125,6 +141,8 @@ jQuery( document ).ready( function( $ ) {
 		} else {
 			element.html( localized_data.text.completed + '<span class="dashicons dashicons-no onhover"></span>' );
 		}
+
+		element.attr( 'href', originalHref );
 
 		element.blur();
 
