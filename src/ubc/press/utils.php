@@ -181,6 +181,35 @@ class Utils {
 
 
 	/**
+	 * Get the content for a link
+	 *
+	 * Usage: \UBC\Press\Utils::get_link_content( $post_id );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $post_id - A specific ID for a handout to fetch
+	 * @return (array) An array of content
+	 */
+
+	public static function get_link_content( $post_id = null ) {
+
+		if ( empty( $post_id ) ) {
+			$post_id = get_the_ID();
+		}
+
+		$post_id = absint( $post_id );
+
+		$meta_key = '_link_details_link_details_group';
+
+		$links = get_post_meta( $post_id, $meta_key, true );
+
+		return $links;
+
+	}/* get_link_content() */
+
+
+
+	/**
 	 * Fetch the content for a section, including the meta (description etc.)
 	 * and the content blocks (components)
 	 *
