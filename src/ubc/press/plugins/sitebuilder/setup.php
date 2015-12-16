@@ -125,6 +125,12 @@ class Setup {
 		add_filter( 'manage_link_posts_columns' , array( $this, 'manage_assignment_posts_columns__add_section' ) );
 		add_filter( 'manage_post_posts_columns' , array( $this, 'manage_assignment_posts_columns__add_section' ) );
 
+		// Modify the tabs in the 'Add New Component' overlay
+		add_filter( 'siteorigin_panels_widget_dialog_tabs', array( $this, 'siteorigin_panels_widget_dialog_tabs__remove_unused_tabs' ), 100 );
+
+		// Modify the list of widgets shown in the Add New Component overlay
+		add_filter( 'siteorigin_panels_widgets', array( $this, 'siteorigin_panels_widgets__remove_unused_widgets' ), 100 );
+
 	}/* setup_filters() */
 
 
@@ -826,5 +832,77 @@ class Setup {
 		wp_send_json_success( array( 'completed' => ! $is_completed ) );
 
 	}/* ubcpressajax_mark_as_complete__process() */
+
+
+	/**
+	 * The Add New Component overlay has a looooot of tabs. We don't want a billion.
+	 * That's too confusing. We'll remove all of them for now, but perhaps in the
+	 * future may add some more specific ones
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $tabs - The currently defined tabs
+	 * @return (array) Modified tabs
+	 */
+
+	public function siteorigin_panels_widget_dialog_tabs__remove_unused_tabs( $tabs ) {
+
+		$to_remove = array(
+			'widgets_bundle',
+			'page_builder',
+			'wordpress',
+			'bbpress',
+			'recommended',
+		);
+
+		foreach ( $to_remove as $id => $remove ) {
+			if ( ! in_array( $remove, array_keys( $tabs ) ) ) {
+				continue;
+			}
+
+			unset( $tabs[ $remove ] );
+		}
+
+		return $tabs;
+
+	}/* siteorigin_panels_widget_dialog_tabs__remove_unused_tabs() */
+
+
+	/**
+	 * Remove unused widgets from the overlay
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $widgets - The widgets currently shown
+	 * @return (array) Modified widgets list
+	 */
+
+	public function siteorigin_panels_widgets__remove_unused_widgets( $widgets ) {
+
+		$to_remove = array(
+			'BBP_Login_Widget',
+			'BBP_Views_Widget',
+			'BBP_Search_Widget',
+			'BBP_Forums_Widget',
+			'BBP_Topics_Widget',
+			'BBP_Replies_Widget',
+			'BBP_Stats_Widget',
+			'WP_Widget_Calendar',
+			'WP_Widget_Meta',
+			'WP_Widget_Search',
+		);
+
+		foreach ( $to_remove as $id => $remove ) {
+
+			if ( ! in_array( $remove, array_keys( $widgets ) ) ) {
+				continue;
+			}
+
+			unset( $widgets[ $remove ] );
+		}
+
+		return $widgets;
+
+	}/* siteorigin_panels_widgets__remove_unused_widgets() */
 
 }/* class Setup */
