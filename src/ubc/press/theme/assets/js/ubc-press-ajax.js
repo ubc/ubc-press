@@ -43,9 +43,9 @@ jQuery( document ).ready( function( $ ) {
 
 				if( response.success ) {
 					switch_completed_state( thisButton, response.data.completed );
+					update_progress_bar( response.data.completed );
 					update_count_in_section_list( response.data.completed );
 				} else {
-					console.log( response );
 					alert( 'Could not mark as complete. Please refresh and try again' );
 				}
 			},
@@ -155,7 +155,7 @@ jQuery( document ).ready( function( $ ) {
 
 
 	/**
-	 * Also update the completed count in the sidebar
+	 * Also update the completed count in the sidebar.
 	 *
 	 * @since 1.0.0
 	 *
@@ -165,23 +165,139 @@ jQuery( document ).ready( function( $ ) {
 
 	function update_count_in_section_list( completed ) {
 
-		// Find the completed class and the number of already completed
-		var updateSpan = $( '.current_page_item .completed-components-details .completed-components' );
-		var prevValue = parseInt( updateSpan.text() );
+		var prevValue = get_previous_value();
 
 		var newValue;
 
 		// Calculate new value
+		newValue = get_new_value( prevValue, completed );
+
+		// Update the value
+		var updateSpan = $( '.current_page_item .completed-components-details .completed-components' );
+		updateSpan.text( newValue );
+
+	}/* update_count_in_section_list() */
+
+
+	/**
+	 * What's the new completed number of components. It's the old Number
+	 * plus or minus 1 depending on if we've just completed or uncompleted
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) prevValue - The number before we did the action
+	 * @param (bool) completed - Whether we've just completed or uncompleted (true = completed)
+	 * @return (int) The new number of completed components
+	 */
+
+	function get_new_value( prevValue, completed ) {
+
 		if ( completed ) {
 			newValue = prevValue + 1;
 		} else {
 			newValue = prevValue - 1;
 		}
 
-		// Update the value
-		updateSpan.text( newValue );
+		return newValue;
 
-	}/* update_count_in_section_list() */
+	}/* get_new_value() */
+
+	/**
+	 * Fetch the previous value of the completed components
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return (int) The number of completed items before we've made any changes
+	 */
+
+	function get_previous_value() {
+
+		// Find the completed class and the number of already completed
+		var updateSpan = $( '.current_page_item .completed-components-details .completed-components' );
+		var prevValue = parseInt( updateSpan.text() );
+
+		return prevValue;
+
+	}/* get_previous_value() */
+
+
+	/**
+	 * Fetch the total number of components for this section
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return (int) The total number of components
+	 */
+
+	function get_total_num_of_components() {
+
+		var totalSpan = $( '.current_page_item .completed-components-details .total-components' );
+		var totalValue = parseInt( totalSpan.text() );
+
+		return totalValue;
+
+	}/* get_total_num_of_components() */
+
+
+	/**
+	 * Update the progress bar. 2 things to Change
+	 * 1) the style width
+	 * 2) the text in the bubble
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (bool) Have we completed or uncompleted?
+	 * @return null
+	 */
+
+	function update_progress_bar( completed ) {
+
+		var prevValue			= get_previous_value();
+
+		var newValue 			= get_new_value( prevValue, completed );
+		var totalNumComponents	= get_total_num_of_components();
+
+		var new_percentage 		= get_percentage( newValue, totalNumComponents );
+
+		var progress_div 		= $( '.current_page_item .progress' );
+		var progress_span 		= $( progress_div ).find( '.meter' );
+		var text_span 			= $( progress_div ).find( '.complete-percentage span' );
+
+		// progress_span.css( 'width', new_percentage + '%' );
+		progress_span.animate({
+			width: new_percentage + '%'
+		}, 150);
+
+		text_span.text( new_percentage + '%' );
+
+	}/* update_progress_bar() */
+
+
+	/**
+	 * Calculate the percentage of completed components
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) value - The number of completed components
+	 * @param (int) total - The total number of completed components
+	 * @return (int) The percentage amount of completed components
+	 */
+
+	function get_percentage( value, total ) {
+
+		if ( 0 === value || 0 === total ) {
+			return 0;
+		}
+
+		// Round to 2 d.p.
+		var percentage = ( value / total ) * 100;
+		percentage = +percentage.toFixed( 2 );
+
+		return percentage;
+
+	}/* get_percentage() */
 
 
 	/**
@@ -235,6 +351,9 @@ jQuery( document ).ready( function( $ ) {
 		if ( typeof( iHateEverything.func ) === 'undefined' || 'completedQuiz' !== iHateEverything.func ) {
 			return;
 		}
+
+		// And also update the completion bar
+		update_progress_bar( true );
 
 		// OK, this is a completed quiz. Increase the count.
 		update_count_in_section_list( true );
