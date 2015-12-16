@@ -273,6 +273,22 @@ jQuery( document ).ready( function( $ ) {
 		// Update the text
 		text_span.text( new_percentage + '%' );
 
+		if ( new_percentage === 0 ) {
+			progress_div.addClass( 'no-complete' );
+		}
+		else if ( new_percentage > 0 ) {
+			progress_div.removeClass( 'no-complete' );
+		}
+		else { progress_div.addClass('somthingwrong'); }
+
+
+		if ( new_percentage === 100 ) {
+			progress_div.addClass( 'completed' ).removeClass( 'start-progress' );
+		}
+		else if ( new_percentage < 100 ) {
+			progress_div.removeClass( 'completed' );
+		}
+
 	}/* update_progress_bar() */
 
 
