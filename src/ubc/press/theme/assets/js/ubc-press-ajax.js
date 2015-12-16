@@ -265,11 +265,12 @@ jQuery( document ).ready( function( $ ) {
 		var progress_span 		= $( progress_div ).find( '.meter' );
 		var text_span 			= $( progress_div ).find( '.complete-percentage span' );
 
-		// progress_span.css( 'width', new_percentage + '%' );
-		progress_span.animate({
+		// Animate the progress bar
+		progress_span.animate( {
 			width: new_percentage + '%'
-		}, 150);
+		}, 150 );
 
+		// Update the text
 		text_span.text( new_percentage + '%' );
 
 	}/* update_progress_bar() */
@@ -287,8 +288,14 @@ jQuery( document ).ready( function( $ ) {
 
 	function get_percentage( value, total ) {
 
+		// Catch the zero case
 		if ( 0 === value || 0 === total ) {
 			return 0;
+		}
+
+		// Max 100%, so if for some reason value > total, return 100
+		if ( value > total ) {
+			return 100;
 		}
 
 		// Round to 2 d.p.
