@@ -196,6 +196,13 @@ jQuery( document ).ready( function( $ ) {
 		// Calculate new value
 		newValue = get_new_value( prevValue, completed );
 
+		// Test if already max'd - helps prevent a quiz from looking like it's gone > 100%
+		var maxCount = get_total_num_of_components();
+
+		if ( prevValue >= maxCount ) {
+			return;
+		}
+
 		// Update the value
 		var updateSpan = $( '.current_page_item .completed-components-details .completed-components' );
 		updateSpan.text( newValue );
