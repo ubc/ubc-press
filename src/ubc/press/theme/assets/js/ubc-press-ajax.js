@@ -273,15 +273,15 @@ jQuery( document ).ready( function( $ ) {
 		// Update the text
 		text_span.text( new_percentage + '%' );
 
+		//If percent is 0 add no-complete class else if above 0 remove class
 		if ( new_percentage === 0 ) {
 			progress_div.addClass( 'no-complete' );
 		}
 		else if ( new_percentage > 0 ) {
 			progress_div.removeClass( 'no-complete' );
 		}
-		else { progress_div.addClass('somthingwrong'); }
 
-
+		//If percent is 100 add completed class else if below 100 remove class
 		if ( new_percentage === 100 ) {
 			progress_div.addClass( 'completed' ).removeClass( 'start-progress' );
 		}
