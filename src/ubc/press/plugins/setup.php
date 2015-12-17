@@ -94,7 +94,7 @@ class Setup {
 
 	public function setup_wp_event_calendar() {
 
-		if ( ! function_exists( 'wp_event_calendar' ) ) {
+		if ( ! function_exists( '_wp_event_calendar' ) ) {
 			return;
 		}
 
