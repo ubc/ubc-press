@@ -35,9 +35,13 @@ jQuery( document ).ready( function( $ ) {
 			return;
 		}
 
-		// First things first; disable the button
-		thisButton.attr( 'disabled', 'disabled' );
-		thisButton.addClass( 'disabled' );
+		// First things first; disable the buttons
+		var allButtons = $( 'a.mark-as-complete' );
+		$.each( allButtons, function( i, val ) {
+			$( val ).attr( 'disabled', 'disabled' );
+			$( val ).addClass( 'disabled' );
+		} );
+
 		var originalHref = thisButton.attr( 'href' );
 
 		var url 		= originalHref;
@@ -66,7 +70,7 @@ jQuery( document ).ready( function( $ ) {
 				}
 			},
 			complete: function( jqXHR, textStatus ) {
-				stop_loading( thisButton, originalHref );
+				stop_loading( thisButton, originalHref, allButtons );
 			},
 			error: function( jqXHR, textStatus, errorThrown ) {
 				return;
@@ -131,10 +135,12 @@ jQuery( document ).ready( function( $ ) {
 	 * @return null
 	 */
 
-	function stop_loading( element, originalHref ) {
+	function stop_loading( element, originalHref, allButtons ) {
 
-		element.removeAttr( 'disabled' );
-		element.removeClass( 'disabled' );
+		$.each( allButtons, function( i, val ) {
+			$( val ).removeAttr( 'disabled' );
+			$( val ).removeClass( 'disabled' );
+		} );
 
 		if ( element.hasClass( 'secondary' ) ) {
 			element.html( localized_data.text.mark_as_complete + '<span class="dashicons dashicons-yes onhover"></span>' );
