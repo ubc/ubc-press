@@ -156,7 +156,7 @@ class Setup {
 		$exclude = array(
 			'handout',
 			'link',
-			'lecture',
+			// 'lecture',
 		);
 
 		if ( in_array( $cpt_object->post_type_name, $exclude ) ) {
