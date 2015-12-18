@@ -106,7 +106,7 @@ class Setup {
 					'with_front' => false,
 					'slug' => 'lecture',
 				),
-				'hierarchical' => false,
+				'hierarchical' => true,
 				'has_archive' => 'lectures',
 			),
 			'icon' => 'dashicons-megaphone',
@@ -200,7 +200,7 @@ class Setup {
 			),
 			'wp_args' => array(
 				'capability_type' 	=> 'hiddenquiz',
-				'map_meta_cap' 		=> true,
+				'map_meta_cap' 		=> false,
 				'supports' 			=> array( 'title' ),
 				'has_archive' 		=> false,
 				'public' => false,
