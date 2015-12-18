@@ -118,7 +118,7 @@ class Setup {
 
 		// Sanitize the time
 		$saved_post_time_start = \UBC\Press\Utils::sanitize_time( $this->get_time_from_post( $_POST, 'start' ) );
-		$saved_post_time_end 	= \UBC\Press\Utils::sanitize_time( $this->get_time_from_post( $_POST, 'end' ) );
+		$saved_post_time_end = \UBC\Press\Utils::sanitize_time( $this->get_time_from_post( $_POST, 'end' ) );
 
 		// Now we look to see if there's an associated calendar post for this post
 		$has_calendar_post = $this->get_associated_calendar_post( $saved_post_id );
