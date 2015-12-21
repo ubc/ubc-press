@@ -14,5 +14,5 @@
 <h3><?php the_title(); ?></h3>
 
 <div class="forum-content">
-	<?php echo wp_kses_post( do_shortcode( '[bbp-single-forum id=' . get_the_ID() . ']' ) ); ?>
+	<?php echo do_shortcode( '[bbp-single-forum id=' . get_the_ID() . ']' ); ?>
 </div><!-- .assignment-content -->
