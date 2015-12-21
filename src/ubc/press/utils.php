@@ -841,6 +841,8 @@ class Utils {
 		// Add our completion
 		$current_completed[ $site_id ][ $post_id ] = array( 'when' => time() );
 
+		do_action( 'ubc_press_set_component_as_complete', $post_id, $user_id );
+
 		return (bool) update_user_meta( $user_id, 'ubc_press_completed', $current_completed );
 
 	}/* set_component_as_complete() */
@@ -892,6 +894,8 @@ class Utils {
 		if ( array_key_exists( $post_id, $current_completed[ $site_id ] ) ) {
 			unset( $current_completed[ $site_id ][ $post_id ] );
 		}
+
+		do_action( 'ubc_press_set_component_as_incomplete', $post_id, $user_id );
 
 		return (bool) update_user_meta( $user_id, 'ubc_press_completed', $current_completed );
 
