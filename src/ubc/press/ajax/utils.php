@@ -70,6 +70,13 @@ class Utils {
 			$url = add_query_arg( $data, $url );
 		}
 
+		// Tack on a redirect URL which is where we came from
+		$redirect_url = ( isset( $_SERVER['REQUEST_URI'] ) ) ? esc_url( $_SERVER['REQUEST_URI'] ) : false;
+
+		if ( false !== $redirect_url ) {
+			$url = add_query_arg( 'redirect_to', home_url( $redirect_url ), $url );
+		}
+
 		return esc_url( apply_filters( 'ubc_press_ajax_action_url', $url, $action, $with_nonce, $nonce ) );
 
 	}/* get_ubc_press_ajax_action_url() */
