@@ -82,7 +82,7 @@ class Setup {
 		add_action( 'manage_post_posts_custom_column', array( $this, 'manage_component_posts_custom_column__component_sections_content' ), 10, 2 );
 
 		// Output a 'mark as complete' button before the components
-		add_action( 'ubc_press_show_template_for_post_of_post_type_before', array( $this, 'ubc_press_show_template_for_post_of_post_type_before__add_mark_as_complete' ), 10, 4 );
+		add_action( 'ubc_press_show_template_for_post_of_post_type_after', array( $this, 'ubc_press_show_template_for_post_of_post_type_after__add_mark_as_complete' ), 10, 4 );
 
 		// Our custom AJAX implementation gives us ubcpressajax_mark_component_complete
 		add_action( 'ubcpressajax_mark_as_complete', array( $this, 'ubcpressajax_mark_as_complete__process' ) );
@@ -759,7 +759,7 @@ class Setup {
 	 * @return null
 	 */
 
-	public function ubc_press_show_template_for_post_of_post_type_before__add_mark_as_complete( $template_start, $template_path, $post_id, $post_type ) {
+	public function ubc_press_show_template_for_post_of_post_type_after__add_mark_as_complete( $template_start, $template_path, $post_id, $post_type ) {
 
 		// Kiiinda pointless for someone who isn't signed in
 		if ( ! is_user_logged_in() ) {
@@ -798,7 +798,7 @@ class Setup {
 
 		\UBC\Helpers::locate_template_part_in_plugin( \UBC\Press::get_plugin_path() . 'src/ubc/press/theme/templates/', 'mark-as-complete.php', true, false, $data );
 
-	}/* ubc_press_show_template_for_post_of_post_type_before__add_mark_as_complete() */
+	}/* ubc_press_show_template_for_post_of_post_type_after__add_mark_as_complete() */
 
 
 	/**
