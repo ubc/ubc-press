@@ -816,7 +816,6 @@ class Setup {
 		// The nonce is already checked for us, still need to sanitize data
 		$post_id = absint( $request_data['post_id'] );
 		$user_id = get_current_user_id();
-		$redirect_to = ( isset( $request_data['redirect_to'] ) ) ? esc_url( $request_data['redirect_to'] ) : false;
 
 		$is_completed = \UBC\Press\Utils::component_is_completed( $post_id, $user_id );
 
@@ -836,6 +835,8 @@ class Setup {
 			wp_send_json_success( array( 'completed' => ! $is_completed ) );
 
 		} else {
+
+			$redirect_to = ( isset( $request_data['redirect_to'] ) ) ? esc_url( $request_data['redirect_to'] ) : false;
 
 			// Otherwise, something went wrong somewhere, but we should not show a whitescreen, so redirect back to the component
 			if ( false !== $redirect_to ) {
