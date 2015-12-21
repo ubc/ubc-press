@@ -36,11 +36,7 @@ jQuery( document ).ready( function( $ ) {
 		}
 
 		// First things first; disable the buttons
-		var allButtons = $( 'a.mark-as-complete' );
-		$.each( allButtons, function( i, val ) {
-			$( val ).attr( 'disabled', 'disabled' );
-			$( val ).addClass( 'disabled' );
-		} );
+		change_all_buttons( 'disable' );
 
 		var originalHref = thisButton.attr( 'href' );
 
@@ -70,7 +66,7 @@ jQuery( document ).ready( function( $ ) {
 				}
 			},
 			complete: function( jqXHR, textStatus ) {
-				stop_loading( thisButton, originalHref, allButtons );
+				stop_loading( thisButton, originalHref );
 			},
 			error: function( jqXHR, textStatus, errorThrown ) {
 				return;
@@ -117,9 +113,6 @@ jQuery( document ).ready( function( $ ) {
 
 	function start_loading( element ) {
 
-		// Change the text to be 'Loading' but store the current text as a data-attribute
-		var currentValue = element.text();
-
 		element.text( localized_data.text.loading );
 
 	}/* start_loading() */
@@ -135,12 +128,9 @@ jQuery( document ).ready( function( $ ) {
 	 * @return null
 	 */
 
-	function stop_loading( element, originalHref, allButtons ) {
+	function stop_loading( element, originalHref ) {
 
-		$.each( allButtons, function( i, val ) {
-			$( val ).removeAttr( 'disabled' );
-			$( val ).removeClass( 'disabled' );
-		} );
+		change_all_buttons( 'enable' );
 
 		if ( element.hasClass( 'secondary' ) ) {
 			element.html( localized_data.text.mark_as_complete + '<span class="dashicons dashicons-yes onhover"></span>' );
@@ -153,6 +143,45 @@ jQuery( document ).ready( function( $ ) {
 		element.blur();
 
 	}/* stop_loading() */
+
+
+	/**
+	 * Wrapper function to enable doing something to all buttons
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) status - are we enabling or disabling?
+	 * @return null
+	 */
+
+	function change_all_buttons( status ) {
+
+		var allButtons = $( 'a.mark-as-complete' );
+
+		switch (status) {
+
+			case 'disable':
+
+				$.each( allButtons, function( i, val ) {
+					$( val ).attr( 'disabled', 'disabled' );
+					$( val ).addClass( 'disabled' );
+				} );
+
+			break;
+
+			case 'enable':
+				$.each( allButtons, function( i, val ) {
+					$( val ).removeAttr( 'disabled' );
+					$( val ).removeClass( 'disabled' );
+				} );
+
+			break;
+
+			default:
+
+		}
+
+	}/* change_all_buttons() */
 
 
 	/**
