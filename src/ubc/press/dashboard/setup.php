@@ -78,6 +78,9 @@ class Setup {
 		// All the actions for editing the default menu are in one method
 		$this->edit_default_dashboard_menu();
 
+		// Network main site menu
+		add_action( 'admin_menu', array( $this, 'admin_menu__edit_network_main_site_dashboard_menu' ), 100 );
+
 		// Register our scripts
 		add_action( 'init', array( $this, 'init__register_assets' ), 5 );
 
@@ -187,6 +190,35 @@ class Setup {
 		add_action( 'admin_menu', array( $this, 'admin_menu__gravity_forms_no' ), 100 );
 
 	}/* edit_default_dashboard_menu() */
+
+
+
+	/**
+	 * A network's main site is different. It's not a 'course' site, rather a place
+	 * for network admins to set options and details for the coureses within that
+	 * network. As such the main menu is different. We don't need 'quizzes'
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function admin_menu__edit_network_main_site_dashboard_menu() {
+
+		if ( ! \UBC\Press\Utils::current_site_is_main_site_for_network() ) {
+			return;
+		}
+
+		global $menu;
+
+		if ( ! isset( $menu[55] ) || 'admin.php?page=wpProQuiz' !== $menu[55][2] ) {
+			return;
+		}
+
+		unset( $menu[55] );
+
+	}/* admin_menu__edit_network_main_site_dashboard_menu() */
 
 
 	/**
