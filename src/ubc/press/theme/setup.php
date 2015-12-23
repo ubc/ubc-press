@@ -140,6 +140,8 @@ class Setup {
 		$localized_data = array(
 			'ajax_url'	=> \UBC\Press\Ajax\Utils::get_ubc_press_ajax_url(),
 			'text'		=> array(
+				'save' => __( 'Save', \UBC\Press::get_text_domain() ),
+				'saved' => __( 'Saved', \UBC\Press::get_text_domain() ),
 				'loading' => __( 'Loading', \UBC\Press::get_text_domain() ),
 				'completed' => __( 'Completed', \UBC\Press::get_text_domain() ),
 				'mark_as_complete' => __( 'Mark as complete', \UBC\Press::get_text_domain() ),

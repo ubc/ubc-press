@@ -100,6 +100,7 @@ class Setup {
 
 		// Save user notes
 		add_action( 'cmb2_init', array( $this, 'cmb2_init__save_user_notes' ) );
+		add_action( 'ubcpressajax_user_notes', array( $this, 'ubcpressajax_user_notes__process' ) );
 
 		// The form we need for user onboarding
 		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init__onboarding' ) );
@@ -474,6 +475,15 @@ class Setup {
 			'escape_cb' => array( $this, 'user_notes_default_content' ),
 		) );
 
+		// Hidden field for the AJAX endpoint URL
+		$ajax_url = \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'user_notes', true, null, false );
+
+		$ajax_url = $user_notes->add_field( array(
+			'id' => 'user_notes_ajax_url',
+			'type' => 'hidden',
+			'default' => $ajax_url,
+		) );
+
 	}/* cmb2_init__user_notes() */
 
 
@@ -504,6 +514,49 @@ class Setup {
 		$added = \UBC\Press\Utils::add_user_notes_for_object( $user_id, $section_id, $note_content );
 
 	}/* cmb2_init__save_user_notes() */
+
+
+	/**
+	 * AJAX handler for saving user notes
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $request_data - the $_REQUEST data
+	 * @return null
+	 */
+
+	public function ubcpressajax_user_notes__process( $request_data ) {
+
+		// The nonce is already checked for us, still need to sanitize data
+		$post_id 		= absint( $request_data['post_id'] );
+		$user_id 		= get_current_user_id();
+		$notes_content	= wp_kses_post( $request_data['notes_content'] );
+
+		$complete 		= \UBC\Press\Utils::add_user_notes_for_object( $user_id, $post_id, $notes_content );
+
+		// If we're coming from an AJAX request, send JSON
+		if ( ! empty( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && 'xmlhttprequest' === strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) ) {
+
+			if ( false === (bool) $complete ) {
+				wp_send_json_error( array( 'message' => $complete ) );
+			}
+
+			wp_send_json_success( array( 'completed' => $complete ) );
+
+		} else {
+
+			$redirect_to = ( isset( $request_data['redirect_to'] ) ) ? esc_url( $request_data['redirect_to'] ) : false;
+
+			// Otherwise, something went wrong somewhere, but we should not show a whitescreen, so redirect back to the component
+			if ( false !== $redirect_to ) {
+				header( 'Location: ' . $redirect_to );
+			} else {
+				header( 'Location: ' . get_permalink( $post_id ) );
+			}
+		}
+
+	}/* ubcpressajax_user_notes__process() */
+
 
 	/**
 	 * By default the content of the notes field is empty, however, if

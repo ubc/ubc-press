@@ -12,6 +12,10 @@ jQuery( document ).ready( function( $ ) {
 	// Hook in to AJAX success so we can trigger our own items when a quiz is completed
 	$( document ).ajaxSuccess( function( event, xhr, settings ) { ajax_success__update_sidebar_completion_counts_for_quiz_completion( event, xhr, settings ); } );
 
+	// When the 'save' button is pressed for user notes...save the notes
+	$( 'body' ).on( 'submit', '#ubc_user_notes_metabox', submit_ubc_user_notes_metabox__save_user_notes );
+
+
 	/**
 	 * When a .mark-as-complete button is clicked, we do the appropriate action.
 	 * If they've just completed it, we set the user meta (via AJAX), change the button
@@ -47,8 +51,8 @@ jQuery( document ).ready( function( $ ) {
 		thisButton.attr( 'href', '' );
 
 		jQuery.ajax( {
-			type : "post",
-			dataType : "json",
+			type : 'post',
+			dataType : 'json',
 			url : url,
 			data : {
 				post_id : post_id,
@@ -113,6 +117,10 @@ jQuery( document ).ready( function( $ ) {
 
 	function start_loading( element ) {
 
+		if ( element.is( 'input[type="submit"]' ) ) {
+			element.val( localized_data.text.loading );
+			return;
+		}
 		element.text( localized_data.text.loading );
 
 	}/* start_loading() */
@@ -129,6 +137,11 @@ jQuery( document ).ready( function( $ ) {
 	 */
 
 	function stop_loading( element, originalHref ) {
+
+		if ( element.is( 'input[type="submit"]' ) ) {
+			element.val( localized_data.text.save );
+			return;
+		}
 
 		change_all_buttons( 'enable' );
 
@@ -442,5 +455,90 @@ jQuery( document ).ready( function( $ ) {
 		update_count_in_section_list( true );
 
 	}/* ajax_success__update_sidebar_completion_counts_for_quiz_completion() */
+
+
+	/**
+	 * When the user notes form is submitted, save the notes via AJAX
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (object) event - The submit event from jQuery
+	 * @return null
+	 */
+
+	function submit_ubc_user_notes_metabox__save_user_notes( event ) {
+
+		// Stop the normal PHP processing
+		event.stopPropagation();
+		event.preventDefault();
+
+		// Grab some variables including the submitted content
+		var thisForm			= $( this );
+		var thisButton 			= thisForm.find( 'input[type="submit"]' ).eq(0);
+		var notesContentField	= $( '#ubc_user_notes_content' );
+		var notesContent 		= notesContentField.val();
+
+		// Do our best to prevent double clicking.
+		if ( thisButton.hasAttr( 'disabled' ) || thisButton.hasClass( 'disabled' ) ) {
+			return;
+		}
+
+		// Post ID (subsection ID) is stored in a hidden field with a name of 'object_id'
+		var post_id = thisForm.find( 'input[name="object_id"]' ).eq(0).val();
+		var nonce 	= thisForm.find( '#nonce_CMB2phpubc_user_notes_metabox' ).eq(0).val();
+
+		// AJAX url
+		var url		= thisForm.find( '#user_notes_ajax_url' ).eq(0).val();
+
+		jQuery.ajax( {
+			type : 'post',
+			dataType : 'json',
+			url : url,
+			data : {
+				post_id : post_id,
+				nonce: nonce,
+				notes_content: notesContent
+			},
+			beforeSend: function( jqXHR, settings ) {
+				start_loading( thisButton );
+			},
+			success: function( response ) {
+
+				if ( response.success ) {
+					show_saved_message( thisButton, 3000 );
+				}
+			},
+			complete: function( jqXHR, textStatus ) {
+				stop_loading( thisButton );
+			},
+			error: function( jqXHR, textStatus, errorThrown ) {
+				return;
+			}
+		} );
+
+	}/* submit_ubc_user_notes_metabox__save_user_notes() */
+
+
+	/**
+	 * Output a 'saved' message for user notes which fades out
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (object) element - The element _before_ where we want to show the message
+	 * @param (int) timeout - For How long should the message be shown (ms)
+	 * @return null
+	 */
+
+	function show_saved_message( element, timeout ) {
+
+		if ( ! $( '#notes_saved_msg' ).length ) {
+			var markup = '<span id="notes_saved_msg" style="display: none;"> ' + localized_data.text.saved + ' </span>';
+			element.after( markup );
+		}
+
+		$( '#notes_saved_msg' ).fadeIn( 'fast' ).delay( timeout ).fadeOut( 'fast' );
+
+	}/* show_saved_message() */
+
 
 } );
