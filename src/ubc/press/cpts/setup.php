@@ -71,10 +71,7 @@ class Setup {
 
 		// We only register these post types on sites which are NOT
 		// the network's main site
-		$current_blog_id = get_current_blog_id();
-		$main_site_id = \UBC\Press\Utils::get_id_for_networks_main_site_of_blog_id( $current_blog_id );
-
-		if ( $current_blog_id === $main_site_id ) {
+		if ( \UBC\Press\Utils::current_site_is_main_site_for_network() ) {
 			return;
 		}
 

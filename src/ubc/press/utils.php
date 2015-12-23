@@ -742,6 +742,31 @@ class Utils {
 	}/* get_id_for_networks_main_site_of_blog_id() */
 
 
+
+	/**
+	 * Test if the current site is the main site for the network
+	 * Usage: \UBC\Press\Utils::current_site_is_main_site_for_network();
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return (bool) true if the current site is the network's main site. False otherwise
+	 */
+
+	public static function current_site_is_main_site_for_network() {
+
+		$current_blog_id = get_current_blog_id();
+		$main_site_id = \UBC\Press\Utils::get_id_for_networks_main_site_of_blog_id( $current_blog_id );
+
+		if ( $current_blog_id === $main_site_id ) {
+			return true;
+		}
+
+		return false;
+
+	}/* current_site_is_main_site_for_network() */
+
+
 	/**
 	 * Determine if a component is marked as complete for the passed user ID
 	 * Each user has a meta-key 'ubc_press_completed'. They keys in the outer array
