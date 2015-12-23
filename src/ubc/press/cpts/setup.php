@@ -69,6 +69,15 @@ class Setup {
 
 	private function determine() {
 
+		// We only register these post types on sites which are NOT
+		// the network's main site
+		$current_blog_id = get_current_blog_id();
+		$main_site_id = \UBC\Press\Utils::get_id_for_networks_main_site_of_blog_id( $current_blog_id );
+
+		if ( $current_blog_id === $main_site_id ) {
+			return;
+		}
+
 		$post_types_to_set_up = array();
 
 		$post_types_to_set_up['section'] = array(
