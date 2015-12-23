@@ -53,7 +53,7 @@ class Utils {
 		if ( false !== $with_nonce ) {
 			$nonce = sanitize_text_field( $nonce );
 
-			if ( false === $nonce ) {
+			if ( false === $nonce || empty( $nonce ) ) {
 				$nonce = wp_create_nonce( $action );
 			}
 		}
