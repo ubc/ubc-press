@@ -40,7 +40,7 @@ jQuery( document ).ready( function( $ ) {
 		}
 
 		// First things first; disable the buttons
-		change_all_buttons( 'disable' );
+		change_all_mark_as_complete_buttons( 'disable' );
 
 		var originalHref = thisButton.attr( 'href' );
 
@@ -107,7 +107,7 @@ jQuery( document ).ready( function( $ ) {
 
 	/**
 	 * Show loading status after a button is pressed.
-	 * Change the text to 'loading...' and disable the button
+	 * Change the text
 	 *
 	 * @since 1.0.0
 	 *
@@ -117,6 +117,7 @@ jQuery( document ).ready( function( $ ) {
 
 	function start_loading( element ) {
 
+		// If it's a submit button, change the text of the button
 		if ( element.is( 'input[type="submit"]' ) ) {
 			element.val( localized_data.text.loading );
 			return;
@@ -138,12 +139,13 @@ jQuery( document ).ready( function( $ ) {
 
 	function stop_loading( element, originalHref ) {
 
+		// If this is a submit/save button, revert the text and we're done
 		if ( element.is( 'input[type="submit"]' ) ) {
 			element.val( localized_data.text.save );
 			return;
 		}
 
-		change_all_buttons( 'enable' );
+		change_all_mark_as_complete_buttons( 'enable' );
 
 		if ( element.hasClass( 'secondary' ) ) {
 			element.html( localized_data.text.mark_as_complete + '<span class="dashicons dashicons-yes onhover"></span>' );
@@ -167,7 +169,7 @@ jQuery( document ).ready( function( $ ) {
 	 * @return null
 	 */
 
-	function change_all_buttons( status ) {
+	function change_all_mark_as_complete_buttons( status ) {
 
 		var allButtons = $( 'a.mark-as-complete' );
 
@@ -194,7 +196,7 @@ jQuery( document ).ready( function( $ ) {
 
 		}
 
-	}/* change_all_buttons() */
+	}/* change_all_mark_as_complete_buttons() */
 
 
 	/**
