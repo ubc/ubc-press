@@ -94,6 +94,7 @@ class Setup {
 				),
 				'hierarchical' => true,
 				'has_archive' => 'sections',
+				'show_in_rest' => true,
 			),
 			'icon' => 'dashicons-welcome-add-page',
 		);
@@ -114,6 +115,7 @@ class Setup {
 				),
 				'hierarchical' => true,
 				'has_archive' => 'lectures',
+				'show_in_rest' => true,
 			),
 			'icon' => 'dashicons-megaphone',
 		);
@@ -134,6 +136,7 @@ class Setup {
 					'slug' => 'assignment',
 				),
 				'has_archive' => 'assignments',
+				'show_in_rest' => true,
 			),
 			'icon' => 'dashicons-media-text',
 		);
@@ -154,6 +157,7 @@ class Setup {
 					'slug' => 'handout',
 				),
 				'has_archive' => 'handouts',
+				'show_in_rest' => true,
 			),
 			'icon' => 'dashicons-portfolio',
 		);
@@ -173,6 +177,7 @@ class Setup {
 					'slug' => 'reading',
 				),
 				'has_archive' => 'readings',
+				'show_in_rest' => true,
 			),
 			'icon' => 'dashicons-book-alt',
 		);
@@ -193,6 +198,7 @@ class Setup {
 					'slug' => 'link',
 				),
 				'has_archive' => 'links',
+				'show_in_rest' => true,
 			),
 			'icon' => 'dashicons-admin-links',
 		);
