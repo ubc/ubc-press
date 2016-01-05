@@ -39,6 +39,9 @@ class Setup {
 		// Setup plugin tieups
 		self::setup_plugins();
 
+		// Set up REST API
+		self::setup_rest_api();
+
 		// Set up the dashboard
 		self::setup_dashboard();
 
@@ -229,6 +232,23 @@ class Setup {
 		$ajax->init();
 
 	}/* setup_ajax() */
+
+
+	/**
+	 * WP REST API Tie-ups
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function setup_rest_api() {
+
+		$api = new \UBC\Press\API\Setup;
+		$api-> init();
+
+	}/* setup_rest_api() */
 
 
 	/**
