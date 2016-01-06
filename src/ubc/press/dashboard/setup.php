@@ -538,6 +538,11 @@ class Setup {
 
 	public function admin_menu__rename_pages_menu() {
 
+		// We don't do this for the main site on the network
+		if ( \UBC\Press\Utils::current_site_is_main_site_for_network() ) {
+			return;
+		}
+
 		// In order to do this we actually rename 'Pages'
 		global $menu;
 

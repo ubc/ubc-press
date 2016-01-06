@@ -495,9 +495,7 @@ class Setup {
 				}
 
 				update_post_meta( $o_post_id, 'section_associations', $components_section_assocations );
-
 			}
-
 		}
 
 		// Now, $associations is an array of post IDs (of components) which are associated with this section
