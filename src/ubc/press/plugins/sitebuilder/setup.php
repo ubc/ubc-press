@@ -465,7 +465,39 @@ class Setup {
 		}
 
 		if ( empty( $associations ) ) {
-			return;
+
+			// If $associations is empty on save, we need to check if there were associations initially. If so,
+			// they need to be removed
+			$original_associations = get_post_meta( $post_id, 'component_associations', true );
+
+			// None originally? Cool, we're done here
+			if ( ! $original_associations || empty( $original_associations ) ) {
+				return;
+			}
+
+			// There were some, so let's set them and then deal with them
+			foreach ( $original_associations as $okey => $o_post_id ) {
+
+				// First remove it from the component
+				$components_section_assocations = get_post_meta( $o_post_id, 'section_associations', true );
+
+				if ( empty( $components_section_assocations ) ) {
+					continue;
+				}
+
+				// Loop over each of this component's section associations looking for the just saved section ID
+				// Then remove it from the array and update the component
+				foreach ( $components_section_assocations as $c_s_a_k => $c_s_a_post_id ) {
+					if ( $post_id !== $c_s_a_post_id ) {
+						continue;
+					}
+					unset( $components_section_assocations[ $c_s_a_k ] );
+				}
+
+				update_post_meta( $o_post_id, 'section_associations', $components_section_assocations );
+
+			}
+
 		}
 
 		// Now, $associations is an array of post IDs (of components) which are associated with this section
