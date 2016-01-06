@@ -65,6 +65,8 @@ class Setup {
 
 	public function setup_actions() {
 
+		add_action( 'rest_api_init', array( $this, 'rest_api_init__add_component_associations' ) );
+
 	}/* setup_actions() */
 
 
@@ -81,6 +83,46 @@ class Setup {
 
 	}/* setup_actions() */
 
+
+	/**
+	 * Add the component_associations meta field to the return of sections in the
+	 * REST API
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function rest_api_init__add_component_associations() {
+
+		register_rest_field( 'section',
+	        'component_associations',
+	        array(
+	            'get_callback'    => array( $this, 'get_component_associations' ),
+	            'update_callback' => null,
+	            'schema'          => null,
+	        )
+	    );
+
+	}/* rest_api_init__add_component_associations() */
+
+
+	/**
+	 * Get the component_associations meta field for the given object (section)
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $object Details of current post.
+	 * @param (string) $field_name Name of field.
+	 * @param (WP_REST_Request) $request Current request
+	 *
+	 * @return mixed
+	 */
+
+	public function get_component_associations( $object, $field_name, $request ) {
+		return get_post_meta( $object['id'], $field_name, true );
+	}/* get_component_associations() */
 
 	/**
 	 * Run before we make any api changes. Simply runs an action which we can
