@@ -243,7 +243,7 @@ class Setup {
 			return;
 		}
 
-		wp_register_script( 'ubc_press_ajax', \UBC\Press::get_plugin_url() . 'src/ubc/press/theme/assets/js/ubc-press-ajax.js', array( 'jquery' ) );
+		wp_register_script( 'ubc_press_ajax', \UBC\Press::get_plugin_url() . 'src/ubc/press/theme/assets/js/ubc-press-ajax.js', array( 'jquery' ), null, true );
 
 		$localized_data = array(
 			'ajax_url'	=> \UBC\Press\Ajax\Utils::get_ubc_press_ajax_url(),
