@@ -11,8 +11,12 @@
 
 ?>
 
-<h3><?php the_title(); ?></h3>
+<div class="component-wrapper component-assignment">
 
-<div class="assignment-content">
-	<?php the_content(); ?>
-</div><!-- .assignment-content -->
+	<h3><?php the_title(); ?></h3>
+
+	<div class="assignment-content">
+		<?php the_content(); ?>
+	</div><!-- .assignment-content -->
+
+</div><!-- .component-wrapper -->

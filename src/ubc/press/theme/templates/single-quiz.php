@@ -18,6 +18,10 @@ $wp_pro_quiz_id = get_post_meta( $hidden_quiz_post_id, 'ubc_press_associated_qui
 
 ?>
 
-<div class="quiz-content">
-	<?php echo do_shortcode( "[WpProQuiz $wp_pro_quiz_id]" ); ?>
-</div><!-- .assignment-content -->
+<div class="component-wrapper component-quiz">
+
+	<div class="quiz-content">
+		<?php echo do_shortcode( "[WpProQuiz $wp_pro_quiz_id]" ); ?>
+	</div><!-- .assignment-content -->
+
+</div><!-- .component-wrapper -->
