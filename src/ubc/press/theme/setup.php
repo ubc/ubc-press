@@ -89,8 +89,116 @@ class Setup {
 
 	public function setup_filters() {
 
+		// Add enablejsapi=1 to youtube embeds and an ID
+		add_filter( 'embed_oembed_html', array( $this, 'oembed_result__add_jsapi_to_youtube_url' ), 100, 4 );
+
+		// Add attributes to a Vimeo video url
+		add_filter( 'embed_oembed_html', array( $this, 'embed_oembed_html__add_api_to_vimeo_url' ), 100, 4 );
+
 	}/* setup_actions() */
 
+
+
+	/**
+	 * Add some attributes to the youTube iframe. An ID and a enablejsapi=1
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed  $cache   The cached HTML result, stored in post meta.
+	 * @param string $url     The attempted embed URL.
+	 * @param array  $attr    An array of shortcode attributes.
+	 * @param int    $post_ID Post ID.
+	 * @return mixed $cache - modified cache
+	 */
+
+	public function oembed_result__add_jsapi_to_youtube_url( $cache, $url, $attr, $post_ID ) {
+
+		// Search for these urls within $url
+		$youtube_url_tests = array(
+			'youtube.com',
+			'youtu.be',
+		);
+
+		// Default to false
+		$url_is_found = false;
+
+		foreach ( $youtube_url_tests as $key => $search_url ) {
+			if ( strpos( $url, $search_url ) !== false ) {
+				$url_is_found = true;
+				continue;
+			}
+		}
+
+		if ( false === $url_is_found ) {
+			return $cache;
+		}
+
+		$cache = str_replace( '?feature=oembed', '?feature=oembed&enablejsapi=1', $cache );
+		$cache = str_replace( '<iframe', '<iframe id="youtube-embed-post-id-' . $post_ID . '"', $cache );
+		return $cache;
+
+	}/* oembed_result__add_jsapi_to_youtube_url() */
+
+
+	/**
+	 * Add api=1 and player_id={post_id} to vimeo URLs
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param mixed  $cache   The cached HTML result, stored in post meta.
+	 * @param string $url     The attempted embed URL.
+	 * @param array  $attr    An array of shortcode attributes.
+	 * @param int    $post_ID Post ID.
+	 * @return mixed $cache - modified cache
+	 */
+
+	public function embed_oembed_html__add_api_to_vimeo_url( $cache, $url, $attr, $post_ID ) {
+
+		// Search for these urls within $url
+		$vimeo_url_tests = array(
+			'vimeo.com',
+		);
+
+		// Default to false
+		$url_is_found = false;
+
+		foreach ( $vimeo_url_tests as $key => $search_url ) {
+			if ( strpos( $url, $search_url ) !== false ) {
+				$url_is_found = true;
+				continue;
+			}
+		}
+		if ( false === $url_is_found ) {
+			return $cache;
+		}
+
+		$original_url = $url;
+
+		// Test if the URL already has query params
+		$query = parse_url( $url, PHP_URL_QUERY );
+
+		$to_append = 'api=1&player_id=' . $post_ID;
+
+		$url .= ( $query ) ? '&' : '?';
+		$url .= $to_append;
+
+		// Always use ssl, so check for http: and replace with https:
+		$url = str_replace( 'http://', 'https://', $url );
+		$original_url_with_ssl = str_replace( 'http://', 'https://', $original_url );
+
+		// Need to replace the original URL which may be SSL
+		$cache = str_replace( $original_url_with_ssl, $url, $cache );
+		$cache = str_replace( $original_url, $url, $cache );
+
+		// Add an ID to the iFrame
+		$cache = str_replace( '<iframe', '<iframe id="vimeo-embed-post-id-' . $post_ID . '"', $cache );
+
+		// And a class
+		$cache = str_replace( '<iframe', '<iframe class="vimeo-embed"', $cache );
+
+		return $cache;
+
+	}/* embed_oembed_html__add_api_to_vimeo_url() */
 
 
 	/**
