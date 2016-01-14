@@ -186,6 +186,12 @@ class Setup {
 		$url = str_replace( 'http://', 'https://', $url );
 		$original_url_with_ssl = str_replace( 'http://', 'https://', $original_url );
 
+		// Need to have player.vimeo.com in the URL,
+		$url = str_replace( 'http://vimeo.com/', 'https://player.vimeo.com/video/', $url );
+		$url = str_replace( 'https://vimeo.com/', 'https://player.vimeo.com/video/', $url );
+		$original_url_with_ssl = str_replace( 'http://vimeo.com/', 'https://player.vimeo.com/video/', $original_url_with_ssl );
+		$original_url_with_ssl = str_replace( 'https://vimeo.com/', 'https://player.vimeo.com/video/', $original_url_with_ssl );
+
 		// Need to replace the original URL which may be SSL
 		$cache = str_replace( $original_url_with_ssl, $url, $cache );
 		$cache = str_replace( $original_url, $url, $cache );
