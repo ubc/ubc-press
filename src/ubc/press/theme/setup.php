@@ -75,7 +75,14 @@ class Setup {
 		// Load custom CSS. @TODO: Place this into the main theme stylesheet
 		add_action( 'init', array( $this, 'init__load_temp_stylesheet' ) );
 
+		add_action( 'init', array( $this, 'ag_add_oembed_handlers' ) );
+
 	}/* setup_actions() */
+
+	function ag_add_oembed_handlers() {
+		// https://admin.video.ubc.ca/index.php/kwidget/cache_st/1452816460/wid/_135/uiconf_id/11170395/entry_id/0_g5x5kgdf
+		wp_oembed_add_provider( '#https://admin\.video\.ubc\.ca/index\.php/kwidget/cache_st/(\S*)/wid/_135/uiconf_id/11170395/entry_id/*#i', 'https://video.ubc.ca/oembed', true );
+	}
 
 
 	/**
@@ -286,6 +293,14 @@ class Setup {
 
 		wp_register_style( 'ubc-press-temp', \UBC\Press::get_plugin_url() . 'src/ubc/press/theme/assets/css/temp.css' );
 		wp_enqueue_style( 'ubc-press-temp' );
+		wp_register_style( 'ubc-press-temp-admin', \UBC\Press::get_plugin_url() . 'src/ubc/press/theme/assets/css/temp-admin.css' );
+		wp_enqueue_style( 'ubc-press-temp-admin' );
+
+		if ( is_admin() ) {
+			wp_register_script( 'ubc-press-temp', \UBC\Press::get_plugin_url() . 'src/ubc/press/theme/assets/js/ubc-press-temp.js', array( 'jquery' ), null, true );
+			wp_enqueue_script( 'ubc-press-temp' );
+		}
+
 
 	}/* init__load_temp_stylesheet() */
 

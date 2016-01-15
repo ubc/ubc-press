@@ -115,6 +115,9 @@ class Setup {
 
 		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init__save_onboarding_options' ) );
 
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes__subsection_icon' ) );
+		add_action( 'save_post', array( $this, 'save_post__save_icon_metabox' ) );
+
 	}/* create() */
 
 
@@ -781,7 +784,7 @@ class Setup {
 		 */
 		$faculty 		= sanitize_text_field( $_POST['ubc_press_onboarding_faculty'] );
 
-		$dept_field 	= $_POST['ubc_press_onboarding_' . $faculty . '_department'];
+		$dept_field 	= $_POST[ 'ubc_press_onboarding_' . $faculty . '_department' ];
 
 		$department 	= sanitize_text_field( $dept_field );
 
@@ -817,7 +820,84 @@ class Setup {
 	}/* cmb2_admin_init__save_onboarding_options() */
 
 
+	/**
+	 * A metabox which gives instructors the ability to set an icon
+	 * for their subsection. We try and be clever and automatically
+	 * select an appropriate icon based on the components added, but
+	 * this gives the instructor the ability to override that.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
 
+	public function add_meta_boxes__subsection_icon() {
+
+		$screens = array( 'section' );
+
+		add_meta_box(
+			'ubcpress_section_icon',
+			__( 'Display Icon', 'ubc-press' ),
+			array( $this, 'add_meta_box__icon_picker_markup' ),
+			$screens,
+			'side',
+			'low'
+		);
+
+	}/* add_meta_boxes__subsection_icon() */
+
+	public function save_post__save_icon_metabox( $post_id ) {
+		/*
+		 * We need to verify this came from our screen and with proper authorization,
+		 * because the save_post action can be triggered at other times.
+		 */
+
+		// Check if our nonce is set.
+		if ( ! isset( $_POST['ubc_press_section_icon_nonce'] ) ) {
+			return;
+		}
+
+		// Verify that the nonce is valid.
+		if ( ! wp_verify_nonce( $_POST['ubc_press_section_icon_nonce'], 'ubc_press_section_icon' ) ) {
+			return;
+		}
+
+		// If this is an autosave, our form has not been submitted, so we don't want to do anything.
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		/* OK, it's safe for us to save the data now. */
+
+		// Make sure that it is set.
+		if ( ! isset( $_POST['ubc_press_section_icon_picker'] ) ) {
+			return;
+		}
+
+		// Sanitize user input.
+		$my_data = sanitize_text_field( $_POST['ubc_press_section_icon_picker'] );
+
+		// Update the meta field in the database.
+		update_post_meta( $post_id, '_section_icon', $my_data );
+
+	}/* save_post__save_icon_metabox() */
+
+	public function add_meta_box__icon_picker_markup( $post ) {
+
+		// Add a nonce field so we can check for it later.
+		wp_nonce_field( 'ubc_press_section_icon', 'ubc_press_section_icon_nonce' );
+
+		/*
+		 * Use get_post_meta() to retrieve an existing value
+		 * from the database and use the value for the form.
+		 */
+		$value = get_post_meta( $post->ID, '_section_icon', true );
+
+		_e( '<input class="" value="' . esc_attr( $value ) . '" id="ubc_press_section_icon_picker" name="ubc_press_section_icon_picker" type="text" />' );
+		_e( '<input class="button dashicons-picker" type="button" value="Choose Icon" data-target="#ubc_press_section_icon_picker" />' );
+
+	}
 
 	function cmb2_init__test() {
 

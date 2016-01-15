@@ -22,12 +22,17 @@
         {
             "type": "vcs",
             "url": "https://github.com/origgami/CMB2-grid"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/richardtape/cmb-field-select2"
         }
     ],
     "require": {
         "jjgrainger/wp-custom-post-type-class": "dev-master",
         "webdevstudios/cmb2": "2.1.2",
-        "origgami/CMB2-grid": "dev-master"
+        "origgami/CMB2-grid": "dev-master",
+        "mustardBees/cmb-field-select2": "dev-master"
     },
     "minimum-stability": "dev",
     "autoload": {
@@ -37,7 +42,8 @@
         },
         "files": [
             "vendor/webdevstudios/cmb2/init.php",
-            "vendor/origgami/CMB2-grid/Cmb2GridPlugin.php"
+            "vendor/origgami/CMB2-grid/Cmb2GridPlugin.php",
+            "vendor/mustardBees/cmb-field-select2/cmb-field-select2.php"
         ]
     }
 }
