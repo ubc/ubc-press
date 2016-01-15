@@ -891,7 +891,7 @@ class Setup {
 
 
 	/**
-	 * BAsed on the provided panels data, determine what a good automatic icon
+	 * Based on the provided panels data, determine what a good automatic icon
 	 * for this section would be. The default is returned if there's no components
 	 * or we're unsure what to do.
 	 *
@@ -926,7 +926,7 @@ class Setup {
 
 		// Found a quiz? We'll use that
 		if ( true === $has_quiz ) {
-			return 'dashicons-star-half';
+			return \UBC\Press\Utils::get_component_icon( 'AddQuizWidget' );
 		}
 
 		// Only one component? Use icon for that
