@@ -876,12 +876,116 @@ class Setup {
 		}
 
 		// Sanitize user input.
-		$my_data = sanitize_text_field( $_POST['ubc_press_section_icon_picker'] );
+		$saved_icon = sanitize_text_field( $_POST['ubc_press_section_icon_picker'] );
+
+		// If the field is empty, we take a look at the components added to this subsection
+		// Logic for auto-deciding on icon if empty
+		if ( empty( $saved_icon ) ) {
+			$saved_icon = static::determine_default_icon( $_POST['panels_data'] );
+		}
 
 		// Update the meta field in the database.
-		update_post_meta( $post_id, '_section_icon', $my_data );
+		update_post_meta( $post_id, '_section_icon', $saved_icon );
 
 	}/* save_post__save_icon_metabox() */
+
+
+	/**
+	 * BAsed on the provided panels data, determine what a good automatic icon
+	 * for this section would be. The default is returned if there's no components
+	 * or we're unsure what to do.
+	 *
+	 * If there's a quiz anywhere, we use that icon.
+	 *
+	 * If there's only one component, we use the icon for that component.
+	 *
+	 * If there's multiple components, and one has more instances than the others,
+	 * we use the icon for that component.
+	 *
+	 * Otherwise we use the icon for the first component in the list.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $content - The $_POST-d panels data
+	 * @return (string) The string of the suggested icon
+	 */
+
+	public static function determine_default_icon( $content ) {
+
+		// If our logic fails, this is the default
+		$default = 'dashicons-portfolio';
+
+		// Panels is a slashed, json string
+		$panels_data = json_decode( wp_unslash( $content ), true );
+
+		if ( empty( $panels_data ) || ! isset( $panels_data['widgets'] ) || empty( $panels_data['widgets'] ) ) {
+			return $default;
+		}
+
+		$has_quiz = static::does_section_contain_a_quiz( $panels_data );
+
+		// Found a quiz? We'll use that
+		if ( true === $has_quiz ) {
+			return 'dashicons-star-half';
+		}
+
+		// Only one component? Use icon for that
+		if ( 1 === count( $panels_data['widgets'] ) ) {
+
+			$widget_type = \UBC\Press\Utils::get_panels_widget_type( $panels_data['widgets'][0]['panels_info']['class'] );
+			return \UBC\Press\Utils::get_component_icon( $widget_type );
+		}
+
+		$widget_types = array();
+
+		foreach ( $panels_data['widgets'] as $wid => $wwidget ) {
+			$widget_class = $wwidget['panels_info']['class'];
+			if ( array_key_exists( $widget_class, $widget_types ) ) {
+				$widget_types[ $widget_class ] = $widget_types[ $widget_class ] + 1;
+			} else {
+				$widget_types[ $widget_class ] = 1;
+			}
+		}
+
+		// Sort the array so the most popular is on top
+		arsort( $widget_types );
+		// reset() allows us to then get the first item
+		reset( $widget_types );
+		// key gives us the key of the first (hence most popular) item
+		$pop_widget_type = key( $widget_types );
+
+		$widget_type = \UBC\Press\Utils::get_panels_widget_type( $pop_widget_type );
+		return \UBC\Press\Utils::get_component_icon( $widget_type );
+
+	}/* determine_default_icon() */
+
+	/**
+	 * Helper method to determine if a section contains a quiz component
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $panels_data - The stored panels_data meta for a post
+	 * @return (bool) true if the section contains a quiz.
+	 */
+
+	public static function does_section_contain_a_quiz( $panels_data ) {
+
+		if ( ! is_array( $panels_data ) || ! isset( $panels_data['widgets'] ) || empty( $panels_data['widgets'] ) ) {
+			return false;
+		}
+
+		$widgets = $panels_data['widgets'];
+
+		foreach ( $widgets as $id => $widget ) {
+			if ( array_key_exists( 'quiz_post_id', $widget ) ) {
+				return true;
+			}
+		}
+
+		return false;
+
+	}/* does_section_contain_a_quiz() */
+
 
 	public function add_meta_box__icon_picker_markup( $post ) {
 

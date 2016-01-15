@@ -24,7 +24,61 @@ class Utils {
 	 * @var (object) $user
 	 */
 
-	public $user = null;
+	public static $user = null;
+
+
+	/**
+	 * A map of component type to its associated icon
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @var (object) $component_icons
+	 */
+
+	public static $component_icons = array(
+		'AddLectureWidget' 			=> 'dashicons-megaphone',
+		'AddAssignmentWidget'		=> 'dashicons-media-text',
+		'AddHandoutWidget' 			=> 'dashicons-portfolio',
+		'note' 						=> 'dashicons-edit',
+		'AddReadingWidget' 			=> 'dashicons-book-alt',
+		'AddQuizWidget' 			=> 'dashicons-awards',
+		'AddLinkWidget' 			=> 'dashicons-admin-links',
+		'AddDiscussionForumWidget'	=> 'dashicons-format-status',
+	);
+
+
+	/**
+	 * Fetch the component icons array
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return array A map of component type to its associated icon
+	 */
+
+	public static function get_component_icons() {
+		return apply_filters( 'ubc_press_get_component_icons', static::$component_icons );
+	}/* get_component_icons() */
+
+
+	/**
+	 * Get the icon for a spcific component type
+	 *
+	 * Usage: \UBC\Press\Utils::get_component_icon( 'assignment' );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $component_type - The component type for which we need the icon
+	 * @return (string) The associated icon
+	 */
+
+	public static function get_component_icon( $component_type = false ) {
+
+		$all_icons = static::get_component_icons();
+		return apply_filters( 'ubc_press_get_component_icon', $all_icons[ $component_type ] );
+
+	}/* get_component_icon() */
 
 
 
