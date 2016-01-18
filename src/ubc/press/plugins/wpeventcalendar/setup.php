@@ -49,6 +49,9 @@ class Setup {
 		add_action( 'wp_trash_post', array( $this, 'wp_trash_delete_post__delete_linked_calendar_post' ), 10, 1 );
 		add_action( 'wp_delete_post', array( $this, 'wp_trash_delete_post__delete_linked_calendar_post' ), 10, 1 );
 
+		// Add a /calendar/ rewrite rule (so no fake 'page' required)
+		add_action( 'init', array( $this, 'init__add_calendar_rewrite_rule' ) );
+
 	}/* setup_actions() */
 
 
@@ -63,6 +66,10 @@ class Setup {
 	 */
 
 	public function setup_filters() {
+
+		// Add a /calendar/ rewrite rule (so no fake 'page' required)
+		add_filter( 'query_vars', array( $this, 'query_vars__add_calendar_rewrite_rule' ) );
+		add_filter( 'template_include', array( $this, 'template_include__add_calendar_rewrite_rule' ) );
 
 	}/* setup_filters() */
 
@@ -214,6 +221,61 @@ class Setup {
 		update_post_meta( $calendar_post_id, 'wp_event_calendar_end_date_time', $passed_end_datetime );
 
 	}/* check_dates_and_update_if_necessary() */
+
+	/**
+	 * Add the /calendar/ rewrite rule which will show the front-end rendering
+	 * of the course calendar
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function init__add_calendar_rewrite_rule() {
+
+		// Satisifies [calendar, calendar/, calendar/day, calendar/day/]  (and week and month)
+		add_rewrite_rule( 'calendar[\/]?(day|week|month)?[\/]?', 'index.php?pagename=calendar&mode=$matches[1]', 'top' );
+
+	}/* init__add_calendar_rewrite_rule() */
+
+	/**
+	 * Add the calendar query var to enable the /calendar/ rewrite
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $vars - Already existing query variables
+	 * @return (array) Modified query variables with our added calendar
+	 */
+
+	public function query_vars__add_calendar_rewrite_rule( $vars ) {
+
+		$vars[] = __( 'mode', \UBC\Press::get_text_domain() );
+		return $vars;
+
+	}/* query_vars__add_calendar_rewrite_rule() */
+
+
+	/**
+	 * If someone hits a calendar URL, we show our calendar template
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function template_include__add_calendar_rewrite_rule( $original_template ) {
+
+		$calendar_page = get_query_var( 'pagename' );
+
+		if ( 'calendar' !== $calendar_page ) {
+			return $original_template;
+		}
+
+		return \UBC\Press::get_plugin_path() . '/src/ubc/press/theme/templates/calendar.php';
+
+	}/* template_include__add_calendar_rewrite_rule() */
 
 
 	/**
