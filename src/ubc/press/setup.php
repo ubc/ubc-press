@@ -33,6 +33,9 @@ class Setup {
 
 		self::$instance = new self;
 
+		// Set up constants
+		self::setup_constants();
+
 		// Custom AJAX Endpoint creation
 		self::setup_ajax();
 
@@ -67,6 +70,26 @@ class Setup {
 		self::setup_onboarding();
 
 	}/* init() */
+
+
+
+	/**
+	 * Set up the set of constants we use. These do various things, such as let
+	 * us know the plugin is active
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function setup_constants() {
+
+		if ( ! defined( 'UBC_PRESS_VERSION' ) ) {
+			define( 'UBC_PRESS_VERSION', \UBC\Press::get_version() );
+		}
+
+	}/* setup_constants() */
 
 
 	/**
