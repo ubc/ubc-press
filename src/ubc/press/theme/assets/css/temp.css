@@ -2,30 +2,110 @@
 This file is temporary. It will be backed into the main stylesheet
  */
 
+.mark-as-complete-wrapper {
+	border-top: 1px solid #ccc;
+	height: 100px;
+	margin-top: 25px;
+	padding-top: 20px;
+	position: relative;
+}
+
 /* Ensure the 'Mark as complete'/Completed buttons are the same size */
 .button.mark-as-complete {
-	min-width: 202px;
+	height: 45px;
+	margin-bottom: 0;
+	overflow: hidden;
+	width: 202px;
 }
 
 /* dashicon only shown on hover */
-.dashicons.onhover {
-	display: none;
+
+.button.mark-as-complete .button-text, .dashicons.onhover, .button.mark-as-complete .mark-as-incomplete, .single-section .so-panel {
+
+	-webkit-transition: all 0.3s ease-in-out;
+	-moz-transition: all 0.3s ease-in-out;
+	-ms-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
 }
 
-.button.mark-as-complete:hover .dashicons.onhover{
-	display: inline-block;
+.button.mark-as-complete .button-text, .dashicons.onhover, .button.mark-as-complete .mark-as-incomplete {
 	height: 15px;
+}
+
+.dashicons.onhover, .mark-as-incomplete {
+	opacity: 0;
+}
+
+.dashicons.onhover {
+	top: 12px;
+	right: -35px;
+}
+
+.dashicons.onhover, .button.mark-as-complete .button-text, .mark-as-incomplete {
 	position: absolute;
-	top: 11px;
+}
+
+.button.mark-as-complete:hover .dashicons.onhover {
+	right: 30px;
+}
+
+.button.mark-as-complete .button-text {
+	display: block;
+	left: 0;
+    width: 100%;
+}
+
+.button.mark-as-complete:hover .button-text, .button.mark-as-complete:focus .button-text, .button.mark-as-complete:active .button-text {
+	top: 14px;
+	left: -30px;
+}
+
+.button.mark-as-complete.success:hover .button-text, .button.mark-as-complete.success:focus .button-text, .button.mark-as-complete.success:active .button-text {
+	left: -175px;
 }
 
 /* When completed and hovering, colour should be a warning colour */
-.button.mark-as-complete.success:hover {
+.button.mark-as-complete.success:hover, .button.mark-as-complete.success:focus, .button.mark-as-complete.success:active {
 	background: #dc750f;
 	border-color: #dc750f;
 }
 
-.button.mark-as-complete.success:hover::after {
+.button.mark-as-complete.success:hover::after, .button.mark-as-complete.success:focus::after, .button.mark-as-complete.success:active::after {
 	background: #dc750f;
 	border-color: #dc750f;
+}
+
+.when_completed {
+	display: block;
+	font-size: 11px;
+	margin-bottom: 1.25rem;
+}
+
+.when_completed .dashicons {
+	font-size: 11px;
+	height: auto;
+	vertical-align: text-top;
+	width: auto;
+}	
+.mark-as-incomplete {
+	left: -150px;
+}
+.button.mark-as-complete:hover .dashicons.onhover, .button.mark-as-complete:focus .dashicons.onhover, .button.mark-as-complete:active .dashicons.onhover, .button.mark-as-complete:hover .mark-as-incomplete, .button.mark-as-complete:focus .mark-as-incomplete, .button.mark-as-complete:active .mark-as-incomplete {
+	opacity: 1;
+}
+.button.mark-as-complete:hover .mark-as-incomplete, .button.mark-as-complete:focus .mark-as-incomplete, .button.mark-as-complete:active .mark-as-incomplete {
+	left: 30px;
+}
+.single-section .so-panel {
+	background-color: transparent;
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-ms-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
+}
+.single-section .so-panel.parent-hover {
+	background-color: #f1f1f1;
+
 }

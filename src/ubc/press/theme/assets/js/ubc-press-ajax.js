@@ -212,9 +212,9 @@
 			this.change_all_mark_as_complete_buttons( 'enable' );
 
 			if ( element.hasClass( 'secondary' ) ) {
-				element.html( localized_data.text.mark_as_complete + '<span class="dashicons dashicons-yes onhover"></span>' );
+				element.html( '<span class="button-text">' + localized_data.text.mark_as_complete + '</span><span class="dashicons dashicons-yes onhover"></span>' );
 			} else {
-				element.html( localized_data.text.completed + '<span class="dashicons dashicons-no onhover"></span>' );
+				element.html( '<span class="button-text">' + localized_data.text.completed + '</span><span class="mark-as-incomplete">Mark incomplete</span><span class="dashicons dashicons-no onhover"></span>' );
 			}
 
 			element.attr( 'href', originalHref );
@@ -840,3 +840,4 @@ var ubc_press = ubc_press();
 function onYouTubePlayerAPIReady() {
     ubc_press.YT_ready( true );
 }
+
