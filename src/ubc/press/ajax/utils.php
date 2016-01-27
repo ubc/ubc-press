@@ -35,7 +35,7 @@ class Utils {
 	 * A helper method to create URLs for our custom AJAX requests.
 	 * Basically site.com/{ajaxendpoint}/{action}
 	 *
-	 * Usage: \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( $action, $nonce )
+	 * Usage: \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( $action, $with_nonce, $nonce, $data )
 	 *
 	 * @since 1.0.0
 	 *
