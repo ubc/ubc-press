@@ -220,6 +220,23 @@ class Setup {
 			),
 		);
 
+		$post_types_to_set_up['submission'] = array(
+			'label_args' => array(
+				'post_type_name' 	=> 'submission',
+				'singular' 			=> 'submission',
+				'plural' 			=> 'submissions',
+				'slug' 				=> 'submission',
+			),
+			'wp_args' => array(
+				'capability_type' 	=> 'submission',
+				'map_meta_cap' 		=> false,
+				'supports' 			=> array( 'title' ),
+				'has_archive' 		=> false,
+				'public' => true,
+				'can_export' => false,
+			),
+		);
+
 		static::$post_types_to_set_up = $post_types_to_set_up;
 
 	}/* determine() */
