@@ -1444,4 +1444,38 @@ class Utils {
 
 	}/* get_user_notes() */
 
+
+	/**
+	 * Check if a Gravity Form exists with the passed title.
+	 *
+	 * Usage: \UBC\Press\Utils::gform_exists( $title );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $title - The title of a form to check
+	 * @return (bool) true if a form exists with this title, false otherwise
+	 */
+
+	public static function gform_exists( $title ) {
+
+		if ( ! class_exists( '\RGFormsModel' ) ) {
+			return false;
+		}
+
+		$form_exists = false;
+
+		$forms = \RGFormsModel::get_forms( null, 'title' );
+
+		if ( count( $forms ) > 0 ) {
+			foreach ( $forms as $form ) {
+				if ( $form->title === $title ) {
+					$form_exists = true;
+				}
+			}
+		}
+
+		return $form_exists;
+
+	}/* gform_exists() */
+
 }/* Utils */
