@@ -80,6 +80,9 @@ class Setup {
 
 	public function create() {
 
+		// Load custom admin metaboxes JS
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts__load_admin_metaboxes_js' ) );
+
 		// Add a section description metabox
 		add_action( 'cmb2_init', array( $this, 'cmb2_init__section_description' ) );
 
@@ -118,7 +121,36 @@ class Setup {
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes__subsection_icon' ) );
 		add_action( 'save_post', array( $this, 'save_post__save_icon_metabox' ) );
 
+		// Assignment's "create new assignment form" metabox
+		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init__show_assignment_form_create_form_markup' ) );
+		add_action( 'ubcpressajax_create_assignment_form', array( $this, 'ubcpressajax_create_assignment_form__process' ) );
+
 	}/* create() */
+
+
+	public function admin_enqueue_scripts__load_admin_metaboxes_js() {
+
+		// back-end only
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		wp_register_script( 'ubc_press_admin_metaboxes', \UBC\Press::get_plugin_url() . 'src/ubc/press/metaboxes/assets/js/ubc-press-admin-metaboxes.js', array( 'jquery' ), null, true );
+
+		$localized_data = array(
+			'ajax_url'	=> \UBC\Press\Ajax\Utils::get_ubc_press_ajax_url(),
+			'text'		=> array(
+				'loading' => __( 'Loading', \UBC\Press::get_text_domain() ),
+				'completed' => __( 'Completed', \UBC\Press::get_text_domain() ),
+				'please_correct' => __( 'Please correct the highlighted fields.', \UBC\Press::get_text_domain() ),
+			),
+		);
+
+		wp_localize_script( 'ubc_press_admin_metaboxes', 'ubc_press_admin_metaboxes_vars', $localized_data );
+
+		wp_enqueue_script( 'ubc_press_admin_metaboxes' );
+
+	}/* admin_enqueue_scripts__load_admin_metaboxes_js */
 
 
 	/**
@@ -1002,6 +1034,227 @@ class Setup {
 		_e( '<input class="button dashicons-picker" type="button" value="Choose Icon" data-target="#ubc_press_section_icon_picker" />' );
 
 	}
+
+
+	/**
+	 * Display the markup for when a form hasn't been associated with an assignment
+	 * yet
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function cmb2_admin_init__show_assignment_form_create_form_markup( $post ) {
+
+		// Test if we have an associated form ID
+		global $post;
+
+		if ( ! $post || ! is_a( $post, 'WP_Post' ) ) {
+			$this->show_create_assignment_form_markup();
+			return;
+		}
+
+		$associated_gform = get_post_meta( $post->ID, 'associated_gravity_form', true );
+		if ( false === $associated_gform || empty( $associated_gform ) ) {
+			$this->show_create_assignment_form_markup();
+			return;
+		}
+
+		$this->show_assignment_form_attached_markup( $post );
+
+	}/* cmb2_admin_init__show_assignment_form_create_form_markup() */
+
+
+	/**
+	 * Display the markup for creating an assignment form
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function show_create_assignment_form_markup() {
+
+		$prefix = 'ubc_press_create_assignment_form_';
+
+		$create_assignment_form = new_cmb2_box( array(
+			'id'			=> $prefix . 'metabox',
+			'title'			=> __( 'Create Assignment Form', \UBC\Press::get_text_domain() ),
+			'object_types'  => array( 'Assignment' ),
+			'context'    	=> 'normal',
+			'priority' 		=> 'low',
+		) );
+
+		$create_assignment_form->add_field( array(
+			'name' => __( 'What\'s this?', \UBC\Press::get_text_domain() ),
+			'id'   => $prefix . 'title',
+			'desc' => __( 'Each assignment component contains a customizable form. Fill out some details below and click the "Create Assignment Form" button. A form will be made and associated with this component. Any submissions of that form will be associated with this form. We will automatically take the title of this assignment and use that for the form and also set the opening and closing dates for submission based on the details you provide.', \UBC\Press::get_text_domain() ),
+			'type' => 'title',
+		) );
+
+		$with_textarea = $create_assignment_form->add_field( array(
+			'name'	=> __( 'Content Submission Type', \UBC\Press::get_text_domain() ),
+			'desc' 	=> __( 'How would you like your students to submit their content? As a file upload (.pdf, .doc, .docx, .pages) or enter it as text in a WYSIWYG editor, or both?', \UBC\Press::get_text_domain() ),
+			'id'  	=> $prefix . 'text_area_or_file_upload_or_both',
+			'type'	=> 'radio',
+			'options' => array(
+				'file_upload'	=> __( 'File Upload', \UBC\Press::get_text_domain() ),
+				'textarea' 		=> __( 'WYSIWYG', \UBC\Press::get_text_domain() ),
+				'both'			=> __( 'Both', \UBC\Press::get_text_domain() ),
+			),
+			'after_row'	=> array( $this, 'after__submit_button_for_assignment_form' ),
+		) );
+
+	}/* show_assignment_form_attached_markup() */
+
+
+	/**
+	 * The 'Create Assignment Form' metabox needs to be able to allow for separate
+	 * submission. This callback adds a button.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param  (array) $field_args Array of field parameters
+	 * @param  (CMB2_Field object) $field Field object
+	 * @return null
+	 */
+
+	public function after__submit_button_for_assignment_form( $field_args, $field ) {
+
+		// Need the AJAX URL
+		$ajax_url = \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'create_assignment_form', true, false );
+
+		echo '<p><input type="submit" data-ajax_url="' . $ajax_url . '" name="create_assignment_form" id="create_assignment_form" class="button button-primary button-large" value="Create Assignment Form"></p>';
+
+	}/* after__submit_button_for_assignment_form() */
+
+
+	/**
+	 * Display the markup for the details of the attached gravity form
+	 * for this assignment
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (WP_Post Object) $post - The assignment post we're currently editing
+	 * @return null
+	 */
+
+	public function show_assignment_form_attached_markup( $post ) {
+
+		echo 'we got one!';
+
+	}/* show_assignment_form_attached_markup() */
+
+
+	/**
+	 * Creation of a Gravity Form for assignment submissions. When a new assignment
+	 * is created, the user can create and associated a gravity form. The form is
+	 * created here using the gForm API and then meta associates the two.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $request_data - the $_REQUEST data
+	 * @return null
+	 */
+
+	public function ubcpressajax_create_assignment_form__process( $request_data ) {
+
+		// The nonce is already checked for us, still need to sanitize data
+		$submission_type	= sanitize_text_field( $request_data['submissionType'] ); // file_upload/textarea/both
+		$title 				= sanitize_title( $request_data['titleField'] );
+		$date 				= \UBC\Press\Utils::sanitize_date( $request_data['dateField'] );
+		$start_time 		= \UBC\Press\Utils::sanitize_time( $request_data['startTimeField'] );
+		$end_time 			= \UBC\Press\Utils::sanitize_time( $request_data['endTimeField'] );
+
+		// We need Gravity Forms
+		if ( ! class_exists( 'RGFormsModel' ) ) {
+			wp_send_json_error( array( 'message' => __( 'Gravity Forms is not active', \UBC\Press::get_text_domain() ) ) );
+			return;
+		}
+
+		// Check if a form with this title already exists
+		if ( \UBC\Press\Utils::gform_exists( $title ) ) {
+			wp_send_json_error( array( 'message' => __( 'A form with this name already exists', \UBC\Press::get_text_domain() ) ) );
+			return;
+		}
+
+		// OK form doesn't exist, let's make one
+		$form_array = array();
+
+		$form_array['title'] = $title;
+		$form_array['date_created'] = date( 'Y-m-d H:i:s' );
+
+		$form_array['fields'] = array(
+			array(
+				'id' => 1,
+				'label' => 'Name',
+				'adminLabel' => '',
+				'type' => 'name',
+				'isRequired' => true,
+				'inputs' => array(
+					array(
+						'id' => 1.3,
+						'label' => 'First',
+						'name' => '',
+					),
+					array(
+						'id' => 1.6,
+						'label' => 'Last',
+						'name' => '',
+					),
+				),
+			),
+			array(
+				'id' => 2,
+				'label' => 'Email',
+				'adminLabel' => '',
+				'type' => 'email',
+				'isRequired' => true,
+			),
+			array(
+				'id' => 3,
+				'label' => 'Subject',
+				'adminLabel' => '',
+				'type' => 'text',
+				'isRequired' => true,
+			),
+			array(
+				'id' => 4,
+				'label' => 'Message',
+				'adminLabel' => '',
+				'type' => 'textarea',
+				'isRequired' => true,
+			),
+		);
+
+		$result = \GFAPI::add_form( $form_array );
+
+		// If we're coming from an AJAX request, send JSON
+		if ( ! empty( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && 'xmlhttprequest' === strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) ) {
+
+			if ( false === (bool) $result ) {
+				wp_send_json_error( array( 'message' => $result ) );
+			}
+
+			wp_send_json_success( array( 'completed' => $result ) );
+
+		} else {
+
+			$redirect_to = ( isset( $request_data['redirect_to'] ) ) ? esc_url( $request_data['redirect_to'] ) : false;
+
+			// Otherwise, something went wrong somewhere, but we should not show a whitescreen, so redirect back
+			if ( false !== $redirect_to ) {
+				header( 'Location: ' . $redirect_to );
+			} else {
+				header( 'Location:' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] );
+			}
+		}
+
+	}/* ubcpressajax_create_assignment_form__process() */
+
 
 	function cmb2_init__test() {
 
