@@ -152,11 +152,12 @@ class Setup {
 			return;
 		}
 
-		// Don't add it for handouts/links
+		// Don't add it for handouts/links/assignments
 		$exclude = array(
 			'handout',
 			'link',
-			// 'lecture',
+			'assignment',
+			'submission',
 		);
 
 		if ( in_array( $cpt_object->post_type_name, $exclude ) ) {
