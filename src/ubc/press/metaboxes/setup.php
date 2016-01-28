@@ -1157,8 +1157,7 @@ class Setup {
 			'priority' 		=> 'low',
 		) );
 
-		// Build the gravity form edit form link: wp-admin/admin.php?page=gf_edit_forms&id=3
-		$form_edit_url = $this->get_form_edit_url( $associated_form_id );
+		$metabox_content = $this->get_content_for_already_assigned_form( $associated_form_id );
 
 		$create_assignment_form->add_field( array(
 			'name' => __( 'What\'s this?', \UBC\Press::get_text_domain() ),
@@ -1168,6 +1167,30 @@ class Setup {
 		) );
 
 	}/* show_assignment_form_attached_markup() */
+
+
+
+	/**
+	 * Returns the content displayed to the user when the assignment they
+	 * are viewing is already associated with a form.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $form_id - The associated form
+	 * @return (string) The content to show for this associated form
+	 */
+
+
+	public function get_content_for_already_assigned_form( $form_id ) {
+
+		// Build the gravity form edit form link: wp-admin/admin.php?page=gf_edit_forms&id=3
+		$form_edit_url = $this->get_form_edit_url( $form_id );
+
+		$content = __( 'You have associated a <a href="' . $form_edit_url . '" title="">form</a> with this assignment. You may <a href="' . $form_edit_url . '" title="">edit the form</a> using the form builder.', \UBC\Press::get_text_domain() );
+
+		return $content;
+
+	}/* get_content_for_already_assigned_form() */
 
 
 	/**
@@ -1212,6 +1235,7 @@ class Setup {
 		$date 				= \UBC\Press\Utils::sanitize_date( $request_data['dateField'] );
 		$start_time 		= \UBC\Press\Utils::sanitize_time( $request_data['startTimeField'] );
 		$end_time 			= \UBC\Press\Utils::sanitize_time( $request_data['endTimeField'] );
+		$post_id			= absint( $request_data['postID'] );
 
 		// We need Gravity Forms
 		if ( ! class_exists( 'RGFormsModel' ) ) {
@@ -1283,7 +1307,11 @@ class Setup {
 				wp_send_json_error( array( 'message' => $result ) );
 			}
 
-			wp_send_json_success( array( 'completed' => $result ) );
+			wp_send_json_success( array(
+				'completed' => true,
+				'associated_form_id' => $result,
+				'metabox_content' => $this->get_content_for_already_assigned_form( $result ),
+			) );
 
 		} else {
 

@@ -26,11 +26,15 @@
 			event.stopPropagation();
 			event.preventDefault();
 
+			// Disable the button
+			jQuery( this ).attr( 'disable', 'disable' );
+
 			// We need the title and date/time set before we do anything
 			var requiredFieldsSet = ubc_press_admin_metaboxes.prototype.checkForRequiredFields();
 
 			if ( true !== requiredFieldsSet ) {
-				ubc_press_admin_metaboxes.prototype.outputErrors( requiredFieldsSet );
+				// ubc_press_admin_metaboxes.prototype.outputErrors( requiredFieldsSet );
+				ubc_press_admin_metaboxes.prototype.outputFieldMissingErrors( requiredFieldsSet );
 				return;
 			}
 
@@ -104,23 +108,31 @@
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param (array) fields - The fields which are missing
+		 * @param (string) message - The error message to show
 		 * @return null
 		 */
 
-		outputErrors: function( fields ) {
+		outputErrors: function( message ) {
 
 			var errorsContainer = jQuery( '#create_assignment_form' ).parent();
-
-			var message = ubc_press_admin_metaboxes_vars.text.please_correct;
-
-			jQuery( fields ).each( function() {
-				jQuery( this ).css( 'border-color', 'red' );
-			} );
 
 			jQuery( errorsContainer ).after( '<p class="ubc-press-caf-error" style="">' + message + '</p>' );
 
 		},
+
+
+		outputFieldMissingErrors: function( fields ) {
+
+			var message = ubc_press_admin_metaboxes_vars.text.please_correct;
+
+			jQuery( fields ).each( function() {
+				jQuery( this ).css( 'border-color', 'red' ).addClass( 'has-ubc-press-error' );
+			} );
+
+			ubc_press_admin_metaboxes.prototype.outputErrors( message );
+
+		},
+
 
 		/**
 		 * Collect the data we need which includes the title, the dates,
@@ -136,7 +148,8 @@
 
 			var requiredFields = this.collectedData;
 			var otherFields = {
-				submissionType: jQuery( 'input[name="ubc_press_create_assignment_form_text_area_or_file_upload_or_both"]:checked' ).val()
+				submissionType: jQuery( 'input[name="ubc_press_create_assignment_form_text_area_or_file_upload_or_both"]:checked' ).val(),
+				postID: jQuery( '#post_ID' ).val(),
 			};
 
 			// Merge them
@@ -173,9 +186,18 @@
 				success: function( response ) {
 
 					if ( response.success ) {
-						console.log( 'success' );
-						console.log( response );
+
+						ubc_press_admin_metaboxes.prototype.replace_instructions_with_new_content( response.data.metabox_content );
+
+					} else {
+
+						// OK the AJAX request worked, but there was an error. Probably a 'form exists' or something. Let's output the error
+						var message = response.data.message;
+						ubc_press_admin_metaboxes.prototype.outputErrors( message );
+
 					}
+
+					ubc_press_admin_metaboxes.prototype.clearErrors();
 				},
 				complete: function( jqXHR, textStatus ) {
 					console.log( 'complete' );
@@ -187,6 +209,43 @@
 			} );
 
 		},
+
+		/**
+		 * When the 'Create Assignment Form' button is pressed and a form
+		 * is susccessfully created, we replace the content of the form
+		 * creation stuff with other details.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param (string) content - The content which we replacing the existing with
+		 * @return null
+		 */
+
+		replace_instructions_with_new_content: function( content ) {
+
+			var original = jQuery( '#cmb2-metabox-ubc_press_create_assignment_form_metabox' );
+
+			original.fadeOut( 100, function() {
+				original.html( content );
+			} );
+
+			original.fadeIn();
+			jQuery( 'html, body' ).animate( { scrollTop: 0 }, 'slow' );
+
+		},/* replace_instructions_with_new_content() */
+
+		/**
+		 * Clear any errors shown
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param null
+		 * @return null
+		 */
+
+		clearErrors: function() {
+			jQuery( '.has-ubc-press-error' ).css( 'border-color', 'auto' );
+		},/* clearErrors() */
 
 	};
 
