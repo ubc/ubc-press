@@ -1307,6 +1307,9 @@ class Setup {
 				wp_send_json_error( array( 'message' => $result ) );
 			}
 
+			// OK, now associated that form with this post
+			add_post_meta( $post_id, 'associated_form_id', $result );
+
 			wp_send_json_success( array(
 				'completed' => true,
 				'associated_form_id' => $result,
