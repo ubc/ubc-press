@@ -1049,20 +1049,21 @@ class Setup {
 	public function cmb2_admin_init__show_assignment_form_create_form_markup( $post ) {
 
 		// Test if we have an associated form ID
-		global $post;
+		$post_id = ( isset( $_GET['post'] ) ) ? $_GET['post'] : false;
+		$post_id = absint( $post_id );
 
-		if ( ! $post || ! is_a( $post, 'WP_Post' ) ) {
+		if ( ! $post_id  ) {
 			$this->show_create_assignment_form_markup();
 			return;
 		}
 
-		$associated_gform = get_post_meta( $post->ID, 'associated_gravity_form', true );
+		$associated_gform = get_post_meta( $post_id, 'associated_form_id', true );
 		if ( false === $associated_gform || empty( $associated_gform ) ) {
 			$this->show_create_assignment_form_markup();
 			return;
 		}
 
-		$this->show_assignment_form_attached_markup( $post );
+		$this->show_assignment_form_attached_markup( $post_id );
 
 	}/* cmb2_admin_init__show_assignment_form_create_form_markup() */
 
@@ -1108,7 +1109,7 @@ class Setup {
 			'after_row'	=> array( $this, 'after__submit_button_for_assignment_form' ),
 		) );
 
-	}/* show_assignment_form_attached_markup() */
+	}/* show_create_assignment_form_markup() */
 
 
 	/**
@@ -1138,16 +1139,59 @@ class Setup {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param (WP_Post Object) $post - The assignment post we're currently editing
+	 * @param (int) $post_id - The ID assignment post we're currently editing
 	 * @return null
 	 */
 
-	public function show_assignment_form_attached_markup( $post ) {
+	public function show_assignment_form_attached_markup( $post_id ) {
 
-		echo 'we got one!';
+		$prefix = 'ubc_press_attached_assignment_form_';
+
+		$associated_form_id = get_post_meta( absint( $post_id ), 'associated_form_id', true );
+
+		$create_assignment_form = new_cmb2_box( array(
+			'id'			=> $prefix . 'metabox',
+			'title'			=> __( 'Assignment Form Details', \UBC\Press::get_text_domain() ),
+			'object_types'  => array( 'Assignment' ),
+			'context'    	=> 'normal',
+			'priority' 		=> 'low',
+		) );
+
+		// Build the gravity form edit form link: wp-admin/admin.php?page=gf_edit_forms&id=3
+		$form_edit_url = $this->get_form_edit_url( $associated_form_id );
+
+		$create_assignment_form->add_field( array(
+			'name' => __( 'What\'s this?', \UBC\Press::get_text_domain() ),
+			'id'   => $prefix . 'title',
+			'desc' => __( 'You have associated a <a href="' . $form_edit_url . '" title="">form</a> with this assignment. You may <a href="' . $form_edit_url . '" title="">edit the form</a> using the form builder.', \UBC\Press::get_text_domain() ),
+			'type' => 'title',
+		) );
 
 	}/* show_assignment_form_attached_markup() */
 
+
+	/**
+	 * Returns the admin edit url for the passed form ID
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $form_id - The ID of the form
+	 * @return (string) The URL of the edit screen for the passed form ID
+	 */
+
+	public function get_form_edit_url( $form_id ) {
+
+		$form_id = absint( $form_id );
+
+		if ( ! $form_id ) {
+			return false;
+		}
+
+		$url = admin_url( 'admin.php?page=gf_edit_forms&id=' . $form_id );
+
+		return esc_url( $url );
+
+	}/* get_form_edit_url() */
 
 	/**
 	 * Creation of a Gravity Form for assignment submissions. When a new assignment
