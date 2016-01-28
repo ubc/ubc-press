@@ -1162,7 +1162,7 @@ class Setup {
 		$create_assignment_form->add_field( array(
 			'name' => __( 'What\'s this?', \UBC\Press::get_text_domain() ),
 			'id'   => $prefix . 'title',
-			'desc' => __( 'You have associated a <a href="' . $form_edit_url . '" title="">form</a> with this assignment. You may <a href="' . $form_edit_url . '" title="">edit the form</a> using the form builder.', \UBC\Press::get_text_domain() ),
+			'desc' => $metabox_content,
 			'type' => 'title',
 		) );
 
