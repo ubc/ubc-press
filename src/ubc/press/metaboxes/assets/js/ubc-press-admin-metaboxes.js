@@ -20,6 +20,59 @@
 
 		},
 
+		/**
+		 * If on an assignment creation screen, we only enable the publish button
+		 * when an assignment _form_ has been created and assigned.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param null
+		 * @return null
+		 */
+
+		addHandlerToPreventAssignmentPublishing: function() {
+
+			if ( ! ubc_press_admin_metaboxes.prototype.onAssignmentScreen() ) {
+				return;
+			}
+
+			var assignmentSubmitButton = jQuery( '#publish' );
+
+			if( jQuery( '#create_assignment_form' ).is( ':visible') ) {
+				ubc_press_admin_metaboxes.prototype.disableAssignmentPublishing();
+			}
+
+		},
+
+		disableAssignmentPublishing: function() {
+			var assignmentSubmitButton = jQuery( '#publish' );
+			assignmentSubmitButton.attr( 'disabled', 'disabled' );
+		},
+
+		enableAssignmentPublishing: function() {
+			var assignmentSubmitButton = jQuery( '#publish' );
+			assignmentSubmitButton.removeAttr( 'disabled' );
+		},
+
+		/**
+		 * Determine if we're on an assignment screen or not
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param null
+		 * @return (bool) True if we're adding/editing an assignment
+		 */
+
+		onAssignmentScreen: function() {
+
+			if ( jQuery( 'body' ).hasClass( 'post-type-assignment' ) ) {
+				return true;
+			}
+
+			return false;
+
+		},
+
 		click_create_assignment_form__send_ajax: function( event ) {
 
 			// Stop the normal PHP processing
@@ -67,9 +120,10 @@
 			// The fields we need to be non-empty
 			var requiredFields = {
 				titleField:		jQuery( '#titlewrap #title' ),
-				dateField:		jQuery( '#ubc_item_date_item_date' ),
-				startTimeField:	jQuery( '#ubc_item_date_item_time_start' ),
-				endTimeField:	jQuery( '#ubc_item_date_item_time_end' ),
+				dateField:		jQuery( '#ubc_assignment_item_date_item_date' ),
+				dateFieldEnd:	jQuery( '#ubc_assignment_item_date_item_date_closing' ),
+				startTimeField:	jQuery( '#ubc_assignment_item_date_item_time_start' ),
+				endTimeField:	jQuery( '#ubc_assignment_item_date_item_time_end' ),
 			};
 
 			// This will be a map of fields that are empty
@@ -189,6 +243,9 @@
 
 						ubc_press_admin_metaboxes.prototype.replace_instructions_with_new_content( response.data.metabox_content );
 
+						// Enable the publish button
+						ubc_press_admin_metaboxes.prototype.enableAssignmentPublishing();
+
 					} else {
 
 						// OK the AJAX request worked, but there was an error. Probably a 'form exists' or something. Let's output the error
@@ -251,6 +308,7 @@
 
 	ubc_press_admin_metaboxes.init = function() {
 		this.addClickHandlerForCreateAssignmentFormButton();
+		this.addHandlerToPreventAssignmentPublishing();
 	};
 
 	// trick borrowed from jQuery so we don't have to use the 'new' keyword
