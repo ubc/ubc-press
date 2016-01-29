@@ -1339,10 +1339,11 @@ class Setup {
 		$submission_type	= sanitize_text_field( $request_data['submissionType'] ); // file_upload/textarea/both
 		$title 				= sanitize_title( $request_data['titleField'] );
 		$date 				= \UBC\Press\Utils::sanitize_date( $request_data['dateField'] );
+		$date_end 			= \UBC\Press\Utils::sanitize_date( $request_data['dateFieldEnd'] );
 		$start_time 		= \UBC\Press\Utils::sanitize_time( $request_data['startTimeField'] );
 		$end_time 			= \UBC\Press\Utils::sanitize_time( $request_data['endTimeField'] );
 		$post_id			= absint( $request_data['postID'] );
-		file_put_contents( WP_CONTENT_DIR . "/debug.log", print_r( array( $request_data ), true ), FILE_APPEND );
+
 		// We need Gravity Forms
 		if ( ! class_exists( 'RGFormsModel' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Gravity Forms is not active', \UBC\Press::get_text_domain() ) ) );
@@ -1356,6 +1357,11 @@ class Setup {
 		}
 
 		// We need to split the start and end times
+		$start_time_parts	= $this->TARDIS( $start_time );
+		$end_time_parts		= $this->TARDIS( $end_time );
+
+		// Generate a sign in link
+		$sign_in_link = wp_kses_post( '<a href="' . wp_login_url( get_permalink() ) . '" title="">' . __( 'Sign In', \UBC\Press::get_text_domain() ) . '</a>' );
 
 		// OK form doesn't exist, let's make one
 		$form_array = array();
@@ -1368,8 +1374,25 @@ class Setup {
 		$form_array['postStatus'] = 'pending';
 		$form_array['requireLogin'] = true;
 		$form_array['is_active'] = true;
+
+		// Scheduling
 		$form_array['scheduleForm'] = true;
 		$form_array['scheduleStart'] = $date;
+		$form_array['scheduleEnd'] = $date_end;
+
+		$form_array['scheduleStartHour'] = $start_time_parts['hour'];
+		$form_array['scheduleStartMinute'] = $start_time_parts['minute'];
+		$form_array['scheduleStartAmpm'] = $start_time_parts['AMPM'];
+		$form_array['scheduleEndHour'] = $end_time_parts['hour'];
+		$form_array['scheduleEndMinute'] = $end_time_parts['minute'];
+		$form_array['scheduleEndAmpm'] = $end_time_parts['AMPM'];
+
+		$form_array['schedulePendingMessage'] = __( 'This assignment can be submitted after ' . $start_time . ' on ' .  $date . '.', \UBC\Press::get_text_domain() );
+		$form_array['scheduleMessage'] = __( 'This assignment can no longer be submitted.', \UBC\Press::get_text_domain() );
+
+		// Require login
+		$form_array['requireLogin'] = true;
+		$form_array['requireLoginMessage'] = __( 'You must ' . $sign_in_link .' to submit this assignment', \UBC\Press::get_text_domain() );
 
 		// Add the default fields: Name, Email, Entry ID, Assignment ID
 		$form_array['fields'] = array(
@@ -1483,6 +1506,65 @@ class Setup {
 
 	}/* ubcpressajax_create_assignment_form__process() */
 
+
+	/**
+	 * Gravity Forms requires times to be in distinct chunks. We receive a time
+	 * such as 10:00 AM and gForms needs the Hour, Minute and AM/PM as separate
+	 * fields. This method provides a way to do that and returns an array of the
+	 * parts.
+	 *
+	 * Why is this method called TARDIS? Becuase we explode Time and Space.
+	 * props @thoronas for the name.
+	 *
+	 * @TODO: Make this a bit smarter for if we have a 24 hour clock
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param ($string) $time - Time as a string, i.e. 10:00 AM
+	 * @return (array) The distinct parts as an associative array
+	 */
+
+	public function TARDIS( $time ) {
+
+		// Sanitize
+		$time		= \UBC\Press\Utils::sanitize_time( $time );
+
+		// Bail early if we don't have the format we expect
+		if ( empty( $time ) ) {
+			return array();
+		}
+
+		// First; get the am/pm by splitting on a space
+		// We're, err, exploding time and space. Geddit? Don't judge.
+		$ampm_parts	= explode( " ", $time );
+		$ampm		= $ampm_parts[1]; // Will be "AM" or "PM"
+
+		$just_time	= $ampm_parts[0]; // Will just be i.e. 10:00
+
+		// Split on the colon to get the hour and minute
+		$time_parts	= explode( ':', $just_time );
+		$hour		= $time_parts[0];
+		$minute		= $time_parts[1];
+
+		$time_parts = array(
+			'AMPM'	=> $ampm,
+			'hour'	=> $hour,
+			'minute'=> $minute,
+		);
+
+		/**
+		 * Filters An array of time parts made by converting a time from a
+		 * HH:MM (A/P)M format.
+		 *
+		 * @since 0.5.0
+		 *
+		 * @param (array) $time_parts - An associative array containing the hour and minute and (A/P)M
+		 * @param (string) $time The unconverted time string
+		 */
+
+		return apply_filters( 'ubc_press_time_parts', $time_parts, $time );
+
+	}/* TARDIS() */
 
 	function cmb2_init__test() {
 
