@@ -95,8 +95,11 @@ class Setup {
 		// Course settings metabox
 		add_action( 'cmb2_init', array( $this, 'cmb2_init__course_settings' ) );
 
-		// Add a date metabox to most post types
+		// Add a date metabox to some post types
 		add_action( 'cmb2_init', array( $this, 'cmb2_init__date' ) );
+
+		// Assignments have a slightly adapted date/time
+		add_action( 'cmb2_init', array( $this, 'cmb2_init__assignment_date' ) );
 
 		// This is the front-end notes submission form
 		add_action( 'cmb2_init', array( $this, 'cmb2_init__user_notes' ) );
@@ -372,7 +375,7 @@ class Setup {
 		$item_date = new_cmb2_box( array(
 			'id'			=> $prefix . 'metabox',
 			'title'			=> __( 'Date/Time', \UBC\Press::get_text_domain() ),
-			'object_types'  => array( 'lecture', 'assignment' ),
+			'object_types'  => array( 'lecture' ),
 			'context'    	=> 'normal',
 			'priority' 		=> 'low',
 			'show_names'	=> false,
@@ -423,6 +426,79 @@ class Setup {
 	}/* cmb2_init__date() */
 
 
+	public function cmb2_init__assignment_date() {
+
+		$prefix = 'ubc_assignment_item_date_';
+
+		$item_date = new_cmb2_box( array(
+			'id'			=> $prefix . 'metabox',
+			'title'			=> __( 'Date/Time', \UBC\Press::get_text_domain() ),
+			'object_types'  => array( 'assignment' ),
+			'context'    	=> 'normal',
+			'priority' 		=> 'low',
+			'show_names'	=> false,
+		) );
+
+		$title = $item_date->add_field( array(
+			'name' => __( '', \UBC\Press::get_text_domain() ),
+			'id'   => $prefix . 'date_title',
+			'desc' => __( 'Adding a date and time will add this item to the calendar automatically.', \UBC\Press::get_text_domain() ),
+			'type' => 'title',
+		) );
+
+		$text_date = $item_date->add_field( array(
+			'name'       => __( 'Opening Date', \UBC\Press::get_text_domain() ),
+			'desc'       => __( 'e.g. MM/DD/YYYY', \UBC\Press::get_text_domain() ),
+			'id'         => $prefix . 'item_date',
+			'type'       => 'text_date',
+		) );
+
+		$hidden_timestamp = $item_date->add_field( array(
+			'name'       => __( 'Hidden Timestamp', \UBC\Press::get_text_domain() ),
+			'desc'       => __( '', \UBC\Press::get_text_domain() ),
+			'id'         => $prefix . 'hidden_timestamp',
+			'type'       => 'hidden',
+		) );
+
+		$text_time_start = $item_date->add_field( array(
+			'name'       => __( 'Start Time', \UBC\Press::get_text_domain() ),
+			'desc'       => __( 'e.g. 09:00 AM', \UBC\Press::get_text_domain() ),
+			'id'         => $prefix . 'item_time_start',
+			'type'       => 'text_time',
+		) );
+
+		$hidden_title = $item_date->add_field( array(
+			'name' => __( '', \UBC\Press::get_text_domain() ),
+			'id'   => $prefix . 'date_title_hidden',
+			'desc' => __( '&nbsp;', \UBC\Press::get_text_domain() ),
+			'type' => 'title',
+		) );
+
+		$text_date_end = $item_date->add_field( array(
+			'name'       => __( 'Closing Date', \UBC\Press::get_text_domain() ),
+			'desc'       => __( 'e.g. MM/DD/YYYY', \UBC\Press::get_text_domain() ),
+			'id'         => $prefix . 'item_date_closing',
+			'type'       => 'text_date',
+		) );
+
+		$text_time_end = $item_date->add_field( array(
+			'name'       => __( 'End Time', \UBC\Press::get_text_domain() ),
+			'desc'       => __( 'e.g. 10:30 AM', \UBC\Press::get_text_domain() ),
+			'id'         => $prefix . 'item_time_end',
+			'type'       => 'text_time',
+		) );
+
+		if ( ! is_admin() ) {
+			return;
+		}
+		$grid_layout = new \Cmb2Grid\Grid\Cmb2Grid( $item_date );
+		$row_1 = $grid_layout->addRow();
+		$row_1->addColumns( array( $title, $text_date, $text_time_start ) );
+		$row_2 = $grid_layout->addRow();
+		$row_2->addColumns( array( $hidden_title, $text_date_end, $text_time_end ) );
+
+	}/* cmb2_init__assignment_date() */
+
 
 	/**
 	 * When we save a lecture/assignment, we have a 'ubc_item_date_item_date' field
@@ -443,17 +519,47 @@ class Setup {
 			return;
 		}
 
-		if ( ! isset( $_POST['nonce_CMB2phpubc_item_date_metabox'] ) ) {
+		if ( ! isset( $_POST['nonce_CMB2phpubc_item_date_metabox'] ) && ! isset( $_POST['nonce_CMB2phpubc_assignment_item_date_metabox'] ) ) {
 			return;
 		}
 
-		// See if $_POST contains ubc_item_date_item_date
-		if ( ! wp_verify_nonce( $_POST['nonce_CMB2phpubc_item_date_metabox'], 'nonce_CMB2phpubc_item_date_metabox' ) || ! isset( $_POST['ubc_item_date_item_date'] ) ) {
+		$post_type = sanitize_text_field( $_POST['post_type'] );
+
+		if ( ! $post_type ) {
 			return;
+		}
+
+		// Check nonces and required fields
+		if ( 'assignment' === $post_type ) {
+
+			if ( ! isset( $_POST['nonce_CMB2phpubc_assignment_item_date_metabox'] ) ) {
+				return;
+			}
+
+			if ( ! wp_verify_nonce( $_POST['nonce_CMB2phpubc_assignment_item_date_metabox'], 'nonce_CMB2phpubc_assignment_item_date_metabox' ) ) {
+				return;
+			}
+
+			if ( ! isset( $_POST['ubc_assignment_item_date_item_date_closing'] ) ) {
+				return;
+			}
+		} else {
+
+			if ( ! isset( $_POST['nonce_CMB2phpubc_item_date_metabox'] ) ) {
+				return;
+			}
+
+			if ( ! wp_verify_nonce( $_POST['nonce_CMB2phpubc_item_date_metabox'], 'nonce_CMB2phpubc_item_date_metabox' ) ) {
+				return;
+			}
+
+			if ( ! isset( $_POST['ubc_item_date_item_date'] ) ) {
+				return;
+			}
 		}
 
 		// Convert the format to a timestamp and sanitize it
-		$date = \UBC\Press\Utils::sanitize_date( $_POST['ubc_item_date_item_date'] );
+		$date = ( 'assignment' !== $post_type ) ? \UBC\Press\Utils::sanitize_date( $_POST['ubc_item_date_item_date'] ) : \UBC\Press\Utils::sanitize_date( $_POST['ubc_assignment_item_date_item_date_closing'] );
 
 		if ( empty( $date ) ) {
 			return;
@@ -1236,7 +1342,7 @@ class Setup {
 		$start_time 		= \UBC\Press\Utils::sanitize_time( $request_data['startTimeField'] );
 		$end_time 			= \UBC\Press\Utils::sanitize_time( $request_data['endTimeField'] );
 		$post_id			= absint( $request_data['postID'] );
-
+		file_put_contents( WP_CONTENT_DIR . "/debug.log", print_r( array( $request_data ), true ), FILE_APPEND );
 		// We need Gravity Forms
 		if ( ! class_exists( 'RGFormsModel' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Gravity Forms is not active', \UBC\Press::get_text_domain() ) ) );
@@ -1249,54 +1355,101 @@ class Setup {
 			return;
 		}
 
+		// We need to split the start and end times
+
 		// OK form doesn't exist, let's make one
 		$form_array = array();
 
+		// Form properties
 		$form_array['title'] = $title;
 		$form_array['date_created'] = date( 'Y-m-d H:i:s' );
+		$form_array['useCurrentUserAsAuthor'] = true;
+		$form_array['postTitleTemplate'] = '{Your Name:1} - {form_title}';
+		$form_array['postStatus'] = 'pending';
+		$form_array['requireLogin'] = true;
+		$form_array['is_active'] = true;
+		$form_array['scheduleForm'] = true;
+		$form_array['scheduleStart'] = $date;
 
+		// Add the default fields: Name, Email, Entry ID, Assignment ID
 		$form_array['fields'] = array(
 			array(
 				'id' => 1,
-				'label' => 'Name',
-				'adminLabel' => '',
-				'type' => 'name',
+				'label' => 'Your Name',
+				'type' => 'post_title',
 				'isRequired' => true,
-				'inputs' => array(
-					array(
-						'id' => 1.3,
-						'label' => 'First',
-						'name' => '',
-					),
-					array(
-						'id' => 1.6,
-						'label' => 'Last',
-						'name' => '',
-					),
-				),
+				'size' => 'medium',
+				'defaultValue' => '{user:display_name}',
+
 			),
 			array(
 				'id' => 2,
-				'label' => 'Email',
+				'label' => 'Your Email Address',
+				'inputType' => 'email',
+				'defaultValue' => '{user:user_email}',
+				'postCustomFieldName' => '_user_email_address',
 				'adminLabel' => '',
-				'type' => 'email',
+				'type' => 'post_custom_field',
 				'isRequired' => true,
 			),
 			array(
-				'id' => 3,
-				'label' => 'Subject',
-				'adminLabel' => '',
-				'type' => 'text',
-				'isRequired' => true,
+				'id' => '999',
+				'type' => 'post_custom_field',
+				'label' => 'Created Entry ID',
+				'inputType' => 'text',
+				'defaultValue' => '{entry_id}',
+				'postCustomFieldName' => '_entry_id',
+				'cssClass' => 'hidden',
 			),
 			array(
-				'id' => 4,
-				'label' => 'Message',
-				'adminLabel' => '',
-				'type' => 'textarea',
-				'isRequired' => true,
+				'id' => '1000',
+				'type' => 'hidden',
+				'label' => 'Associated Assignment ID',
+				'defaultValue' => esc_html( $post_id ),
 			),
 		);
+
+		$file_upload_args = array(
+			'id' => 3,
+			'label' => 'Assignment File',
+			'inputType' => 'fileupload',
+			'postCustomFieldName' => '_assignment_file',
+			'adminLabel' => '',
+			'allowedExtensions' => 'pdf, doc, docx, txt',
+			'type' => 'post_custom_field',
+			'isRequired' => true,
+		);
+
+		$textarea_args = array(
+			'id' => 4,
+			'label' => 'Assignment Text',
+			'adminLabel' => '',
+			'type' => 'post_content',
+			'size' => 'medium',
+			'isRequired' => true,
+		);
+
+		// Now conditionally add the fields selected via the form input
+		switch ( $submission_type ) {
+
+			case 'file_upload':
+
+				$form_array['fields'][] = $file_upload_args;
+				break;
+
+			case 'textarea':
+
+				$form_array['fields'][] = $textarea_args;
+				break;
+
+			case 'both':
+			default:
+
+				$form_array['fields'][] = $file_upload_args;
+				$form_array['fields'][] = $textarea_args;
+				break;
+
+		}
 
 		$result = \GFAPI::add_form( $form_array );
 

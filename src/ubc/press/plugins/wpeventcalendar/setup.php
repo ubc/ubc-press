@@ -104,13 +104,41 @@ class Setup {
 			return;
 		}
 
-		if ( ! isset( $_POST['nonce_CMB2phpubc_item_date_metabox'] ) || ! wp_verify_nonce( $_POST['nonce_CMB2phpubc_item_date_metabox'], 'nonce_CMB2phpubc_item_date_metabox' ) ) {
-			return;
-		}
+		if ( 'assignment' === $post_type ) {
 
-		// Look for the meta being saved
-		$date_key = 'ubc_item_date_item_date';
-		$time_key = 'ubc_item_date_item_time';
+			if ( ! isset( $_POST['nonce_CMB2phpubc_assignment_item_date_metabox'] ) ) {
+				return;
+			}
+
+			if ( ! wp_verify_nonce( $_POST['nonce_CMB2phpubc_assignment_item_date_metabox'], 'nonce_CMB2phpubc_assignment_item_date_metabox' ) ) {
+				return;
+			}
+
+			if ( ! isset( $_POST['ubc_assignment_item_date_item_date_closing'] ) ) {
+				return;
+			}
+
+			// Look for the meta being saved
+			$date_key = 'ubc_assignment_item_date_item_date_closing';
+			$time_key = 'ubc_assignment_item_date_item_time_end';
+		} else {
+
+			if ( ! isset( $_POST['nonce_CMB2phpubc_item_date_metabox'] ) ) {
+				return;
+			}
+
+			if ( ! wp_verify_nonce( $_POST['nonce_CMB2phpubc_item_date_metabox'], 'nonce_CMB2phpubc_item_date_metabox' ) ) {
+				return;
+			}
+
+			if ( ! isset( $_POST['ubc_item_date_item_date'] ) ) {
+				return;
+			}
+
+			// Look for the meta being saved
+			$date_key = 'ubc_item_date_item_date';
+			$time_key = 'ubc_item_date_item_time';
+		}
 
 		// Both not set? Bail
 		if ( ! isset( $_POST[ $date_key ] ) && ! isset( $_POST[ $time_key ] ) ) {
@@ -322,7 +350,15 @@ class Setup {
 
 	protected function get_date_from_post( $post ) {
 
-		return \UBC\Press\Utils::get_data_from_post( 'ubc_item_date_item_date' , $post );
+		switch ( $post['post_type'] ) {
+			case 'assignment':
+				return \UBC\Press\Utils::get_data_from_post( 'ubc_assignment_item_date_item_date_closing' , $post );
+				break;
+
+			default:
+				return \UBC\Press\Utils::get_data_from_post( 'ubc_item_date_item_date' , $post );
+				break;
+		}
 
 	}/* get_date_from_post() */
 
@@ -342,7 +378,15 @@ class Setup {
 			$start_or_end = 'start';
 		}
 
-		return \UBC\Press\Utils::get_data_from_post( 'ubc_item_date_item_time_' . $start_or_end , $post );
+		switch ( $post['post_type'] ) {
+			case 'assignment':
+				return \UBC\Press\Utils::get_data_from_post( 'ubc_assignment_item_date_item_time_end' , $post );
+				break;
+
+			default:
+				return \UBC\Press\Utils::get_data_from_post( 'ubc_item_date_item_time_' . $start_or_end , $post );
+				break;
+		}
 
 	}/* get_time_from_post() */
 
