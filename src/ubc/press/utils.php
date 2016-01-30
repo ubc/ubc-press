@@ -1478,4 +1478,30 @@ class Utils {
 
 	}/* gform_exists() */
 
+
+	/**
+	 * Generate a random string of given length. [A-Z0-9]
+	 * From http://stackoverflow.com/a/5444902/308455
+	 *
+	 * Usage: \UBC\Press\Utils::random_string_of_length( 10 );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $length - The number of characters of the string
+	 * @return (string) A random string of given length
+	 */
+
+	public static function random_string_of_length( $length = 10 ) {
+
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$string = '';
+
+		for ( $i = 0; $i < $length; $i++ ) {
+			$string .= $characters[ mt_rand( 0, strlen( $characters ) - 1 ) ];
+		}
+
+		return $string;
+
+	}/* random_string_of_length() */
+
 }/* Utils */
