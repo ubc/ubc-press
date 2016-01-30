@@ -127,6 +127,8 @@ class Setup {
 		// Assignment's "create new assignment form" metabox
 		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init__show_assignment_form_create_form_markup' ) );
 		add_action( 'ubcpressajax_create_assignment_form', array( $this, 'ubcpressajax_create_assignment_form__process' ) );
+		add_action( 'gform_after_submission', array( $this, 'gform_after_submission__create_submission_for_assignments' ), 10, 2 );
+		add_filter( 'gform_disable_post_creation', array( $this, 'gform_disable_post_creation__stop_auto_post_creation_for_assignments' ), 10, 3 );
 
 	}/* create() */
 
@@ -1394,6 +1396,20 @@ class Setup {
 		$form_array['requireLogin'] = true;
 		$form_array['requireLoginMessage'] = __( 'You must ' . $sign_in_link .' to submit this assignment', \UBC\Press::get_text_domain() );
 
+		// Confirmations
+		$conf_id = \UBC\Press\Utils::random_string_of_length( 13 );
+		$form_array['confirmations'] = array(
+			$conf_id => array(
+				'id' 		=> $conf_id,
+				'name' 		=> 'Default Confirmation',
+				'isDefault'	=> 1,
+				'type' 		=> 'message',
+				'message' 	=> 'Your assignment has been received. Here is a copy of what you submitted:
+
+{all_fields}',
+			),
+		);
+
 		// Add the default fields: Name, Email, Entry ID, Assignment ID
 		$form_array['fields'] = array(
 			array(
@@ -1507,6 +1523,180 @@ class Setup {
 	}/* ubcpressajax_create_assignment_form__process() */
 
 
+
+	/**
+	 * When a Gravityform is submitted we check if this is an assignment. If it is
+	 * we make a 'submission' post. We then associate that submission with the
+	 * assignment component post which holds the form.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $entry - The entry that was just created.
+	 * @param (array) $form - The current form.
+	 * @return null
+	 */
+
+	public function gform_after_submission__create_submission_for_assignments( $entry, $form ) {
+
+		// The FormID is stored as post meta under 'associated_form_id'
+		$form_id = $form['id'];
+
+		$associated_assignment_post_id = static::get_post_id_of_assignment_form( $form_id );
+
+		// Bail if this isn't for an assignment
+		if ( false === $associated_assignment_post_id ) {
+			return;
+		}
+
+		$new_submission_post_id = $this->make_submission_post( $entry, $form );
+
+		$this->associate_submission_with_assignment( $new_submission_post_id, $associated_assignment_post_id );
+
+	}/* gform_after_submission__create_submission_for_assignments() */
+
+
+
+	/**
+	 * When a gForm has a post title field, it auto creates a post. That's annoying.
+	 * Let's stop that for assignments as we create our own.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (bool) $is_disabled - Is post creation disabled for this form?
+	 * @param (array) $form - The gravityform properties
+	 * @param (array) $entry - The gravityform entry
+	 * @return (bool) Whether this form should have disabled post creation
+	 */
+
+	public function gform_disable_post_creation__stop_auto_post_creation_for_assignments( $is_disabled, $form, $entry ) {
+
+		// The FormID is stored as post meta under 'associated_form_id'
+		$form_id = $form['id'];
+
+		$associated_assignment_post_id = static::get_post_id_of_assignment_form( $form_id );
+
+		// Bail if this isn't for an assignment
+		if ( false === $associated_assignment_post_id ) {
+			return $is_disabled;
+		}
+
+		return true;
+
+	}/* gform_disable_post_creation__stop_auto_post_creation_for_assignments() */
+
+	/**
+	 * Return the Post ID of the assignment component whose 'associated_form_id'
+	 * matches the passed $id
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $id - The meta_value we're looking for within associated_form_id
+	 * @return (int|false) $assignment_post_id The Post ID of the assignment component
+	 */
+
+
+	public static function get_post_id_of_assignment_form( $id ) {
+
+		$results = new \WP_Query( array(
+			'post_type' => 'assignment',
+			'meta_key' => 'associated_form_id',
+			'meta_value' => $id,
+		) );
+
+		$post_count = ( isset( $results->post_count ) ) ? $results->post_count : false;
+
+		if ( false === $post_count || 0 === $post_count ) {
+			return false;
+		}
+
+		$post = $results->posts[0];
+
+		$post_id = $post->ID;
+
+		return $post_id;
+
+	}/* get_post_id_of_assignment_form() */
+
+
+
+	/**
+	 * Make a submission post based on the submitted gForm entry
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $entry - The GForm entry that has been created
+	 * @param (array) $form - The GForm submitted
+	 * @return (int) $post_id - The ID of the newly created submission post
+	 */
+
+	public function make_submission_post( $entry, $form ) {
+		$title_field = $this->get_title_field_id_from_form( $form );
+		$new_post_args = array(
+			'post_author' => get_current_user_id(),
+			'post_title' => $entry[ $title_field ] . ' - ' . $form['title'],
+			'post_type' => 'submission',
+		);
+		$new_post_id = wp_insert_post( $new_post_args, true );
+		return $new_post_id;
+
+	}/* make_submission_post() */
+
+
+
+	/**
+	 * Get the title field ID for a submitted form
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $form - A gForm form
+	 * @return (int) The field ID for an entry for the title field
+	 */
+
+
+	public function get_title_field_id_from_form( $form ) {
+		$title_field_id = false;
+
+		foreach ( $form['fields'] as $key => $field_object ) {
+
+			if ( is_a( $field_object, 'GF_Field_Post_Title' ) ) {
+				$title_field_id = $field_object->id;
+			}
+		}
+
+		return $title_field_id;
+
+	}/* get_title_field_id_from_form() */
+
+
+
+	/**
+	 * Associate a newly made submission post with the assignment form
+	 * component that created it
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $submission_id - The newly made submission post ID
+	 * @param (int) $assignment_id - The assignment component ID
+	 * @return null
+	 */
+
+	public function associate_submission_with_assignment( $submission_id, $assignment_id ) {
+
+		add_post_meta( $submission_id, 'associated_assignment_id', $assignment_id );
+
+		// Also, for the assignment, add it to an array of submissions
+		$existing_submissions = get_post_meta( $assignment_id, 'associated_submissions', true );
+		if ( empty( $existing_submissions ) || ! is_array( $existing_submissions ) ) {
+			$existing_submissions = array();
+		}
+
+		$existing_submissions[] = $submission_id;
+
+		update_post_meta( $assignment_id, 'associated_submissions', $existing_submissions );
+
+	}/* associate_submission_with_assignment() */
+
+
 	/**
 	 * Gravity Forms requires times to be in distinct chunks. We receive a time
 	 * such as 10:00 AM and gForms needs the Hour, Minute and AM/PM as separate
@@ -1536,7 +1726,7 @@ class Setup {
 
 		// First; get the am/pm by splitting on a space
 		// We're, err, exploding time and space. Geddit? Don't judge.
-		$ampm_parts	= explode( " ", $time );
+		$ampm_parts	= explode( ' ', $time );
 		$ampm		= $ampm_parts[1]; // Will be "AM" or "PM"
 
 		$just_time	= $ampm_parts[0]; // Will just be i.e. 10:00
@@ -1549,7 +1739,7 @@ class Setup {
 		$time_parts = array(
 			'AMPM'	=> $ampm,
 			'hour'	=> $hour,
-			'minute'=> $minute,
+			'minute' => $minute,
 		);
 
 		/**
