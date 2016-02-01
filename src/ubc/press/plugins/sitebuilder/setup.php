@@ -82,7 +82,7 @@ class Setup {
 		add_action( 'manage_post_posts_custom_column', array( $this, 'manage_component_posts_custom_column__component_sections_content' ), 10, 2 );
 
 		// Output a 'mark as complete' button before the components
-		add_action( 'ubc_press_show_template_for_post_of_post_type_after', array( $this, 'ubc_press_show_template_for_post_of_post_type_after__add_mark_as_complete' ), 10, 4 );
+		add_action( 'ubc_press_show_template_for_post_of_post_type_before', array( $this, 'ubc_press_show_template_for_post_of_post_type_after__add_mark_as_complete' ), 10, 4 );
 
 		// Our custom AJAX implementation gives us ubcpressajax_mark_component_complete
 		add_action( 'ubcpressajax_mark_as_complete', array( $this, 'ubcpressajax_mark_as_complete__process' ) );
