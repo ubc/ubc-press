@@ -226,16 +226,12 @@
 
 		sendAjaxToCreateForm: function( url, data ) {
 
-			console.log( url );
-			console.log( data );
-
 			jQuery.ajax( {
 				type : 'post',
 				dataType : 'json',
 				url : url,
 				data : data,
 				beforeSend: function( jqXHR, settings ) {
-					console.log( 'beforeSend' );
 				},
 				success: function( response ) {
 
@@ -257,11 +253,8 @@
 					ubc_press_admin_metaboxes.prototype.clearErrors();
 				},
 				complete: function( jqXHR, textStatus ) {
-					console.log( 'complete' );
 				},
 				error: function( jqXHR, textStatus, errorThrown ) {
-					console.log( 'error' );
-					console.log( [jqXHR, textStatus, errorThrown] );
 				}
 			} );
 

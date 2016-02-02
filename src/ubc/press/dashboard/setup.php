@@ -33,9 +33,9 @@ class Setup {
 
 	public function init() {
 
-		if ( ! is_admin() ) {
-			return;
-		}
+		// if ( ! is_admin() ) {
+		// 	return;
+		// }
 
 		$this->before();
 
@@ -84,12 +84,18 @@ class Setup {
 		// Register our scripts
 		add_action( 'init', array( $this, 'init__register_assets' ), 5 );
 
+		// Load our admin JS
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts__load_admin_js' ) );
+
 		// Remove dashboard widgets
 		add_action( 'wp_dashboard_setup', array( $this, 'wp_dashboard_setup__remove_dashboard_widgets' ), 999 );
 
 		// Lecture date column (rather than published date)
 		add_action( 'manage_lecture_posts_custom_column', array( $this, 'manage_lecture_posts_custom_column__date_column' ), 10, 2 );
 		add_action( 'pre_get_posts', array( $this, 'pre_get_posts__make_lecture_date_sortable' ), 9 );
+
+		// AJAX handler for viewing submissions for an assignment in the admin
+		add_action( 'ubcpressajax_admin_view_submissions', array( $this, 'ubcpressajax_admin_view_submissions__process' ) );
 
 	}/* setup_actions() */
 
@@ -114,6 +120,9 @@ class Setup {
 		// Lecture date column (rather than published date)
 		add_filter( 'manage_lecture_posts_columns' , array( $this, 'manage_lecture_posts_columns__date_column' ) );
 		add_filter( 'manage_edit-lecture_sortable_columns', array( $this, 'manage_edit_lecture_sortable_columns__make_lecture_date_srotable' ) );
+
+		// Place a get submissions link in the quick actions list for assignments
+		add_filter( 'post_row_actions', array( $this, 'post_row_actions__add_get_submissions_link_to_assignments' ), 10, 2 );
 
 	}/* setup_actions() */
 
@@ -238,6 +247,12 @@ class Setup {
 
 	}/* init__register_assets() */
 
+
+	public function admin_enqueue_scripts__load_admin_js( $hook ) {
+
+		wp_enqueue_script( 'ubc-press-dashboard' );
+
+	}/* admin_enqueue_scripts__load_admin_js() */
 
 	/**
 	 * Remove the default dashboard widgets
@@ -1106,9 +1121,108 @@ class Setup {
 
 		}
 
-		// wp_die( '<pre>' . print_r( $query, true ) . '</pre>' );
-
 	}/* pre_get_posts__make_lecture_date_sortable() */
+
+
+
+	/**
+	 * Add a 'View Submissions' link to the row actions list for assignments
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $actions - Currently set row actions
+	 * @param (object) $post - The current WP_Post object for a row
+	 * @return (array) Modified actions
+	 */
+
+
+	public function post_row_actions__add_get_submissions_link_to_assignments( $actions, $post ) {
+
+		// Bail early if this isn't assignments
+		if ( 'assignment' !== $post->post_type ) {
+			return $actions;
+		}
+
+		// Only Teachers, TAs and Admins should be able to do this
+		if ( ! \UBC\Press\Utils::current_users_role_is_one_of( array( 'administrator', 'instructor', 'ta' ) ) ) {
+			return $actions;
+		}
+
+		// Build the URL
+		$url = \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'admin_view_submissions', true, false, array( 'post_id' => $post->ID ) );
+
+		$actions['view_submissions'] = '<a data-post_id="' . $post->ID . '" href="' . $url . '" title="" class="hide-if-no-js ubc-press-view-submissions">' . __( 'View Submissions', \UBC\Press::get_text_domain() ) . '</a><span class="spinner"></span>';
+
+		return $actions;
+
+	}/* post_row_actions__add_get_submissions_link_to_assignments() */
+
+
+	/**
+	 * AJAX Handler for Viewing the submissions attached to an assignment
+	 * in the admin. Triggered when someone clicks on the 'View Assignments'
+	 * link
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $request_data - the $_REQUEST data
+	 * @return null
+	 */
+
+	public function ubcpressajax_admin_view_submissions__process( $request_data ) {
+
+		file_put_contents( WP_CONTENT_DIR . "/debug.log", print_r( array( $request_data ), true ), FILE_APPEND );
+
+		$post_id = absint( $request_data['post_id'] );
+
+		// Our return data`
+		$data = array();
+
+		// An assignment has post meta of associated_submissions
+		$associated_submissions = get_post_meta( $post_id, 'associated_submissions', true );
+
+		if ( ! is_array( $associated_submissions ) ) {
+			$associated_submissions = array();
+		}
+
+		$data['count'] = count( $associated_submissions );
+		$data['submissions'] = array();
+
+		foreach ( $associated_submissions as $id => $submission_post_id ) {
+			$title	= get_the_title( $submission_post_id );
+			$url	= get_permalink( $submission_post_id );
+			$graded	= get_post_meta( $submission_post_id, 'submission_grade', true );
+			$post = get_post( $submission_post_id );
+			$author_name = get_the_author_meta( $post->post_author );
+			$data['submissions'][] = array( 'title' => $title, 'url' => $url, 'graded' => $graded, 'author' => $author_name );
+		}
+
+		$result = true;
+		// If we're coming from an AJAX request, send JSON
+		if ( ! empty( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && 'xmlhttprequest' === strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) ) {
+
+			if ( false === (bool) $result ) {
+				wp_send_json_error( array( 'message' => $result ) );
+			}
+
+			wp_send_json_success( array(
+				'completed' => true,
+				'submissions' => $data,
+			) );
+
+		} else {
+
+			$redirect_to = ( isset( $request_data['redirect_to'] ) ) ? esc_url( $request_data['redirect_to'] ) : false;
+
+			// Otherwise, something went wrong somewhere, but we should not show a whitescreen, so redirect back
+			if ( false !== $redirect_to ) {
+				header( 'Location: ' . $redirect_to );
+			} else {
+				header( 'Location:' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] );
+			}
+		}
+
+	}/* ubcpressajax_admin_view_submissions__process() */
 
 	/**
 	 * Run before we run our dashboard setup. Simply runs an action which we can

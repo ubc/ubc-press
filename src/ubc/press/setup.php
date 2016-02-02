@@ -103,10 +103,6 @@ class Setup {
 
 	public static function setup_dashboard() {
 
-		if ( ! is_admin() ) {
-			return;
-		}
-
 		$dashboard = new \UBC\Press\Dashboard\Setup;
 		$dashboard->init();
 
