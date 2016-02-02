@@ -214,7 +214,7 @@
 			if ( element.hasClass( 'secondary' ) ) {
 				element.html( '<span class="button-text">' + localized_data.text.mark_as_complete + '</span><span class="dashicons dashicons-yes onhover"></span>' );
 			} else {
-				element.html( '<span class="button-text">' + localized_data.text.completed + '</span><span class="mark-as-incomplete">Mark incomplete</span><span class="dashicons dashicons-no onhover"></span>' );
+				element.html( '<span class="button-text">' + localized_data.text.completed + '</span><span class="dashicons dashicons-yes onhover"></span>' );
 			}
 
 			element.attr( 'href', originalHref );
@@ -278,9 +278,9 @@
 		change_completed_message: function( element, completed ) {
 
 			if ( ! completed ) {
-				element.next( '.when_completed' ).fadeOut();
+				element.parents('.row').next( '.when_completed' ).fadeOut();
 			} else {
-				element.after( '<span class="when_completed">' + localized_data.text.completed_just_now + '</span>' );
+				element.parents('.row').after( '<div class="when_completed"><span class="dashicons dashicons-clock"></span> ' + localized_data.text.completed_just_now + '</div>' );
 			}
 
 		},/* this.change_completed_message() */

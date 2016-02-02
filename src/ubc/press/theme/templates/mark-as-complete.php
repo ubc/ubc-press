@@ -9,6 +9,9 @@
 
 $data 					= get_query_var( 'template_data' );
 
+$get_the_title			= get_the_title();
+$button_size			= 'medium';
+
 $button_text 			= ( isset( $data['completed'] ) && true === $data['completed'] ) ? __( 'Completed', \UBC\Press::get_text_domain() ) : __( 'Mark Complete', \UBC\Press::get_text_domain() );
 $when_completed_text	= ( isset( $data['when_completed'] ) ) ? human_time_diff( $data['when_completed'], current_time( 'timestamp' ) ) : false;
 $button_class 			= ( isset( $data['completed'] ) && true === $data['completed'] ) ? 'success' : 'secondary';
@@ -21,14 +24,31 @@ $url 					= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'mark_as_compl
 ?>
 
 <div class="mark-as-complete-wrapper">
-	<a role="button" aria-label="<?php echo esc_html( $button_text ); ?>" href="<?php echo esc_url( $url ); ?>" data-nonce="<?php echo esc_html( $nonce ); ?>" data-post_id="<?php echo absint( $data['post_id'] ); ?>" class="small button radius mark-as-complete <?php echo esc_html( $button_class ); ?>">
-		<span class="button-text"><?php echo esc_html( $button_text ); ?></span>
-		<?php if( $mark_incomplete ) : ?>
-		<span class="mark-as-incomplete"><?php echo esc_html( $mark_incomplete ); ?></span>
-		<?php endif; ?>
-		<span class="<?php echo esc_html( $dashicon ); ?>"></span>
-	</a>
-
+	<div class="row">
+		<div class="columns large-9">
+			<h3><?php echo esc_html( $get_the_title ); ?></h3>
+		</div>
+		<div class="columns large-3">
+			<ul class="button-group">
+				<li>
+					<a role="button" aria-label="<?php echo esc_html( $button_text ); ?>" href="<?php echo esc_url( $url ); ?>" data-nonce="<?php echo esc_html( $nonce ); ?>" data-post_id="<?php echo absint( $data['post_id'] ); ?>" class="<?php echo esc_html( $button_size ); ?> button round mark-as-complete <?php echo esc_html( $button_class ); ?>">
+						<span class="button-text"><?php echo esc_html( $button_text ); ?></span><span class="dashicons dashicons-yes"></span>
+					</a>
+				</li>
+				<li>
+					<a role="button" href="#" class="button <?php echo esc_html( $button_size ); ?> heart hint--bottom-left" data-hint="Save for later"><span class="dashicons dashicons-heart"></span></a>
+				</li>
+				<li>
+					<a role="button" href="#" class="button <?php echo esc_html( $button_size ); ?> share hint--bottom-left" data-hint="Share with group"><span class="dashicons dashicons-share"></span></a>
+				</li>
+				<li>
+					<a role="button" href="#" class="button <?php echo esc_html( $button_size ); ?> feedback hint--bottom-left" data-hint="Provide feedback"><span class="dashicons dashicons-clipboard"></span></a>
+				</li>
+			</ul>
+		</div>
+		<!-- end .button-bar -->
+	</div>
+	<!-- end .row -->
 	<?php if ( $when_completed_text ) : ?>
 	<div class="when_completed"><span class="dashicons dashicons-clock"></span> <?php echo esc_html( sprintf( _x( 'Completed %s ago', '%s = human-readable time difference', \UBC\Press::get_text_domain() ), $when_completed_text ) ); ?></div>
 	<?php endif; ?>

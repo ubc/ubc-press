@@ -291,7 +291,7 @@ class Setup {
 
 	public function init__load_temp_stylesheet() {
 
-		wp_register_style( 'ubc-press-temp', \UBC\Press::get_plugin_url() . 'src/ubc/press/theme/assets/css/temp.css' );
+		// wp_register_style( 'ubc-press-temp', \UBC\Press::get_plugin_url() . 'src/ubc/press/theme/assets/css/temp.css' );
 		wp_enqueue_style( 'ubc-press-temp' );
 		wp_register_style( 'ubc-press-temp-admin', \UBC\Press::get_plugin_url() . 'src/ubc/press/theme/assets/css/temp-admin.css' );
 		wp_enqueue_style( 'ubc-press-temp-admin' );
