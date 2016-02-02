@@ -232,7 +232,7 @@ class Setup {
 				'map_meta_cap' 		=> false,
 				'supports' 			=> array( 'title' ),
 				'has_archive' 		=> false,
-				'public' => true,
+				'public' => false,
 				'can_export' => false,
 			),
 		);
