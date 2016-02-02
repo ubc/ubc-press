@@ -1432,15 +1432,6 @@ class Setup {
 				'isRequired' => true,
 			),
 			array(
-				'id' => '999',
-				'type' => 'post_custom_field',
-				'label' => 'Created Entry ID',
-				'inputType' => 'text',
-				'defaultValue' => '{entry_id}',
-				'postCustomFieldName' => '_entry_id',
-				'cssClass' => 'hidden',
-			),
-			array(
 				'id' => '1000',
 				'type' => 'hidden',
 				'label' => 'Associated Assignment ID',
