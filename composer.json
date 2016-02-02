@@ -29,7 +29,6 @@
         }
     ],
     "require": {
-        "ubc/helpers": "dev-master",
         "jjgrainger/wp-custom-post-type-class": "dev-master",
         "webdevstudios/cmb2": "2.1.2",
         "origgami/CMB2-grid": "dev-master",
