@@ -42,6 +42,16 @@
 			} );
 		},
 
+		addAJAXSubmissionHandlerForAssignmentCompletion: function() {
+			var assignmentForms = document.querySelectorAll( '.ubc-press-assignment-form' );
+			var index = 0;
+			for( index=0; index < assignmentForms.length; index++ ) {
+				var thisForm = assignmentForms[index];
+				thisForm.addEventListener( 'submit', ubc$.prototype.submit__mark_assignment_form_as_complete );
+			}
+
+		},
+
 		addEventListenerForVimeoIFrameMessages: function() {
 			window.addEventListener( 'message', this.onMessageReceived );
 		},
@@ -461,6 +471,43 @@
 
 		},/* this.get_percentage() */
 
+		/**
+		 * When a gravity form assignment form is submitted, we should mark the component
+		 * as complete
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param (object) event - The js event (submit event)
+		 * @return null
+		 */
+
+		submit__mark_assignment_form_as_complete: function( event ) {
+
+			mark_as_complete_button = ubc_press.prototype.findMarkAsCompleteForAssignment( event.target );
+			var component_id = jQuery( mark_as_complete_button ).data( 'post_id' );
+
+			// If it's not already complete, click it
+			if ( ! jQuery( mark_as_complete_button ).hasClass( 'secondary' ) ) {
+				return;
+			}
+
+			var ajax_data = ubc_press.prototype.build_data_for_ajax_complete_item( component_id );
+			ubc_press.prototype.ajax_complete_item( ajax_data.data, ajax_data.thisButton, ajax_data.originalHref );
+
+			// Update the completion bar
+			ubc_press.prototype.update_progress_bar( true );
+
+			// OK, this is a completed assignment. Increase the count.
+			ubc_press.prototype.update_count_in_section_list( true );
+
+		},
+
+		findMarkAsCompleteForAssignment: function( assignmentForm ) {
+			var parent_panel = jQuery( assignmentForm ).parents( '.so-panel' );
+			var mark_as_complete_button = parent_panel.find( 'a.mark-as-complete' );
+
+			return mark_as_complete_button;
+		},
 
 		/**
 		 * When a quiz is finished, update the count in the sidebar of completed items
@@ -814,6 +861,7 @@
 		this.addAJAXSuccessHandlerForQuizCompletion();
 		this.addEventListenerForVimeoIFrameMessages();
 		this.addEventListerForYouTubeIFrameMessages();
+		this.addAJAXSubmissionHandlerForAssignmentCompletion();
 	};
 
 	// trick borrowed from jQuery so we don't have to use the 'new' keyword
@@ -840,4 +888,3 @@ var ubc_press = ubc_press();
 function onYouTubePlayerAPIReady() {
     ubc_press.YT_ready( true );
 }
-

@@ -1376,6 +1376,7 @@ class Setup {
 		$form_array['postStatus'] = 'pending';
 		$form_array['requireLogin'] = true;
 		$form_array['is_active'] = true;
+		$form_array['cssClass'] = 'ubc-press-assignment-form';
 
 		// Scheduling
 		$form_array['scheduleForm'] = true;
