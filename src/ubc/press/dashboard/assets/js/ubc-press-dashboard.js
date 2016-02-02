@@ -89,6 +89,8 @@
 						// Now, for each of the returned posts, we add to that <tr>
 						var injectedBody = jQuery( newRow ).find( '.ubc-submissions-for-assignment' );
 
+						injectedBody.hide();
+
 						var submissions = response.data.submissions.submissions;
 
 						var markupToAdd = '';
@@ -100,7 +102,7 @@
 						}
 
 						// Now add that markup
-						injectedBody.append( markupToAdd );
+						injectedBody.append( markupToAdd ).fadeIn();
 
 					} else {
 
