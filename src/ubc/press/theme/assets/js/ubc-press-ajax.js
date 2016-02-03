@@ -174,7 +174,7 @@
 			element.toggleClass( 'success' );
 			element.toggleClass( 'secondary' );
 
-			this.change_completed_message( element, completed );
+			//this.change_completed_message( element, completed );
 
 		},/* this.switch_completed_state() */
 
@@ -196,7 +196,7 @@
 				element.val( localized_data.text.loading );
 				return;
 			}
-			element.text( localized_data.text.loading );
+			element.append( '<span class="dashicons dashicons-admin-generic round"></span>' );
 
 		},/* this.start_loading() */
 
@@ -222,9 +222,9 @@
 			this.change_all_mark_as_complete_buttons( 'enable' );
 
 			if ( element.hasClass( 'secondary' ) ) {
-				element.html( '<span class="button-text">' + localized_data.text.mark_as_complete + '</span><span class="dashicons dashicons-yes onhover"></span>' );
+				element.attr( 'data-hint', localized_data.text.mark_as_complete ).html( '<span class="button-text">' + localized_data.text.mark_as_complete + '</span><span class="dashicons dashicons-yes onhover"></span>' );
 			} else {
-				element.html( '<span class="button-text">' + localized_data.text.completed + '</span><span class="dashicons dashicons-yes onhover"></span>' );
+				element.attr( 'data-hint', localized_data.text.completed_just_now ).html( '<span class="button-text">' + localized_data.text.completed_just_now + '</span><span class="dashicons dashicons-yes onhover"></span>' );
 			}
 
 			element.attr( 'href', originalHref );
@@ -285,15 +285,15 @@
 		 * @return null
 		 */
 
-		change_completed_message: function( element, completed ) {
+		// change_completed_message: function( element, completed ) {
 
-			if ( ! completed ) {
-				element.parents('.row').next( '.when_completed' ).fadeOut();
-			} else {
-				element.parents('.row').after( '<div class="when_completed"><span class="dashicons dashicons-clock"></span> ' + localized_data.text.completed_just_now + '</div>' );
-			}
+		// 	if ( ! completed ) {
+		// 		element.parents('.row').next( '.when_completed' ).fadeOut();
+		// 	} else {
+		// 		element.parents('.row').after( '<div class="when_completed"><span class="dashicons dashicons-clock"></span> ' + localized_data.text.completed_just_now + '</div>' );
+		// 	}
 
-		},/* this.change_completed_message() */
+		// },/* this.change_completed_message() */
 
 
 		/**
