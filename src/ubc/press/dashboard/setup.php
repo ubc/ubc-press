@@ -97,6 +97,9 @@ class Setup {
 		// AJAX handler for viewing submissions for an assignment in the admin
 		add_action( 'ubcpressajax_admin_view_submissions', array( $this, 'ubcpressajax_admin_view_submissions__process' ) );
 
+		// Custom columns for Assignments
+		add_action( 'manage_assignment_posts_custom_column', array( $this, 'manage_assignment_posts_custom_column__custom_columns' ), 10, 2 );
+
 	}/* setup_actions() */
 
 
@@ -123,6 +126,9 @@ class Setup {
 
 		// Place a get submissions link in the quick actions list for assignments
 		add_filter( 'post_row_actions', array( $this, 'post_row_actions__add_get_submissions_link_to_assignments' ), 10, 2 );
+
+		// Custom assignment columns
+		add_filter( 'manage_assignment_posts_columns' , array( $this, 'manage_assignment_posts_columns__assignment_columns' ) );
 
 	}/* setup_actions() */
 
@@ -1016,6 +1022,83 @@ class Setup {
 
 
 	/**
+	 * Data handler for our assignments custom columns
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $column - Which column are we adding content to
+	 * @param (int) $post_id - the ID for the post for each row
+	 * @return null
+	 */
+
+	public function manage_assignment_posts_custom_column__custom_columns( $column, $post_id ) {
+
+		switch ( $column ) {
+
+			case 'submissions':
+
+				$submissions = get_post_meta( $post_id, 'associated_submissions', true );
+
+				// Build the URL
+				$url = \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'admin_view_submissions', true, false, array( 'post_id' => $post_id ) );
+
+				$link = '<a data-post_id="' . $post_id . '" href="' . $url . '" title="" class="hide-if-no-js ubc-press-view-submissions">' . count( $submissions ) . '</a><span class="spinner"></span>';
+
+				echo ( $link );
+
+			break;
+
+			case 'status':
+
+				// If current date is before start date, 'pending: will open on'
+				// If current date > start but < end, 'open'
+				// If current date > end, 'closed'
+				// @TODO: 4 requests per assignment isn't cool. Defer loading here?
+				$start_date = get_post_meta( $post_id, 'ubc_assignment_item_date_item_date', true ); // 02/01/2016
+				$start_time = get_post_meta( $post_id, 'ubc_assignment_item_date_item_time_start', true ); // 05:00 AM
+				$end_date = get_post_meta( $post_id, 'ubc_assignment_item_date_item_date_closing', true );
+				$end_time = get_post_meta( $post_id, 'ubc_assignment_item_date_item_time_end', true );
+
+				$start_datetime = strtotime( $start_date . ' ' . $start_time );
+				$end_datetime = strtotime( $end_date . ' ' . $end_time );
+
+				$now = strtotime( 'now' );
+
+				if ( $start_datetime < $now && $now < $end_datetime ) {
+					echo wp_kses_post( __( 'Open', \UBC\Press::get_text_domain() ) );
+				} elseif ( $now < $start_datetime ) {
+					echo wp_kses_post( __( 'Pending', \UBC\Press::get_text_domain() ) );
+				} else {
+					echo wp_kses_post( __( 'Closed', \UBC\Press::get_text_domain() ) );
+				}
+
+			break;
+
+		}
+
+	}/* manage_assignment_posts_custom_column__custom_columns() */
+
+	/**
+	 * Add our custom columns for assignments
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $columns - Preset columns
+	 * @return (array) Modified columns
+	 */
+
+	public function manage_assignment_posts_columns__assignment_columns( $columns ) {
+
+		unset( $columns['date'] );
+		$columns['submissions'] = __( 'Submissions', \UBC\Press::get_text_domain() );
+		$columns['status'] = __( 'Status', \UBC\Press::get_text_domain() );
+
+		return $columns;
+
+	}/* manage_assignment_posts_columns__assignment_columns() */
+
+
+	/**
 	 * Output for lecture date column
 	 *
 	 * @since 1.0.0
@@ -1170,8 +1253,6 @@ class Setup {
 	 */
 
 	public function ubcpressajax_admin_view_submissions__process( $request_data ) {
-
-		file_put_contents( WP_CONTENT_DIR . "/debug.log", print_r( array( $request_data ), true ), FILE_APPEND );
 
 		$post_id = absint( $request_data['post_id'] );
 
