@@ -13,8 +13,6 @@
 
 <div class="component-wrapper component-forum">
 
-	<h3><?php the_title(); ?></h3>
-
 	<div class="forum-content">
 		<?php echo do_shortcode( '[bbp-single-forum id=' . get_the_ID() . ']' ); ?>
 	</div><!-- .assignment-content -->

@@ -13,8 +13,6 @@
 
 <div class="component-wrapper component-reading">
 
-	<h3><?php the_title(); ?></h3>
-
 	<div class="reading-content">
 		<?php the_content(); ?>
 	</div><!-- .assignment-content -->

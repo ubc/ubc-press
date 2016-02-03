@@ -21,8 +21,6 @@ $associated_form_id = get_post_meta( $post_id, 'associated_form_id', true );
 
 <div class="component-wrapper component-assignment">
 
-	<h3><?php the_title(); ?></h3>
-
 	<div class="assignment-content">
 		<?php echo do_shortcode( '[gravityform id="' . absint( $associated_form_id ) . '" title="false" description="false" ajax="true"]' ); ?>
 	</div><!-- .assignment-content -->
