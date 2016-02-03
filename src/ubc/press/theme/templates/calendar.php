@@ -21,7 +21,14 @@ $mode = get_query_var( 'mode' );
 ?>
 
 <?php get_header(); ?>
+<?php get_sidebar(); ?>
 
+<div id="primary" <?php WP_CLF_Lite_Content_Classes::primary_content_class(); ?>>
+	<main id="main" <?php WP_CLF_Lite_Content_Classes::main_content_class(); ?> role="main">
 
+	<p>Calendar template will go here</p>
+
+	</main><!-- #main -->
+</div><!-- #primary -->
 
 <?php get_footer(); ?>
