@@ -494,12 +494,6 @@
 			var ajax_data = ubc_press.prototype.build_data_for_ajax_complete_item( component_id );
 			ubc_press.prototype.ajax_complete_item( ajax_data.data, ajax_data.thisButton, ajax_data.originalHref );
 
-			// Update the completion bar
-			ubc_press.prototype.update_progress_bar( true );
-
-			// OK, this is a completed assignment. Increase the count.
-			ubc_press.prototype.update_count_in_section_list( true );
-
 		},
 
 		findMarkAsCompleteForAssignment: function( assignmentForm ) {
