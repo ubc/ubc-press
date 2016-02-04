@@ -607,16 +607,16 @@
 					notes_content: notesContent
 				},
 				beforeSend: function( jqXHR, settings ) {
-					this.start_loading( thisButton );
+					ubc_press.prototype.start_loading( thisButton );
 				},
 				success: function( response ) {
 
 					if ( response.success ) {
-						this.show_saved_message( thisButton, 3000 );
+						ubc_press.prototype.show_saved_message( thisButton, 3000 );
 					}
 				},
 				complete: function( jqXHR, textStatus ) {
-					this.stop_loading( thisButton );
+					ubc_press.prototype.stop_loading( thisButton );
 				},
 				error: function( jqXHR, textStatus, errorThrown ) {
 					return;
@@ -643,7 +643,7 @@
 				element.after( markup );
 			}
 
-			$( '#notes_saved_msg' ).fadeIn( 'fast' ).delay( timeout ).fadeOut( 'fast' );
+			jQuery( '#notes_saved_msg' ).fadeIn( 'fast' ).delay( timeout ).fadeOut( 'fast' );
 
 		},/* this.show_saved_message() */
 
