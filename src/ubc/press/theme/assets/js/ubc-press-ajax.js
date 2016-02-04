@@ -582,8 +582,8 @@
 			// Grab some variables including the submitted content
 			var thisForm			= jQuery( this );
 			var thisButton 			= thisForm.find( 'input[type="submit"]' ).eq(0);
-			var notesContentField	= jQuery( '#ubc_user_notes_content' );
-			var notesContent 		= notesContentField.val();
+			var notesContentField	= jQuery( '#ubc_user_notes_content_ifr' );
+			var notesContent 		= notesContentField.contents().find( 'body' ).html();
 
 			// Do our best to prevent double clicking.
 			if ( thisButton.attr( 'disabled' ) !== undefined || thisButton.hasClass( 'disabled' ) ) {
@@ -596,7 +596,7 @@
 
 			// AJAX url
 			var url		= thisForm.find( '#user_notes_ajax_url' ).eq(0).val();
-
+			console.log( notesContent );
 			jQuery.ajax( {
 				type : 'post',
 				dataType : 'json',
@@ -610,7 +610,7 @@
 					ubc_press.prototype.start_loading( thisButton );
 				},
 				success: function( response ) {
-
+					console.log( response );
 					if ( response.success ) {
 						ubc_press.prototype.show_saved_message( thisButton, 3000 );
 					}
@@ -619,6 +619,7 @@
 					ubc_press.prototype.stop_loading( thisButton );
 				},
 				error: function( jqXHR, textStatus, errorThrown ) {
+					console.log( errorThrown );
 					return;
 				}
 			} );
