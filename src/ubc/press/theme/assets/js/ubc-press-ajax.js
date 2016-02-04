@@ -596,7 +596,7 @@
 
 			// AJAX url
 			var url		= thisForm.find( '#user_notes_ajax_url' ).eq(0).val();
-			console.log( notesContent );
+
 			jQuery.ajax( {
 				type : 'post',
 				dataType : 'json',
@@ -610,7 +610,6 @@
 					ubc_press.prototype.start_loading( thisButton );
 				},
 				success: function( response ) {
-					console.log( response );
 					if ( response.success ) {
 						ubc_press.prototype.show_saved_message( thisButton, 3000 );
 					}
@@ -619,7 +618,6 @@
 					ubc_press.prototype.stop_loading( thisButton );
 				},
 				error: function( jqXHR, textStatus, errorThrown ) {
-					console.log( errorThrown );
 					return;
 				}
 			} );
