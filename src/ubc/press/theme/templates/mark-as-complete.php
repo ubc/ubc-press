@@ -33,6 +33,8 @@ $url 					= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'mark_as_compl
 				<h3><?php echo esc_html( $get_the_title ); ?></h3>
 			</header>
 		</div>
+		<?php // Kiiinda pointless for someone who isn't signed in
+		if ( is_user_logged_in() ) : ?>
 		<div class="medium-3 large-4 columns">
 			<ul class="button-group">
 				<li>
@@ -52,6 +54,7 @@ $url 					= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'mark_as_compl
 			</ul>
 		</div>
 		<!-- end .button-bar -->
+		<?php endif; ?>
 	</div>
 	<!-- end .row -->
 </div>

@@ -792,11 +792,6 @@ class Setup {
 
 	public function ubc_press_show_template_for_post_of_post_type_after__add_mark_as_complete( $template_start, $template_path, $post_id, $post_type ) {
 
-		// Kiiinda pointless for someone who isn't signed in
-		if ( ! is_user_logged_in() ) {
-			return;
-		}
-
 		// Sanitize
 		$post_id	= absint( $post_id );
 		$post_type	= sanitize_text_field( $post_type );
