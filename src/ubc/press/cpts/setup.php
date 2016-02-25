@@ -12,7 +12,7 @@ namespace UBC\Press\CPTs;
  */
 
 
-class Setup {
+class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 
 	/**
@@ -42,7 +42,7 @@ class Setup {
 	public function init() {
 
 		// Run an action so we can hook in beforehand
-		$this->before();
+		$this->before( 'ubc_press_before_create_all_cpts' );
 
 		// Determine which CPTs to create
 		$this->determine();
@@ -51,7 +51,7 @@ class Setup {
 		$this->create();
 
 		// Run an action so we can hook in afterwards
-		$this->after();
+		$this->after( 'ubc_press_after_create_all_cpts' );
 
 	}/* init() */
 
@@ -289,40 +289,5 @@ class Setup {
 		return static::$post_types_to_set_up;
 
 	}/* get_post_types_to_setup */
-
-
-	/**
-	 * Run before we create any custom post types. Simply runs an action which we can
-	 * hook into should we so wish
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	private function before() {
-
-		do_action( 'ubc_press_before_create_all_cpts' );
-
-	}/* before() */
-
-
-
-	/**
-	 * Run an action after we create all post types.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	private function after() {
-
-		do_action( 'ubc_press_after_create_all_cpts' );
-
-	}/* after() */
-
 
 }/* class Setup */

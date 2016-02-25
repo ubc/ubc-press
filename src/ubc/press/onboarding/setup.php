@@ -11,7 +11,7 @@ namespace UBC\Press\Onboarding;
  *
  */
 
-class Setup {
+class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 
 	/**
@@ -257,40 +257,5 @@ class Setup {
 		return wp_kses_post( $template );
 
 	}/* fetch_template() */
-
-
-
-
-	/**
-	 * Run before we make any onboarding changes. Simply runs an action which we can
-	 * hook into should we so wish
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	private function before() {
-
-		do_action( 'ubc_press_before_setup_onboarding' );
-
-	}/* before() */
-
-
-	/**
-	 * Run an action after we make onboarding changes
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	private function after() {
-
-		do_action( 'ubc_press_after_setup_onboarding' );
-
-	}/* after() */
 
 }/* class Setup */

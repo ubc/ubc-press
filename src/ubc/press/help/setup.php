@@ -11,7 +11,7 @@ namespace UBC\Press\Help;
  *
  */
 
-class Setup {
+class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 
 	/**
@@ -189,38 +189,5 @@ class Setup {
 		}
 
 	}/* load__calendar_help_tabs() */
-
-
-	/**
-	 * Run before we make any help changes. Simply runs an action which we can
-	 * hook into should we so wish
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	private function before() {
-
-		do_action( 'ubc_press_before_setup_help' );
-
-	}/* before() */
-
-
-	/**
-	 * Run an action after we make help changes
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	private function after() {
-
-		do_action( 'ubc_press_after_setup_help' );
-
-	}/* after() */
 
 }/* Setup */

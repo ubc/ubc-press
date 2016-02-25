@@ -12,7 +12,7 @@ namespace UBC\Press\Theme;
  */
 
 
-class Setup {
+class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 	/**
 	 * Our initializer
@@ -303,37 +303,5 @@ class Setup {
 
 
 	}/* init__load_temp_stylesheet() */
-
-	/**
-	 * Run before we make any theme changes. Simply runs an action which we can
-	 * hook into should we so wish
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	private function before() {
-
-		do_action( 'ubc_press_before_setup_theme' );
-
-	}/* before() */
-
-
-	/**
-	 * Run an action after we make theme changes
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	private function after() {
-
-		do_action( 'ubc_press_after_setup_theme' );
-
-	}/* after() */
 
 }/* class Setup */

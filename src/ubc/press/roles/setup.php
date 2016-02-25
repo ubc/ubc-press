@@ -12,7 +12,7 @@ namespace UBC\Press\Roles;
  */
 
 
-class Setup {
+class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 	/**
 	 * Once determined, the roles get stored in this class property so they're accessible
@@ -52,25 +52,6 @@ class Setup {
 		$this->after();
 
 	}/* init() */
-
-
-	/**
-	 * Run before we create any custom roles. Simply runs an action which we can
-	 * hook into should we so wish
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	private function before() {
-
-		do_action( 'ubc_press_before_create_all_roles' );
-
-	}/* before() */
-
-
 
 	/**
 	 * Determine which roles to create
@@ -197,22 +178,5 @@ class Setup {
 		}
 
 	}/* create() */
-
-
-
-	/**
-	 * Run an action after we create all roles.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	private function after() {
-
-		do_action( 'ubc_press_after_create_all_roles' );
-
-	}/* after() */
 
 }/* class Setup */

@@ -12,7 +12,7 @@ namespace UBC\Press\Metaboxes;
  */
 
 
-class Setup {
+class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 	/**
 	 * The metaboxes which we will create
@@ -1988,39 +1988,5 @@ class Setup {
 		$row_1->addColumns( array( $test_field_1, $test_field_2, $test_field_3 ) );
 
 	}
-
-
-	/**
-	 * Run before we create any custom metaboxes. Simply runs an action which we can
-	 * hook into should we so wish
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	private function before() {
-
-		do_action( 'ubc_press_before_create_all_metaboxes' );
-
-	}/* before() */
-
-
-
-	/**
-	 * Run an action after we create all metaboxes.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	private function after() {
-
-		do_action( 'ubc_press_after_create_all_metaboxes' );
-
-	}/* after() */
 
 }/* class Setup */

@@ -11,7 +11,7 @@ namespace UBC\Press\API;
  *
  */
 
-class Setup {
+class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 
 	/**
@@ -231,38 +231,5 @@ class Setup {
 	public function register_rest_route__component_callback__component_validate_callback( $value, $request, $parameter ) {
 		return is_numeric( $value );
 	}/* register_rest_route__component_callback__component_validate_callback() */
-
-
-	/**
-	 * Run before we make any api changes. Simply runs an action which we can
-	 * hook into should we so wish
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	private function before() {
-
-		do_action( 'ubc_press_before_setup_api' );
-
-	}/* before() */
-
-
-	/**
-	 * Run an action after we make api changes
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param null
-	 * @return null
-	 */
-
-	private function after() {
-
-		do_action( 'ubc_press_after_setup_api' );
-
-	}/* after() */
 
 }/* Setup */
