@@ -29,7 +29,7 @@ $files 			= isset( $content['fields']['_handout_details_file_list'] ) ? $content
 		<?php endif; ?>
 
 		<?php if ( ! empty( $files ) ) : ?>
-			<ul class="hanfout-file-list">
+			<ul class="hanfout-file-list no-bullet">
 				<?php foreach ( $files as $id => $file_path ) : ?>
 					<li><a href="<?php echo esc_url( $file_path ); ?>" title="<?php echo esc_url( $file_path ); ?>"><?php echo esc_url( $file_path ); ?></a></li>
 				<?php endforeach; ?>
