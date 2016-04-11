@@ -221,10 +221,20 @@
 
 			this.change_all_mark_as_complete_buttons( 'enable' );
 
+				// find the data buttons data-toggle target to change the tool tips text upon click.
+				var toolTipDataToggle 	= element.attr( 'data-toggle' );
+				var findToolTip 		= jQuery( '#' + toolTipDataToggle );
+
 			if ( element.hasClass( 'secondary' ) ) {
-				element.attr( 'data-hint', localized_data.text.mark_as_complete ).html( '<span class="button-text">' + localized_data.text.mark_as_complete + '</span><span class="dashicons dashicons-yes onhover"></span>' );
+
+
+				element.attr( 'title', localized_data.text.mark_as_complete ).html( '<span class="button-text">' + localized_data.text.mark_as_complete + '</span><span class="dashicons dashicons-yes onhover"></span>' );
+				findToolTip.html( localized_data.text.mark_as_complete );
+
 			} else {
-				element.attr( 'data-hint', localized_data.text.completed_just_now ).html( '<span class="button-text">' + localized_data.text.completed_just_now + '</span><span class="dashicons dashicons-yes onhover"></span>' );
+
+				element.attr( 'title', localized_data.text.completed_just_now ).html( '<span class="button-text">' + localized_data.text.completed_just_now + '</span><span class="dashicons dashicons-yes onhover"></span>' );
+				findToolTip.html( localized_data.text.completed_just_now );
 			}
 
 			element.attr( 'href', originalHref );
@@ -411,8 +421,8 @@
 			var new_percentage 		= this.get_percentage( newValue, totalNumComponents );
 
 			var progress_div 		= jQuery( '.current_page_item .progress' );
-			var progress_span 		= jQuery( progress_div ).find( '.meter' );
-			var text_span 			= jQuery( progress_div ).find( '.complete-percentage span' );
+			var progress_span 		= jQuery( progress_div ).find( '.progress-meter' );
+			var text_span 			= jQuery( progress_div ).find( '.progress-meter-text' );
 
 			// Animate the progress bar
 			progress_span.animate( {
