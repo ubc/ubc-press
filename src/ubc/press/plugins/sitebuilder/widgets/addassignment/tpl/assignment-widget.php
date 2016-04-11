@@ -16,3 +16,6 @@ if ( ! $post_id ) {
 }
 
 \UBC\Press\Plugins\SiteBuilder\Widgets\Utils::show_template_for_post_of_post_type( \UBC\Press::get_plugin_path() . 'src/ubc/press/theme/templates/', 'single-assignment.php', $post_id, 'assignment' );
+
+
+
