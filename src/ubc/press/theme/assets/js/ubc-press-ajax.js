@@ -171,7 +171,7 @@
 
 		switch_completed_state: function( element, completed ) {
 
-			element.toggleClass( 'success' );
+			element.toggleClass( 'success hollow' );
 			element.toggleClass( 'secondary' );
 
 			//this.change_completed_message( element, completed );
