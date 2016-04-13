@@ -7,10 +7,14 @@
  *
  */
 
+global $wp_query;
+$the_id 				= $wp_query->post->ID;
+
 $data 					= get_query_var( 'template_data' );
 
 $get_the_title			= get_the_title();
 $get_the_id				= get_the_id();
+
 $button_size			= 'medium';
 
 $button_text 			= ( isset( $data['completed'] ) && true === $data['completed'] ) ? __( 'Mark Uncomplete', \UBC\Press::get_text_domain() ) : __( 'Mark Complete', \UBC\Press::get_text_domain() );
@@ -26,8 +30,8 @@ $dashicon 				= ( ! $when_completed_text ) ? 'dashicons dashicons-yes onhover' :
 // Default URL. As a failsafe if JS is broken
 $url 					= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'mark_as_complete', true, $nonce, array( 'post_id' => $data['post_id'], 'post_type' => $data['post_type'] ) );
 ?>
-
-<div class="mark-as-complete-wrapper clearfix">
+<div data-sticky-container>
+<div class="mark-as-complete-wrapper clearfix sticky" data-sticky data-margin-top="0" data-sticky-on="small">
 	<div class="row">
 		<div class="title small-10 medium-7 columns">
 			<header>
@@ -86,4 +90,5 @@ $url 					= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'mark_as_compl
 		<?php endif; ?>
 	</div>
 	<!-- end .row -->
+</div>
 </div>
