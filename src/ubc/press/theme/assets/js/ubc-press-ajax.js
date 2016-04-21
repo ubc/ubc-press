@@ -5,6 +5,7 @@
 	};
 
 	var markAsCompleteButtons;
+	var saveForLaterButtons;
 	var localized_data = ubc_press_ajax;
 
 	ubc_press.prototype = {
@@ -32,6 +33,13 @@
 			var mark_as_complete_buttons = this.getMarkAsCompleteButtons();
 			for ( var index = 0; index < mark_as_complete_buttons.length; ++index ) {
 				mark_as_complete_buttons[index].addEventListener( 'click', this.click_mark_as_complete__process_completion );
+			}
+		},
+
+		addClickEventHandlerForSaveForLater: function() {
+			var save_for_later_buttons = this.getSaveForLaterButtons();
+			for ( var index = 0; index < save_for_later_buttons.length; ++index ) {
+				save_for_later_buttons[index].addEventListener( 'click', this.click_save_for_later__process_completion );
 			}
 		},
 
@@ -69,6 +77,21 @@
 			return fetched;
 		},
 
+		getSaveForLaterButtons: function() {
+
+			// Check for cached buttons
+			if ( typeof this.saveForLaterButtons !== 'undefined' ) {
+				return this.saveForLaterButtons;
+			}
+
+			// None cached, so grab and cache them
+			var fetched = document.querySelectorAll( '.save-for-later' );
+			this.saveForLaterButtons = fetched;
+			return fetched;
+
+		},
+
+
 		/**
 		 * When a .mark-as-complete button is clicked, we do the appropriate action.
 		 * If they've just completed it, we set the user meta (via AJAX), change the button
@@ -104,9 +127,61 @@
 		},/* click_mark_as_complete__process_completion() */
 
 
+		click_save_for_later__process_completion: function( event ) {
+
+			event.stopPropagation();
+			event.preventDefault();
+
+			var thisButton	= jQuery( this );
+			var componentID = thisButton.data( 'post_id' );
+
+			// Do our best to prevent double clicking.
+			if ( thisButton.attr( 'disabled' ) !== undefined || thisButton.hasClass( 'disabled' ) ) {
+				return;
+			}
+
+			// First things first; disable the buttons
+			ubc$.prototype.change_all_save_for_later_buttons( 'disable' );
+
+			// Collect our AJAX Data
+			var ajax_data = ubc$.prototype.build_data_for_ajax_save_item( componentID );
+
+			// Send the AJAX call
+			ubc$.prototype.ajax_save_item( ajax_data.data, thisButton, ajax_data.originalHref );
+			// ubc$.prototype.change_all_mark_as_complete_buttons( 'disable' );
+			//
+			// var ajax_data = ubc$.prototype.build_data_for_ajax_complete_item( componentID );
+			//
+			// ubc$.prototype.ajax_complete_item( ajax_data.data, thisButton, ajax_data.originalHref );
+
+
+		},
+
+
 		build_data_for_ajax_complete_item: function( component_id ) {
 
-			var thisButton 		= jQuery( '[data-post_id="' + component_id + '"]' );
+			var thisButton 		= jQuery( '.mark-as-complete[data-post_id="' + component_id + '"]' );
+			var originalHref	= thisButton.attr( 'href' );
+			var url 			= originalHref;
+			var post_id 		= thisButton.data( 'post_id' );
+			var nonce 			= thisButton.data( 'nonce' );
+
+			var data = {
+				post_id : post_id,
+				nonce: nonce
+			};
+
+			return {
+				thisButton: thisButton,
+				originalHref: originalHref,
+				data: data,
+			};
+
+		},
+
+		build_data_for_ajax_save_item: function( component_id ) {
+
+			var thisButton 		= jQuery( '.save-for-later[data-post_id="' + component_id + '"]' );
 			var originalHref	= thisButton.attr( 'href' );
 			var url 			= originalHref;
 			var post_id 		= thisButton.data( 'post_id' );
@@ -154,6 +229,34 @@
 		},
 
 
+		ajax_save_item: function( data, thisButton, originalHref ) {
+
+			jQuery.ajax( {
+				type : 'post',
+				dataType : 'json',
+				url : originalHref,
+				data : data,
+				beforeSend: function( jqXHR, settings ) {
+					ubc$.prototype.start_loading( thisButton );
+				},
+				success: function( response ) {
+
+					if ( response.success ) {
+						ubc$.prototype.switch_completed_state( thisButton, response.data.completed );
+						// ubc$.prototype.update_progress_bar( response.data.completed );
+						// ubc$.prototype.update_count_in_section_list( response.data.completed );
+					}
+				},
+				complete: function( jqXHR, textStatus ) {
+					ubc$.prototype.stop_loading( thisButton, originalHref );
+				},
+				error: function( jqXHR, textStatus, errorThrown ) {
+					return;
+				}
+			} );
+
+		},
+
 		/**
 		 * Switch the completed classes for the button. If it already has a
 		 * 'success' class we remove it. If it already has a 'secondary' class
@@ -196,7 +299,7 @@
 				element.val( localized_data.text.loading );
 				return;
 			}
-			element.append( '<span class="dashicons dashicons-admin-generic round"></span>' );
+			// element.append( '<span class="dashicons dashicons-admin-generic round"></span>' );
 
 		},/* this.start_loading() */
 
@@ -219,22 +322,28 @@
 				return;
 			}
 
-			this.change_all_mark_as_complete_buttons( 'enable' );
+			// Urgh. Refactor! Do different things dependeing on what type of interaction
+			if ( element.hasClass( 'save-for-later' ) ) {
+				this.change_all_save_for_later_buttons( 'enable' );
+			} else {
+
+				this.change_all_mark_as_complete_buttons( 'enable' );
 
 				// find the data buttons data-toggle target to change the tool tips text upon click.
 				var toolTipDataToggle 	= element.attr( 'data-toggle' );
 				var findToolTip 		= jQuery( '#' + toolTipDataToggle );
 
-			if ( element.hasClass( 'secondary' ) ) {
+				if ( element.hasClass( 'secondary' ) ) {
 
+					element.attr( 'title', localized_data.text.mark_as_complete ).html( '<span class="button-text">' + localized_data.text.mark_as_complete + '</span><span class="dashicons dashicons-yes onhover"></span>' );
+					findToolTip.html( localized_data.text.mark_as_complete );
 
-				element.attr( 'title', localized_data.text.mark_as_complete ).html( '<span class="button-text">' + localized_data.text.mark_as_complete + '</span><span class="dashicons dashicons-yes onhover"></span>' );
-				findToolTip.html( localized_data.text.mark_as_complete );
+				} else {
 
-			} else {
+					element.attr( 'title', localized_data.text.completed_just_now ).html( '<span class="button-text">' + localized_data.text.completed_just_now + '</span><span class="dashicons dashicons-yes onhover"></span>' );
+					findToolTip.html( localized_data.text.completed_just_now );
+				}
 
-				element.attr( 'title', localized_data.text.completed_just_now ).html( '<span class="button-text">' + localized_data.text.completed_just_now + '</span><span class="dashicons dashicons-yes onhover"></span>' );
-				findToolTip.html( localized_data.text.completed_just_now );
 			}
 
 			element.attr( 'href', originalHref );
@@ -282,6 +391,35 @@
 
 		},/* this.change_all_mark_as_complete_buttons() */
 
+
+		change_all_save_for_later_buttons: function( status ) {
+
+			var allButtons = jQuery( 'a.save-for-later' );
+
+			switch (status) {
+
+				case 'disable':
+
+					jQuery.each( allButtons, function( i, val ) {
+						jQuery( val ).attr( 'disabled', 'disabled' );
+						jQuery( val ).addClass( 'disabled' );
+					} );
+
+				break;
+
+				case 'enable':
+					jQuery.each( allButtons, function( i, val ) {
+						jQuery( val ).removeAttr( 'disabled' );
+						jQuery( val ).removeClass( 'disabled' );
+					} );
+
+				break;
+
+				default:
+
+			}
+
+		},
 
 		/**
 		 * Add/Change/Remove the 'you competed this x{time} ago' message.
@@ -865,6 +1003,7 @@
 		this.addEventListenerForVimeoIFrameMessages();
 		this.addEventListerForYouTubeIFrameMessages();
 		this.addAJAXSubmissionHandlerForAssignmentCompletion();
+		this.addClickEventHandlerForSaveForLater();
 	};
 
 	// trick borrowed from jQuery so we don't have to use the 'new' keyword

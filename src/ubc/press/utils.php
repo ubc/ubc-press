@@ -1504,4 +1504,143 @@ class Utils {
 
 	}/* random_string_of_length() */
 
+
+	public static function component_is_saved_for_later( $post_id, $user_id ) {
+
+		// Bail if user isn't logged in
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		// If no user ID is passed, default to the current user
+		if ( false === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		// Sanitize
+		$post_id = absint( $post_id );
+		$user_id = absint( $user_id );
+		$site_id = get_current_blog_id();
+
+		// i.e. array( '1' => array( 23 => array( 'when' => 345676543 ), 54 => array( 'when' => 34567123 ) ) )
+		$saved = \UBC\Press\Utils::get_saved_components_for_user( $user_id );
+
+		if ( ! is_array( $saved ) ) {
+			$saved = array();
+		}
+
+		if ( ! array_key_exists( $site_id, $saved ) ) {
+			return false;
+		}
+
+		if ( array_key_exists( $post_id, $saved[ $site_id ] ) ) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}/* component_is_saved_for_later() */
+
+
+	public static function get_saved_components_for_user( $user_id ) {
+
+		// Bail if user isn't logged in
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		// If no user ID is passed, default to the current user
+		if ( false === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		// Sanitize
+		$user_id = absint( $user_id );
+
+		// Current meta saved for this component
+		$saved_for_later = get_user_meta( $user_id, 'ubc_press_saved_for_later', true );
+
+		return $saved_for_later;
+
+	}/* get_saved_components_for_user() */
+
+
+	public static function set_component_as_saved_for_later( $post_id, $user_id ) {
+
+		// Bail if user isn't logged in
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		// If no user ID is passed, default to the current user
+		if ( false === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		// Sanitize
+		$post_id = absint( $post_id );
+		$user_id = absint( $user_id );
+		$site_id = get_current_blog_id();
+
+		// Current meta saved for this component
+		$current_saved = \UBC\Press\Utils::get_saved_components_for_user( $user_id );
+
+		// Ensure it's an array
+		if ( ! is_array( $current_saved ) ) {
+			$current_saved = array();
+		}
+
+		if ( ! array_key_exists( $site_id, $current_saved ) ) {
+			$current_saved[ $site_id ] = array();
+		}
+
+		// Add our completion
+		$current_saved[ $site_id ][ $post_id ] = array( 'when' => time() );
+
+		do_action( 'ubc_press_set_component_as_saved', $post_id, $user_id );
+
+		return (bool) update_user_meta( $user_id, 'ubc_press_saved_for_later', $current_saved );
+
+	}/* set_component_as_saved_for_later() */
+
+
+	public static function set_component_as_not_saved_for_later( $post_id, $user_id ) {
+
+		// Bail if user isn't logged in
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		// If no user ID is passed, default to the current user
+		if ( false === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		// Sanitize
+		$post_id = absint( $post_id );
+		$user_id = absint( $user_id );
+		$site_id = get_current_blog_id();
+
+		// Current meta saved for this component
+		$current_saved = \UBC\Press\Utils::get_saved_components_for_user( $user_id );
+
+		// Ensure it's an array
+		if ( ! is_array( $current_saved ) ) {
+			$current_saved = array();
+		}
+
+		if ( ! array_key_exists( $site_id, $current_saved ) ) {
+			$current_saved[ $site_id ] = array();
+		}
+
+		if ( array_key_exists( $post_id, $current_saved[ $site_id ] ) ) {
+			unset( $current_saved[ $site_id ][ $post_id ] );
+		}
+
+		do_action( 'ubc_press_set_component_as_not_saved', $post_id, $user_id );
+
+		return (bool) update_user_meta( $user_id, 'ubc_press_saved_for_later', $current_saved );
+
+	}/* set_component_as_not_saved_for_later() */
+
 }/* Utils */

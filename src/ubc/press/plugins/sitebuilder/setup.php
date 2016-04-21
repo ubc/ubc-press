@@ -87,6 +87,9 @@ class Setup {
 		// Our custom AJAX implementation gives us ubcpressajax_mark_component_complete
 		add_action( 'ubcpressajax_mark_as_complete', array( $this, 'ubcpressajax_mark_as_complete__process' ) );
 
+		// For the 'save for later/fav' feature
+		add_action( 'ubcpressajax_fav_sub_section', array( $this, 'ubcpressajax_fav_sub_section__process' ) );
+
 	}/* setup_actions() */
 
 
@@ -813,9 +816,13 @@ class Setup {
 		$user_id	= get_current_user_id();
 		$completed	= \UBC\Press\Utils::component_is_completed( $post_id, $user_id );
 
-		$data['post_id']	= $post_id;
-		$data['post_type']	= $post_type;
-		$data['completed']	= $completed;
+		// Is this saved for later?
+		$saved_for_later = \UBC\Press\Utils::component_is_saved_for_later( $post_id, $user_id );
+
+		$data['post_id']			= $post_id;
+		$data['post_type']			= $post_type;
+		$data['completed']			= $completed;
+		$data['saved_for_later']	= $saved_for_later;
 
 		// If completed, we'll also send the timestamp
 		if ( $completed ) {
@@ -851,14 +858,69 @@ class Setup {
 			$complete = \UBC\Press\Utils::set_component_as_complete( $post_id, $user_id );
 		}
 
+		$data = ( false === (bool) $complete ) ? array( 'message' => $complete ) : array( 'completed' => ! $is_completed );
+
+		// Send the response
+		$this->send_json_response( $complete, $data, $post_id, $request_data );
+
+	}/* ubcpressajax_mark_as_complete__process() */
+
+
+	/**
+	* Handle the AJAX call for the 'Save for later'/'fav' feature.
+	*
+	* @since 1.0.0
+	*
+	* @param (array) $request_data - the $_REQUEST data
+	* @return null
+	*/
+
+	public function ubcpressajax_fav_sub_section__process( $request_data ) {
+
+		// The nonce is already checked for us, still need to sanitize data
+		$post_id = absint( $request_data['post_id'] );
+		$user_id = get_current_user_id();
+
+		$is_saved_for_later = \UBC\Press\Utils::component_is_saved_for_later( $post_id, $user_id );
+
+		if ( true === $is_saved_for_later ) {
+			$saved = \UBC\Press\Utils::set_component_as_not_saved_for_later( $post_id, $user_id );
+		} else {
+			$saved = \UBC\Press\Utils::set_component_as_saved_for_later( $post_id, $user_id );
+		}
+
+		$data = ( false === (bool) $saved ) ? array( 'message' => $saved ) : array( 'saved' => ! $is_saved_for_later );
+
+		// Send the response
+		$this->send_json_response( $saved, $data, $post_id, $request_data );
+
+	}/* ubcpressajax_fav_sub_section__process() */
+
+	/**
+	 * A helper method to keep us DRY.
+	 * Send data via WP's wp_send_json_* API and handle the case
+	 * where the data is received via a non-AJAX context - i.e.
+	 * handle a redirect
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (bool) $success - Whether we're sending a success or error message
+	 * @param (array) $data - The data which we're sending
+	 * @param (int) $post_id - The ID of the post we're currently on
+	 * @param (array) $request_data - The full request so we're able to see if we have a specified redirect
+	 * @return null
+	 */
+
+	public function send_json_response( $success, $data, $post_id = null, $request_data ) {
+
 		// If we're coming from an AJAX request, send JSON
 		if ( ! empty( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && 'xmlhttprequest' === strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) ) {
 
-			if ( false === (bool) $complete ) {
-				wp_send_json_error( array( 'message' => $complete ) );
+			if ( false === (bool) $success ) {
+				wp_send_json_error( $data );
 			}
 
-			wp_send_json_success( array( 'completed' => ! $is_completed ) );
+			wp_send_json_success( $data );
 
 		} else {
 
@@ -872,7 +934,9 @@ class Setup {
 			}
 		}
 
-	}/* ubcpressajax_mark_as_complete__process() */
+	}/* send_json_response() */
+
+
 
 
 	/**
