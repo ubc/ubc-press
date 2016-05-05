@@ -39,7 +39,7 @@ $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_se
 	<div class="row">
 		<div class="title small-10 medium-7 columns">
 			<header>
-				<h3><?php echo esc_html( $get_the_title ); ?> </h3>
+				<h2><?php echo esc_html( $get_the_title ); ?> </h2>
 			</header>
 		</div>
 		<?php // Kiiinda pointless for someone who isn't signed in
