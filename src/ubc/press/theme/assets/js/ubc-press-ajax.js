@@ -1,3 +1,9 @@
+/**
+ * Everything about this file needs to change.
+ * It's a mishmash of lots of different components and features.
+ * Please make it better.
+ */
+
 ( function( global ) {
 
 	var ubc_press = function() {
@@ -148,12 +154,6 @@
 
 			// Send the AJAX call
 			ubc$.prototype.ajax_save_item( ajax_data.data, thisButton, ajax_data.originalHref );
-			// ubc$.prototype.change_all_mark_as_complete_buttons( 'disable' );
-			//
-			// var ajax_data = ubc$.prototype.build_data_for_ajax_complete_item( componentID );
-			//
-			// ubc$.prototype.ajax_complete_item( ajax_data.data, thisButton, ajax_data.originalHref );
-
 
 		},
 
@@ -243,8 +243,6 @@
 
 					if ( response.success ) {
 						ubc$.prototype.switch_completed_state( thisButton, response.data.completed );
-						// ubc$.prototype.update_progress_bar( response.data.completed );
-						// ubc$.prototype.update_count_in_section_list( response.data.completed );
 					}
 				},
 				complete: function( jqXHR, textStatus ) {
@@ -277,8 +275,6 @@
 			element.toggleClass( 'success hollow' );
 			element.toggleClass( 'secondary' );
 
-			//this.change_completed_message( element, completed );
-
 		},/* this.switch_completed_state() */
 
 
@@ -299,7 +295,6 @@
 				element.val( localized_data.text.loading );
 				return;
 			}
-			// element.append( '<span class="dashicons dashicons-admin-generic round"></span>' );
 
 		},/* this.start_loading() */
 
