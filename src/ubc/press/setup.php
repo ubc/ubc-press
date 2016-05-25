@@ -46,7 +46,7 @@ class Setup {
 		self::setup_rest_api();
 
 		// Set up the dashboard
-		self::setup_dashboard();
+		self::setup_wp_dashboard();
 
 		// Setup our custom taxonomies
 		self::setup_cts();
@@ -93,7 +93,7 @@ class Setup {
 
 
 	/**
-	 * The default dashboard isn't great for a T&L Environment. Let's make a few changes
+	 * The default WordPress dashboard isn't great for a T&L Environment. Let's make a few changes
 	 *
 	 * @since 1.0.0
 	 *
@@ -101,12 +101,12 @@ class Setup {
 	 * @return null
 	 */
 
-	public static function setup_dashboard() {
+	public static function setup_wp_dashboard() {
 
-		$dashboard = new \UBC\Press\Dashboard\Setup;
+		$dashboard = new \UBC\Press\WPDashboard\Setup;
 		$dashboard->init();
 
-	}/* setup_dashboard() */
+	}/* setup_wp_dashboard() */
 
 
 	/**

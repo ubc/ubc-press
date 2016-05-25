@@ -1,6 +1,6 @@
 <?php
 
-namespace UBC\Press\Dashboard;
+namespace UBC\Press\WPDashboard;
 
 /**
  * Setup for our custom dashboard.
@@ -15,7 +15,7 @@ namespace UBC\Press\Dashboard;
  *
  * @since 1.0.0
  * @package UBCPress
- * @subpackage Dashboard
+ * @subpackage WPDashboard
  *
  */
 
@@ -243,9 +243,9 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 	public function init__register_assets() {
 
-		wp_register_style( 'ubc-press-dashboard', \UBC\Press::$plugin_url . 'src/ubc/press/dashboard/assets/css/ubc-press-dashboard.css', null, \UBC\Press::get_version(), 'all' );
+		wp_register_style( 'ubc-press-dashboard', \UBC\Press::$plugin_url . 'src/ubc/press/wpdashboard/assets/css/ubc-press-dashboard.css', null, \UBC\Press::get_version(), 'all' );
 
-		wp_register_script( 'ubc-press-dashboard', \UBC\Press::$plugin_url . 'src/ubc/press/dashboard/assets/js/ubc-press-dashboard.js' );
+		wp_register_script( 'ubc-press-dashboard', \UBC\Press::$plugin_url . 'src/ubc/press/wpdashboard/assets/js/ubc-press-dashboard.js' );
 
 	}/* init__register_assets() */
 
