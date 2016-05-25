@@ -200,7 +200,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			),
 		) );
 
-		if ( ! is_admin() ) {
+		if ( ! is_admin() || ! class_exists( '\Cmb2Grid\Grid\Cmb2Grid' ) ) {
 			return;
 		}
 		$grid_layout = new \Cmb2Grid\Grid\Cmb2Grid( $section_description );
@@ -418,7 +418,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			'type'       => 'text_time',
 		) );
 
-		if ( ! is_admin() ) {
+		if ( ! is_admin() || ! class_exists( '\Cmb2Grid\Grid\Cmb2Grid' ) ) {
 			return;
 		}
 		$grid_layout = new \Cmb2Grid\Grid\Cmb2Grid( $item_date );
@@ -490,7 +490,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			'type'       => 'text_time',
 		) );
 
-		if ( ! is_admin() ) {
+		if ( ! is_admin() || ! class_exists( '\Cmb2Grid\Grid\Cmb2Grid' ) ) {
 			return;
 		}
 		$grid_layout = new \Cmb2Grid\Grid\Cmb2Grid( $item_date );
