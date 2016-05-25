@@ -48,6 +48,9 @@ class Setup {
 		// Set up the dashboard
 		self::setup_wp_dashboard();
 
+		// Set up the student front-end dashboard
+		self::setup_student_dashboard();
+
 		// Setup our custom taxonomies
 		self::setup_cts();
 
@@ -103,10 +106,32 @@ class Setup {
 
 	public static function setup_wp_dashboard() {
 
-		$dashboard = new \UBC\Press\WPDashboard\Setup;
-		$dashboard->init();
+		$wp_dashboard = new \UBC\Press\WPDashboard\Setup;
+		$wp_dashboard->init();
 
 	}/* setup_wp_dashboard() */
+
+
+
+	/**
+	 * Our front-end student dashboard
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function setup_student_dashboard() {
+
+		if ( is_admin() ) {
+			return;
+		}
+
+		$student_dashboard = new \UBC\Press\StudentDashboard\Setup;
+		$student_dashboard->init();
+
+	}/* setup_student_dashboard() */
 
 
 	/**
