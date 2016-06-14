@@ -12,54 +12,58 @@ $home_url				= home_url( '/' );
 get_header();
 ?>
 
-<div id="primary" class="content-area primary row">
-    <main id="main" class="site-main dashboard small-12 column">
+<div id="primary" class="content-area primary">
+    <main id="main" class="site-main dashboard">
 
         <?php tha_entry_before(); ?>
 
         <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
             <?php tha_entry_top(); ?>
 
-            <header class="entry-header">
-                <h1 class="course-title">Course dashboard</h1>
-                <h2 class="lead"><a href="<?php echo esc_url( $home_url );?>" title="Course home"><?php echo esc_html( $course_title ); ?></a></h2>
-	        </header>
-            <!-- .entry-header -->
+            <div class="dashboard-header">
+            	<div class="row expanded">
+		            <header class="entry-header column small-12">
+		                <h1 class="course-title"><a href="<?php echo esc_url( $home_url );?>" title="Course home"><?php echo esc_html( $course_title ); ?></a></h1>
+			        </header>
+	           	 	<!-- .entry-header -->
+			    </div>
 
-            <div class="row expanded meta">
-            	<section class="small-12 medium-5 column user">
-            	<h3>Course instructor</h3>
-            		<div class="row">
-	            		<div class="small-8 medium-7 large-9 small-order-2 column">
-	            			<p class="user-name">Phillip J. Fry, <small class="user-title">Course instructor</small></p>
-			            	<p><a href="mailto:fry@ubc.ca">fry@ubc.ca</a><br>
-			            	604 555 555</p>
-	            		</div>
-	            		<!-- user info container -->
-	            		<div class="small-4 medium-5 large-3 small-order-1 column">
-	            			<img class="avatar aligncenter size-thumbnail wp-image-204" src="http://localhost/wordpress-multisite/brabbins/wp-content/uploads/sites/8/2016/05/12XeSbixxv8-150x150.jpg" alt="12XeSbixxv8" width="150" height="150" />
-	            		</div>
-	            		<!-- img container -->
-	            	</div>
-	            	<!-- .row -->
-            	</section>
-            	<!-- .user -->
-            	<section class="small-12 medium-7 column course-progress">
-            		<h3>Course progress</h3>
-					<div class="progress" role="progressbar" tabindex="0" aria-valuenow="65" aria-valuemin="0" aria-valuetext="65 percent" aria-valuemax="100">
-						<span class="progress-meter" style="width: 65%">
-							<p class="progress-meter-text">65%</p>
-						</span>
-						<p><small>[Completed: 20/30]</small></p>
-						<!-- .progress-meter -->
-					</div>
-					<!-- .progress -->
-            	</section>
-            	<!-- .course-progress -->
-            </div>
-            <!-- .row.expanded -->
-            <div class="entry-content">
-                <ul class="tabs row small-collapse text-center" id="course-dashbord-tabs" data-tabs>
+	            <div class="row expanded meta">
+	            	<section class="small-12 medium-5 column user">
+	            	<h3>Course instructor</h3>
+	            		<div class="row">
+		            		<div class="small-8 medium-7 large-9 small-order-2 column">
+		            			<p class="user-name">Phillip J. Fry, <small class="user-title">Course instructor</small></p>
+				            	<p><a href="mailto:fry@ubc.ca">fry@ubc.ca</a><br>
+				            	604 555 555</p>
+		            		</div>
+		            		<!-- user info container -->
+		            		<div class="small-4 medium-5 large-3 small-order-1 column">
+		            			<img class="avatar aligncenter size-thumbnail wp-image-204" src="http://localhost/wordpress-multisite/brabbins/wp-content/uploads/sites/8/2016/05/12XeSbixxv8-150x150.jpg" alt="12XeSbixxv8" width="150" height="150" />
+		            		</div>
+		            		<!-- img container -->
+		            	</div>
+		            	<!-- .row -->
+	            	</section>
+	            	<!-- .user -->
+	            	<section class="small-12 medium-7 column course-progress">
+	            		<h3>Course progress</h3>
+						<div class="progress" role="progressbar" tabindex="0" aria-valuenow="65" aria-valuemin="0" aria-valuetext="65 percent" aria-valuemax="100">
+							<span class="progress-meter" style="width: 65%">
+								<p class="progress-meter-text">65%</p>
+							</span>
+							<p><small>[Completed: 20/30]</small></p>
+							<!-- .progress-meter -->
+						</div>
+						<!-- .progress -->
+	            	</section>
+	            	<!-- .course-progress -->
+	            </div>
+	            <!-- .row.expanded -->
+	        </div>
+	        <!-- .dashboard-header -->
+            <section class="entry-content">
+                <ul class="tabs  expanded row small-collapse text-center align-center" id="course-dashbord-tabs" data-tabs>
                     <li class="tabs-title column is-active"><a href="#panel1v" aria-selected="true"><span class="dashicons dashicons-calendar-alt"></span> <span class="hide-for-small-only">Calendar</span></a>
                     </li>
                     <li class="tabs-title column"><a href="#panel2v"><span class="dashicons dashicons-edit"></span> <span class="hide-for-small-only">Notes</span></a>
@@ -73,7 +77,7 @@ get_header();
                     <li class="tabs-title column notifications yes"><a href="#panel6v"><span class="dashicons dashicons-warning"></span> <span class="hide-for-small-only">Notificatons</span></a>
                     </li>
                 </ul>
-                <div class="tabs-content row" data-tabs-content="course-dashbord-tabs">
+                <div class="tabs-content row expanded" data-tabs-content="course-dashbord-tabs">
                     <div class="tabs-panel column is-active" id="panel1v">
                     	<div class="row">
 	                        <section class="upcoming small-order-1 small-12 medium-6 large-4 column">
@@ -378,7 +382,7 @@ get_header();
                     <!-- .tabs-panel.notifications.column -->
                 </div>
                 <!-- .tabs-content -->
-            </div>
+            </section>
             <!-- .entry-content -->
 
             <footer class="entry-footer">
