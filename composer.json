@@ -25,7 +25,7 @@
         },
         {
             "type": "vcs",
-            "url": "https://github.com/richardtape/cmb-field-select2"
+            "url": "https://github.com/mustardBees/cmb-field-select2"
         }
     ],
     "require": {
