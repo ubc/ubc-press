@@ -2,8 +2,8 @@
     "name": "ubc/ubc-press",
     "description": "A plugin to help the WP dashboard look and feel more like a teaching and learning platform",
     "version": "1.0.0",
-    "type": "wp-plugin",
-    "keywords": ["dashboard", "lms", "wordpress"],
+    "type": "wordpress-plugin",
+    "keywords": ["dashboard", "wordpress"],
     "homepage": "http://ctlt.ubc.ca",
     "time": "2015-05-25",
     "license": "GPLv2",
@@ -31,8 +31,7 @@
     "require": {
         "jjgrainger/wp-custom-post-type-class": "dev-master",
         "webdevstudios/cmb2": "dev-master",
-        "mustardBees/cmb-field-select2": "dev-master",
-        "stomp-php/stomp-php": "4.*"
+        "mustardBees/cmb-field-select2": "dev-master"
     },
     "minimum-stability": "dev",
     "autoload": {
