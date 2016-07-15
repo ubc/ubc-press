@@ -130,6 +130,10 @@ class Press {
 
 	public static function load_autoloader() {
 
+		if ( ! file_exists( self::$plugin_path . 'vendor/autoload.php' ) ) {
+			die( 'Please run "composer install" from within this plugin\'s directory.' );
+		}
+
 		require self::$plugin_path . 'vendor/autoload.php';
 
 	}/* load_autoloader() */
