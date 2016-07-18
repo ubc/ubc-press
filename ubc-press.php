@@ -26,6 +26,11 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	return;
 }
 
+// If we're during the install process, we don't do anything
+if ( defined( 'WP_INSTALLING' ) && WP_INSTALLING ) {
+	return;
+}
+
 class Press {
 
 	/**
