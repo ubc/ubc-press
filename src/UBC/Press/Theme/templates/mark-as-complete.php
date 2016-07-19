@@ -34,20 +34,18 @@ $mark_as_complete_url 	= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( '
 $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_section', true, $fav_nonce, array( 'post_id' => $data['post_id'], 'post_type' => $data['post_type'] ) );
 
 ?>
-<div data-sticky-container>
-<div class="mark-as-complete-wrapper clearfix sticky" data-sticky data-margin-top="0" data-sticky-on="small">
-	<div class="row">
+<div class="mark-as-complete-wrapper" data-sticky-container>
+	<div class="mark-as-complete-wrapper-inside row expanded clearfix">
 		<div class="title small-10 medium-7 columns">
 			<header>
 				<h2><?php echo esc_html( $get_the_title ); ?> </h2>
 			</header>
 		</div>
-		<?php // Kiiinda pointless for someone who isn't signed in
-		if ( is_user_logged_in() ) : ?>
-		<div class="buttons small-2 medium-5 columns">
+		<?php if ( is_user_logged_in() ) : ?>
+		<div class="buttons columns">
 			<div class="text-right" data-responsive-toggle="mark-as-complete-<?php echo esc_attr( $get_the_id ); ?>">
 				<button id="actionbar-<?php echo esc_attr( $get_the_id ); ?>" class="mobile-button button <?php echo esc_attr( $mark_as_complete_classes ); ?> tiny" type="button" data-toggle=" actionbar-<?php echo esc_attr( $get_the_id ); ?> hamburger-<?php echo esc_attr( $get_the_id ); ?>" data-toggler=".active">
-					<span class="hamburger dots" id="hamburger-<?php echo esc_attr( $get_the_id ); ?>" data-toggler=".dots"></span>
+					<span class="dashicons dashicons-menu" id="hamburger-<?php echo esc_attr( $get_the_id ); ?>"></span>
 				</button>
 			</div>
 			<ul id="mark-as-complete-<?php echo esc_attr( $get_the_id ); ?>" class="button-group section-button-group small-horizontal menu float-right">
@@ -93,6 +91,5 @@ $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_se
 		<!-- end .button-bar -->
 		<?php endif; ?>
 	</div>
-	<!-- end .row -->
-</div>
+	<!-- .row -->
 </div>
