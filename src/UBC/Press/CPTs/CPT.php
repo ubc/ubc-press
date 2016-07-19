@@ -3,7 +3,8 @@
 namespace UBC\Press\CPTs;
 
 /**
- * Setup for our custom post types
+ * A factory class for us to be able to create post types nice
+ * and easily.
  *
  * @since 1.0.0
  * @package UBCPress
@@ -11,55 +12,104 @@ namespace UBC\Press\CPTs;
  *
  */
 
-
-class Setup extends \UBC\Press\ActionsBeforeAndAfter {
-
+class CPT {
 
 	/**
-	 * An array of post types, and their arguments which we are going to
-	 * set up
+	 * The passed label args
 	 *
 	 * @since 1.0.0
 	 *
 	 * @access public
-	 * @var $post_types_to_set_up
+	 * @var $label_args
 	 */
 
-	static $post_types_to_set_up = array();
-
+	static $label_args = array();
 
 	/**
-	 * Our initializer which determines and then creates our custom post types
-	 * Also runs methods before and after creation which run actions enabling us
-	 * to hook in if required
+	 * The passed WordPress args
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param null
+	 * @access public
+	 * @var $wp_args
+	 */
+
+	static $wp_args = array();
+
+	/**
+	 * The passed icon slug
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @var $icon
+	 */
+
+	static $icon = '';
+
+	/**
+	 * The resultant CPT object
+	 *
+	 * @since 1.0.0
+	 *
+	 * @access public
+	 * @var $cpt_object
+	 */
+
+	static $cpt_object = false;
+
+
+	/**
+	 * To create a new custom post type we instantiate this class with
+	 * at least a set up label arguments. We can optionally pass some
+	 * WordPress args (just like for register_post_type() ) and also an
+	 * icon
+	 *
+	 * Usage: $new_cpt = \UBC\Press\CPTs\CPT( array( 'post_type_name' => 'link','singular' => 'link', 'plural' => 'Links', 'slug' => 'link' ) );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @see https://github.com/jjgrainger/wp-custom-post-type-class
+	 * @param (array) $label_args - An array of label args.
+	 * @param (array) $wp_args - A merged array of other CPT arguments
+	 * @param (string) $icon - A dashicons slug for an icon (or an empty string for default) i.e. 'dashicons-admin-links'
 	 * @return null
 	 */
 
-	public function init() {
+	public function __construct( $label_args, $wp_args = array(), $icon = '' ) {
 
-		// Run an action so we can hook in beforehand
-		$this->before( 'ubc_press_before_create_all_cpts' );
+		if ( ! $label_args || ! is_array( $label_args ) || ! array_key_exists( 'post_type_name', $label_args ) ) {
+			return new \WP_Error( 'incorrect_cpt_args', __( 'Incorrect CPT args were passed to \UBC\Press\CPTs\CPT', \UBC\Press::get_text_domain() ) );
+		}
 
-		// Determine which CPTs to create
-		$this->determine();
+		// Set our class properties so we have access to them easily
+		static::$label_args = $label_args;
+		static::$wp_args 	= $wp_args;
+		static::$icon 		= $icon;
+		// Run before we do anything so we can hook in and do...stuff
+		$this->before();
 
-		// Create the CPTs
+		// Run the label args through a filter
+		$this->filter_label_args();
+
+		// Run the WP args through a filter
+		$this->filter_wp_args();
+
+		// Create our CTP object
 		$this->create();
 
-		// Run an action so we can hook in afterwards
-		$this->after( 'ubc_press_after_create_all_cpts' );
+		// Add an icon if we have one
+		$this->add_icon();
+
+		// Run afer we have created the CPT so we can hook in
+		$this->after();
 
 	}/* init() */
 
 
 
 	/**
-	 * Determine which post types to set up. Initially this is just a forced array
-	 * but it will allow us to have an option to turn on/off these
+	 * Sets up filters for our custom post type label arguments
 	 *
 	 * @since 1.0.0
 	 *
@@ -67,184 +117,84 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 	 * @return null
 	 */
 
-	private function determine() {
+	private function filter_label_args() {
 
-		// We only register these post types on sites which are NOT
-		// the network's main site
-		if ( \UBC\Press\Utils::current_site_is_main_site_for_network() ) {
-			return;
-		}
+		$cpt_label_args = static::$label_args;
 
-		$post_types_to_set_up = array();
+		$cpt_name = strtolower( $cpt_label_args['post_type_name'] );
 
-		$post_types_to_set_up['section'] = array(
-			'label_args' => array(
-				'post_type_name' 	=> 'section',
-				'singular' 			=> 'Section',
-				'plural' 			=> 'Sections',
-				'slug' 				=> 'section',
-			),
-			'wp_args' => array(
-				'capability_type' => 'section',
-				'map_meta_cap' => true,
-				'supports' => array( 'title', 'page-attributes' ),
-				'rewrite' => array(
-					'with_front' => false,
-					'slug' => 'section',
-				),
-				'hierarchical' => true,
-				'has_archive' => 'sections',
-				'show_in_rest' => true,
-			),
-			'icon' => 'dashicons-welcome-add-page',
+		/**
+		 * Filters UBC Press Custom Post Type arguments
+		 *
+		 * A generic filter for UBC Press Custom Post Type arguments
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param array $cpt_label_args a filtered associative array of post type args
+		 */
+
+		$cpt_label_args = apply_filters( 'ubc_press_post_type_args',
+			/**
+			 * Filters the post type args specifically for this post type
+			 *
+			 * An associative array of arguments for the link custom post type
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param array $cpt_label_args array of post type args for the CPT class
+			 */
+			apply_filters( 'ubc_press_post_type_args_' . $cpt_name, $cpt_label_args )
 		);
 
-		$post_types_to_set_up['lecture'] = array(
-			'label_args' => array(
-				'post_type_name' 	=> 'lecture',
-				'singular' 			=> 'Lecture',
-				'plural' 			=> 'Lectures',
-				'slug' 				=> 'lecture',
-			),
-			'wp_args' => array(
-				'capability_type' => 'lecture',
-				'map_meta_cap' => true,
-				'rewrite' => array(
-					'with_front' => false,
-					'slug' => 'lecture',
-				),
-				'hierarchical' => true,
-				'has_archive' => 'lectures',
-				'show_in_rest' => true,
-			),
-			'icon' => 'dashicons-megaphone',
-		);
+		static::$label_args = $cpt_label_args;
 
-		$post_types_to_set_up['assignment'] = array(
-			'label_args' => array(
-				'post_type_name' 	=> 'assignment',
-				'singular' 			=> 'Assignment',
-				'plural' 			=> 'Assignments',
-				'slug' 				=> 'assignment',
-			),
-			'wp_args' => array(
-				'capability_type' => 'assignment',
-				'map_meta_cap' => true,
-				'supports' => array( 'title' ),
-				'rewrite' => array(
-					'with_front' => false,
-					'slug' => 'assignment',
-				),
-				'has_archive' => 'assignments',
-				'show_in_rest' => true,
-			),
-			'icon' => 'dashicons-media-text',
-		);
-
-		$post_types_to_set_up['handout'] = array(
-			'label_args' => array(
-				'post_type_name' 	=> 'handout',
-				'singular' 			=> 'Handout',
-				'plural' 			=> 'Handouts',
-				'slug' 				=> 'handout',
-			),
-			'wp_args' => array(
-				'capability_type' => 'handout',
-				'map_meta_cap' => true,
-				'supports' => array( 'title' ),
-				'rewrite' => array(
-					'with_front' => false,
-					'slug' => 'handout',
-				),
-				'has_archive' => 'handouts',
-				'show_in_rest' => true,
-			),
-			'icon' => 'dashicons-portfolio',
-		);
-
-		$post_types_to_set_up['reading'] = array(
-			'label_args' => array(
-				'post_type_name' 	=> 'reading',
-				'singular' 			=> 'Reading',
-				'plural' 			=> 'Readings',
-				'slug' 				=> 'reading',
-			),
-			'wp_args' => array(
-				'capability_type' => 'reading',
-				'map_meta_cap' => true,
-				'rewrite' => array(
-					'with_front' => false,
-					'slug' => 'reading',
-				),
-				'has_archive' => 'readings',
-				'show_in_rest' => true,
-			),
-			'icon' => 'dashicons-book-alt',
-		);
-
-		$post_types_to_set_up['link'] = array(
-			'label_args' => array(
-				'post_type_name' 	=> 'link',
-				'singular' 			=> 'link',
-				'plural' 			=> 'Links',
-				'slug' 				=> 'link',
-			),
-			'wp_args' => array(
-				'capability_type' => 'link',
-				'map_meta_cap' => true,
-				'supports' => array( 'title' ),
-				'rewrite' => array(
-					'with_front' => false,
-					'slug' => 'link',
-				),
-				'has_archive' => 'links',
-				'show_in_rest' => true,
-			),
-			'icon' => 'dashicons-admin-links',
-		);
-
-		$post_types_to_set_up['hiddenquiz'] = array(
-			'label_args' => array(
-				'post_type_name' 	=> 'quiz',
-				'singular' 			=> 'quiz',
-				'plural' 			=> 'quizzes',
-				'slug' 				=> 'quiz',
-			),
-			'wp_args' => array(
-				'capability_type' 	=> 'hiddenquiz',
-				'map_meta_cap' 		=> false,
-				'supports' 			=> array( 'title' ),
-				'has_archive' 		=> false,
-				'public' => false,
-				'can_export' => false,
-			),
-		);
-
-		$post_types_to_set_up['submission'] = array(
-			'label_args' => array(
-				'post_type_name' 	=> 'submission',
-				'singular' 			=> 'submission',
-				'plural' 			=> 'submissions',
-				'slug' 				=> 'submission',
-			),
-			'wp_args' => array(
-				'capability_type' 	=> 'submission',
-				'map_meta_cap' 		=> false,
-				'supports' 			=> array( 'title' ),
-				'has_archive' 		=> false,
-				'public' => false,
-				'can_export' => false,
-			),
-		);
-
-		static::$post_types_to_set_up = $post_types_to_set_up;
-
-	}/* determine() */
-
+	}/* filter_label_args() */
 
 
 	/**
-	 * Create the post types that have been determined
+	 * Sets up filters for our custom post type WordPress arguments
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	private function filter_wp_args() {
+
+		$cpt_wp_args = static::$wp_args;
+
+		$cpt_name = strtolower( static::$label_args['post_type_name'] );
+
+		/**
+		 * Filters UBC Press CPT arguments for the WP args (2nd parameter of the new CPT() call)
+		 *
+		 * For all the other arguments for the post type as provided by WordPress
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param array array() An array of optional params that would be passed to WP to create the CPT
+		 */
+
+		$cpt_wp_args = apply_filters( 'ubc_press_wp_post_type_args',
+			/**
+			 * Filters the specific WP post type args for this post type
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param array array() as per http://codex.wordpress.org/Function_Reference/register_post_type#Parameters
+			 */
+			apply_filters( 'ubc_press_wp_post_type_args_' . $cpt_name, $cpt_wp_args )
+		);
+
+		static::$wp_args = $cpt_wp_args;
+
+	}/* filter_wp_args() */
+
+
+	/**
+	 * Method which actually sets up the CPT object by passing the filtered arguments
+	 * to the main CPT class
 	 *
 	 * @since 1.0.0
 	 *
@@ -254,29 +204,17 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 	private function create() {
 
-		// Fetch which post types are being set up
-		$post_types_to_set_up = static::$post_types_to_set_up;
+		$post_type_object = new \CPT( static::$label_args, static::$wp_args );
 
-		// Bail early if we don't have any
-		if ( empty( $post_types_to_set_up ) || ! is_array( $post_types_to_set_up ) ) {
-			return;
-		}
-
-		// Loop over each one and create it
-		foreach ( $post_types_to_set_up as $slug => $cpt_args ) {
-
-			$label_args	= ( isset( $cpt_args['label_args'] ) ) ? $cpt_args['label_args'] : array();
-			$wp_args 	= ( isset( $cpt_args['wp_args'] ) ) ? $cpt_args['wp_args'] : array();
-			$icon 		= ( isset( $cpt_args['icon'] ) ) ? $cpt_args['icon'] : '';
-
-			$post_type_object = new \UBC\Press\CPTs\CPT( $label_args, $wp_args, $icon );
-		}
+		// Set the class property for this object
+		static::$cpt_object = $post_type_object;
 
 	}/* create() */
 
 
+
 	/**
-	 * Getter method for our post types
+	 * Add an icon for the CPT if we have been asked for one
 	 *
 	 * @since 1.0.0
 	 *
@@ -284,10 +222,53 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 	 * @return null
 	 */
 
-	public static function get_post_types_to_setup() {
+	private function add_icon() {
 
-		return static::$post_types_to_set_up;
+		if ( empty( static::$icon ) ) {
+			return;
+		}
 
-	}/* get_post_types_to_setup */
+		if ( false === static::$cpt_object ) {
+			return;
+		}
+
+		static::$cpt_object->menu_icon( static::$icon );
+
+	}/* add_icon() */
+
+
+
+	/**
+	 * A method run before we actually do anything which runs an action so we hook hook in early
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	private function before() {
+
+		do_action( 'ubc_press_before_create_cpt', static::$label_args, static::$wp_args, static::$icon );
+
+	}/* before() */
+
+
+
+	/**
+	 * A method run after we have created the CPT object, again, allowing us to hook in
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	private function after() {
+
+		do_action( 'ubc_press_after_create_cpt', static::$label_args, static::$wp_args, static::$icon, static::$cpt_object );
+
+	}/* after() */
+
 
 }/* class Setup */
