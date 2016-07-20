@@ -301,7 +301,7 @@ class Setup {
 			return $original_template;
 		}
 
-		return \UBC\Press::get_plugin_path() . '/src/ubc/press/theme/templates/calendar.php';
+		return \UBC\Press::get_plugin_path() . '/src/UBC/Press/Theme/templates/calendar.php';
 
 	}/* template_include__add_calendar_rewrite_rule() */
 

@@ -15,4 +15,4 @@ if ( ! $post_id ) {
 	return;
 }
 
-\UBC\Press\Plugins\SiteBuilder\Widgets\Utils::show_template_for_post_of_post_type( \UBC\Press::get_plugin_path() . 'src/ubc/press/theme/templates/', 'single-link.php', $post_id, 'link' );
+\UBC\Press\Plugins\SiteBuilder\Widgets\Utils::show_template_for_post_of_post_type( \UBC\Press::get_plugin_path() . 'src/UBC/Press/Theme/templates/', 'single-link.php', $post_id, 'link' );

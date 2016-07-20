@@ -243,9 +243,9 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 	public function init__register_assets() {
 
-		wp_register_style( 'ubc-press-dashboard', \UBC\Press::$plugin_url . 'src/ubc/press/wpdashboard/assets/css/ubc-press-dashboard.css', null, \UBC\Press::get_version(), 'all' );
+		wp_register_style( 'ubc-press-dashboard', \UBC\Press::$plugin_url . 'src/UBC/Press/WPDashboard/assets/css/ubc-press-dashboard.css', null, \UBC\Press::get_version(), 'all' );
 
-		wp_register_script( 'ubc-press-dashboard', \UBC\Press::$plugin_url . 'src/ubc/press/wpdashboard/assets/js/ubc-press-dashboard.js' );
+		wp_register_script( 'ubc-press-dashboard', \UBC\Press::$plugin_url . 'src/UBC/Press/WPDashboard/assets/js/ubc-press-dashboard.js' );
 
 	}/* init__register_assets() */
 

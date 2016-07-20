@@ -138,7 +138,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			return $original_template;
 		}
 
-		return \UBC\Press::get_plugin_path() . '/src/ubc/press/studentdashboard/templates/dashboard.php';
+		return \UBC\Press::get_plugin_path() . '/src/UBC/Press/StudentDashboard/templates/dashboard.php';
 
 	}/* template_include__add_dashboard_rewrite_rule() */
 

@@ -201,7 +201,7 @@ class Setup {
 
 	public function init__load_plugin_assets() {
 
-		static::$assets_path = \UBC\Press::$plugin_url . 'src/ubc/press/plugins/sitebuilder/assets/';
+		static::$assets_path = \UBC\Press::$plugin_url . 'src/UBC/Press/Plugins/SiteBuilder/assets/';
 
 		$this->register_js();
 
@@ -829,7 +829,7 @@ class Setup {
 			$data['when_completed'] = \UBC\Press\Utils::get_when_component_was_completed( $post_id, $user_id );
 		}
 
-		\UBC\Helpers::locate_template_part_in_plugin( \UBC\Press::get_plugin_path() . 'src/ubc/press/theme/templates/', 'mark-as-complete.php', true, false, $data );
+		\UBC\Helpers::locate_template_part_in_plugin( \UBC\Press::get_plugin_path() . 'src/UBC/Press/Theme/templates/', 'mark-as-complete.php', true, false, $data );
 
 	}/* ubc_press_show_template_for_post_of_post_type_after__add_mark_as_complete() */
 

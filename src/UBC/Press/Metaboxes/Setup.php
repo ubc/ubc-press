@@ -140,7 +140,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			return;
 		}
 
-		wp_register_script( 'ubc_press_admin_metaboxes', \UBC\Press::get_plugin_url() . 'src/ubc/press/metaboxes/assets/js/ubc-press-admin-metaboxes.js', array( 'jquery' ), null, true );
+		wp_register_script( 'ubc_press_admin_metaboxes', \UBC\Press::get_plugin_url() . 'src/UBC/Press/Metaboxes/assets/js/ubc-press-admin-metaboxes.js', array( 'jquery' ), null, true );
 
 		$localized_data = array(
 			'ajax_url'	=> \UBC\Press\Ajax\Utils::get_ubc_press_ajax_url(),

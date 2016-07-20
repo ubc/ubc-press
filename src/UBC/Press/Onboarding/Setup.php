@@ -212,7 +212,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 	public function load_styles() {
 
-		wp_enqueue_style( 'ubc-press-onboarding', \UBC\Press::get_plugin_url() . 'src/ubc/press/onboarding/assets/css/ubc-press-onboarding.css' );
+		wp_enqueue_style( 'ubc-press-onboarding', \UBC\Press::get_plugin_url() . 'src/UBC/Press/Onboarding/assets/css/ubc-press-onboarding.css' );
 
 	}/* load_styles() */
 
@@ -228,7 +228,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 	public function load_scripts() {
 
-		wp_register_script( 'ubc-press-onboarding', \UBC\Press::get_plugin_url() . 'src/ubc/press/onboarding/assets/js/ubc-press-onboarding.js' );
+		wp_register_script( 'ubc-press-onboarding', \UBC\Press::get_plugin_url() . 'src/UBC/Press/Onboarding/assets/js/ubc-press-onboarding.js' );
 
 		$data = array(
 			'template' => $this->fetch_template(),
@@ -252,7 +252,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 	public function fetch_template() {
 
-		$template = \UBC\Helpers::fetch_template_part( \UBC\Press::get_plugin_path() . 'src/ubc/press/onboarding/templates/dashboard-welcome.php' );
+		$template = \UBC\Helpers::fetch_template_part( \UBC\Press::get_plugin_path() . 'src/UBC/Press/Onboarding/templates/dashboard-welcome.php' );
 
 		return wp_kses_post( $template );
 
