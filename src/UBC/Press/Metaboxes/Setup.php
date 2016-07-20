@@ -924,9 +924,9 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		 */
 		$faculty 		= sanitize_text_field( $_POST['ubc_press_onboarding_faculty'] );
 
-		$dept_field 	= $_POST[ 'ubc_press_onboarding_' . $faculty . '_department' ];
+		$dept_field 	= ( isset( $_POST[ 'ubc_press_onboarding_' . $faculty . '_department' ] ) ) ? $_POST[ 'ubc_press_onboarding_' . $faculty . '_department' ] : false;
 
-		$department 	= sanitize_text_field( $dept_field );
+		$department 	= ( $dept_field ) ? sanitize_text_field( $dept_field ) : false;
 
 		$session 		= sanitize_text_field( $_POST['ubc_press_onboarding_session'] );
 		$year 			= absint( $_POST['ubc_press_onboarding_year'] );
