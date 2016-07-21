@@ -957,6 +957,9 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		update_option( 'ubc_press_onboarded', date( 'U' ) );
 
+		// Also flush rewrite rules on save to ensure this site is set up correctly (the plugin doesn't get "activated" as it's MU)
+		flush_rewrite_rules();
+
 	}/* cmb2_admin_init__save_onboarding_options() */
 
 
