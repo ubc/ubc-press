@@ -7,6 +7,15 @@
 	display: none;
 }
 
+/* Custom styles for the onboarding form */
 #ubc_press_onboarding_metabox {
 	padding-bottom: 13px;
+}
+
+#welcome-panel .ubc-spaces-onboarding-title {
+	margin-top: 0;
+}
+
+.ubc-spaces-onboarding-about-description {
+	margin: 0;
 }
