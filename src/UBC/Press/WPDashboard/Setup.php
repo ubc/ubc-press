@@ -110,9 +110,6 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 	public function setup_filters() {
 
-		// Change Howdy
-		add_filter( 'gettext', array( $this, 'gettext__change_howdy' ), 10, 3 );
-
 		// Admin footer text
 		add_filter( 'admin_footer_text', array( $this, 'admin_footer_text__change_footer_text' ) );
 
@@ -290,30 +287,6 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		unset( $wp_meta_boxes['dashboard']['normal']['core']['rg_forms_dashboard'] );
 
 	}/* wp_dashboard_setup__remove_dashboard_widgets() */
-
-
-	/**
-	 * Howdy...pardner. You're not in Texas any more.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param   -
-	 * @return
-	 */
-
-	public function gettext__change_howdy( $translated, $text, $domain ) {
-
-		if ( ! is_admin() || 'default' !== $domain ) {
-			return $translated;
-		}
-
-		if ( false !== strpos( $translated, 'Howdy' ) ) {
-			return str_replace( 'Howdy', 'Welcome', $translated );
-		}
-
-		return $translated;
-
-	}/* gettext__change_howdy() */
 
 
 
