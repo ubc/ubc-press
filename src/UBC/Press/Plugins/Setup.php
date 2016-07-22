@@ -40,6 +40,9 @@ class Setup {
 		// WP Pro Quiz
 		$this->setup_wp_pro_quiz();
 
+		// Dequeue plugins' scripts and styles as we do it ourselves
+		add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_plugin_assets' ), 999 );
+
 	}/* init() */
 
 
@@ -144,5 +147,93 @@ class Setup {
 		$wpproquiz->init();
 
 	}/* setup_wp_pro_quiz() */
+
+
+	/**
+	 * Dequeue plugin assets from the mu-plugins we use. This allows us to include the styles ourselves in
+	 * our build script to reduce the number of requests being made.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+	public function dequeue_plugin_assets() {
+
+		// Override this behaviour
+		if ( true === apply_filters( 'ubc_press_do_not_dequeue_other_plugin_assets', false ) ) {
+			return;
+		}
+
+		// Dy default we don't dequeue from the WP Dashboard
+		if ( is_admin() && ( true === apply_filters( 'ubc_press_do_not_dequeue_other_plugin_assets_from_admin', true ) ) ) {
+			return;
+		}
+
+		$styles_to_remove = array(
+			/* bbPress */
+			'bbp-default',
+		);
+		$scripts_to_remove = array(
+			/* bbPress */
+			'bbpress-editor',
+			'bbpress-forum',
+			'bbpress-topic',
+			'bbpress-reply',
+			'bbpress-user',
+		);
+
+		$styles_to_remove = apply_filters( 'ubc_press_dequeue_plugin_assets_styles', $styles_to_remove );
+		$scripts_to_remove = apply_filters( 'ubc_press_dequeue_plugin_assets_scripts', $scripts_to_remove );
+
+		$this->deqeue_styles( $styles_to_remove );
+		$this->deqeue_scripts( $scripts_to_remove );
+
+	}/* dequeue_plugin_assets() */
+
+
+	/**
+	 * Dequeue external plugin styles
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $assets - an array of keys of styles to dequeue
+	 * @return null
+	 */
+
+	public function deqeue_styles( $assets = array() ) {
+
+		if ( empty( $assets ) || ! is_array( $assets ) ) {
+			return;
+		}
+
+		foreach ( $assets as $id => $asset_to_dequeue ) {
+			wp_dequeue_style( $asset_to_dequeue );
+		}
+
+	}/* deqeue_styles() */
+
+	/**
+	 *
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $assets - an array of keys of scripts to dequeue
+	 * @return null
+	 */
+
+	public function deqeue_scripts( $assets = array() ) {
+
+		if ( empty( $assets ) || ! is_array( $assets ) ) {
+			return;
+		}
+
+		foreach ( $assets as $id => $asset_to_dequeue ) {
+			wp_dequeue_script( $asset_to_dequeue );
+		}
+
+	}/* deqeue_scripts() */
+
+
 
 }/* class Setup */
