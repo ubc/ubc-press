@@ -306,7 +306,16 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		$sign_out_url = wp_logout_url( network_home_url() );
 		$sign_out_link = '<a href="' . esc_url( $sign_out_url ) . '" title="' . esc_attr__( 'Sign Out', \UBC\Press::get_text_domain() ) . '">' . esc_attr__( 'Sign Out', \UBC\Press::get_text_domain() ) . '</a>';
 
-		return __( 'UBC Press version ' . $version . ' and powered by WordPress. ' . $sign_out_link, \UBC\Press::get_text_domain() );
+		$message = '';
+
+		// If we're a super admin, it's really useful to know which deploy directory/release we're working out of. Let's add that.
+		if ( is_super_admin() && defined( 'UBC_RELEASE_DIR' ) ) {
+			$message .= esc_html__( 'Release: ' . UBC_RELEASE_DIR . '. ' );
+		}
+
+		$message .= 'UBC Press version ' . $version . ' and powered by WordPress. ' . $sign_out_link;
+
+		return wp_kses_post( apply_filters( 'ubc_press_admin_footer_text', $message ), \UBC\Press::get_text_domain() );
 
 	}/* admin_footer_text__change_footer_text() */
 
