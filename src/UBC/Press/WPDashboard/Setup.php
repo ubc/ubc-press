@@ -184,6 +184,9 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		// Add logout to the dashboard menu
 		add_action( 'admin_menu', array( $this, 'admin_menu__add_logout_to_dashboard' ) );
 
+		// Add view site link to dashboard menu
+		add_action( 'admin_menu', array( $this, 'admin_menu__add_view_site_to_dashboard' ) );
+
 		// // Create the 'Course Options' Page
 		// add_action( 'admin_init', array( $this, 'admin_init__register_setting' ) );
 		// add_action( 'admin_menu', array( $this, 'admin_menu__add_course_options_page' ) );
@@ -878,6 +881,28 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		);
 
 	}/* admin_menu__add_logout_to_dashboard() */
+
+
+	/**
+	 * Add View Site link to the dashboard menu
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function admin_menu__add_view_site_to_dashboard() {
+
+		global $menu, $submenu;
+
+		$submenu['index.php'][9] = array(
+			__( 'View Site', \UBC\Press::get_text_domain() ),
+			'read',
+			home_url(),
+		);
+
+	}/* admin_menu__add_view_site_to_dashboard() */
 
 
 	/**
