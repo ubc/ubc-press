@@ -250,7 +250,7 @@ class Press {
 }/* class \UBC\Press */
 
 // Fire it up
-add_action( 'plugins_loaded', array( '\UBC\Press', 'init' ) );
+add_action( 'plugins_loaded', array( '\UBC\Press', 'init' ), 5 );
 
 
 // On plugin activation, we do bits and pieces

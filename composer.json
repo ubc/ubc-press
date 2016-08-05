@@ -31,7 +31,8 @@
     "require": {
         "jjgrainger/wp-custom-post-type-class": "dev-master",
         "webdevstudios/cmb2": "dev-master",
-        "mustardBees/cmb-field-select2": "dev-master"
+        "mustardBees/cmb-field-select2": "dev-master",
+        "origgami/CMB2-grid": "dev-master"
     },
     "minimum-stability": "dev",
     "autoload": {
@@ -41,7 +42,8 @@
         },
         "files": [
             "vendor/webdevstudios/cmb2/init.php",
-            "vendor/mustardBees/cmb-field-select2/cmb-field-select2.php"
+            "vendor/mustardBees/cmb-field-select2/cmb-field-select2.php",
+            "vendor/origgami/CMB2-grid/Cmb2GridPlugin.php"
         ]
     }
 }
