@@ -64,7 +64,7 @@ class Utils {
 		$url = $raw_url . trailingslashit( $action );
 
 		if ( false !== $with_nonce ) {
-			$url = add_query_arg( '_wpnonce', $nonce, $url );
+			$url = add_query_arg( 'ubcajaxnonce', $nonce, $url );
 		}
 
 		if ( false !== $data && is_array( $data ) ) {
