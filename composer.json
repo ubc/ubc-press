@@ -41,9 +41,9 @@
             "UBC\\Press\\Tests": "tests/"
         },
         "files": [
-            "vendor/webdevstudios/cmb2/init.php",
-            "vendor/mustardBees/cmb-field-select2/cmb-field-select2.php",
-            "vendor/origgami/CMB2-grid/Cmb2GridPlugin.php"
+            "vendor/cmb2/init.php",
+            "vendor/cmb-field-select2/cmb-field-select2.php",
+            "vendor/cmb2-grid/Cmb2GridPlugin.php"
         ]
     }
 }
