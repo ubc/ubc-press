@@ -75,7 +75,7 @@ class Utils {
 		$redirect_url = ( isset( $_SERVER['REQUEST_URI'] ) ) ? esc_url( $_SERVER['REQUEST_URI'] ) : false;
 
 		if ( false !== $redirect_url && true === $add_redirect ) {
-			$url = add_query_arg( 'redirect_to', home_url( $redirect_url ), $url );
+			$url = add_query_arg( 'redirect_to', urlencode( home_url( $redirect_url ) ), $url );
 		}
 
 		return esc_url( apply_filters( 'ubc_press_ajax_action_url', $url, $action, $with_nonce, $nonce ) );
