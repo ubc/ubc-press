@@ -11,11 +11,9 @@ namespace UBC\Press\Widgets\HandoutsWidget;
  *
  */
 
-// TODO: change 'Widget_Name' to the name of your plugin
 class Setup extends \WP_Widget {
 
 	/**
-	 * @TODO - Rename "widget-name" to the name your your widget
 	 *
 	 * Unique identifier for your widget.
 	 *
@@ -49,7 +47,6 @@ class Setup extends \WP_Widget {
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 
-		// TODO: update description
 		parent::__construct(
 			$this->get_widget_slug(),
 			__( $this->get_widget_name(), $this->get_widget_slug() ),
@@ -138,7 +135,6 @@ class Setup extends \WP_Widget {
 
 		$widget_string = $before_widget;
 
-		// TODO: Here is where you manipulate your widget's values based on their input fields
 		ob_start();
 		include( plugin_dir_path( __FILE__ ) . 'Views/Widget.php' );
 		$widget_string .= ob_get_clean();
@@ -188,7 +184,7 @@ class Setup extends \WP_Widget {
 		$instance = wp_parse_args(
 			(array) $instance
 		);
-		// TODO: Store the values of the widget in their own variable
+
 		// Display the admin form
 		include( plugin_dir_path(__FILE__) . 'Views/Admin.php' );
 
@@ -203,7 +199,6 @@ class Setup extends \WP_Widget {
 	 */
 	public function widget_textdomain() {
 
-		// TODO be sure to change 'widget-name' to the name of *your* plugin
 		load_plugin_textdomain( $this->get_widget_slug(), false, plugin_dir_path( __FILE__ ) . 'lang/' );
 
 	} // end widget_textdomain
@@ -214,7 +209,6 @@ class Setup extends \WP_Widget {
 	 * @param  boolean $network_wide True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog.
 	 */
 	public function activate( $network_wide ) {
-		// TODO define activation functionality here
 	} // end activate
 
 	/**
@@ -223,7 +217,7 @@ class Setup extends \WP_Widget {
 	 * @param boolean $network_wide True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog
 	 */
 	public function deactivate( $network_wide ) {
-		// TODO define deactivation functionality here
+
 	} // end deactivate
 
 	/**

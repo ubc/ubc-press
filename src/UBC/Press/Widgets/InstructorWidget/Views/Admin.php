@@ -25,15 +25,15 @@ $instructor_email			= $users_info->user_email;
 $instructor_website 		= $users_info->user_url;
 
 // Here are defaults for the widgets!
-$title 			= ! empty( $instance['title'] ) ? $instance['title'] : __( 'Course Instructor', 'widget_textdomain' );
+$title 			= ! empty( $instance['title'] ) ? $instance['title'] : __( 'Course Instructor', 'ubc-press' );
 
-$name 			= ! empty( $instance['name'] ) ? $instance['name'] : __( $instructor_name, 'widget_textdomain' );
+$name 			= ! empty( $instance['name'] ) ? $instance['name'] : __( $instructor_name, 'ubc-press' );
 
-$email 			= ! empty( $instance['email'] ) ? $instance['email'] : __( $instructor_email, 'widget_textdomain' );
+$email 			= ! empty( $instance['email'] ) ? $instance['email'] : __( $instructor_email, 'ubc-press' );
 
-$website		= ! empty( $instance['website'] ) ? $instance['website'] : __( $instructor_website, 'widget_textdomain' );
+$website		= ! empty( $instance['website'] ) ? $instance['website'] : __( $instructor_website, 'ubc-press' );
 
-$telephone 		= ! empty( $instance['telephone'] ) ? $instance['telephone'] : __( '000 000 0000', 'widget_textdomain' );
+$telephone 		= ! empty( $instance['telephone'] ) ? $instance['telephone'] : __( '000 000 0000', 'ubc-press' );
 
 // $office_hours 	= ! empty( $instance['office_hours'] ) ? $instance['office_hours'] : array();
 

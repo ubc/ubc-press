@@ -30,9 +30,15 @@ $handout_args = array(
 </p>
 <!-- widget title -->
 
-<?php $hasposts = get_posts( $handout_args ); ?>
+<?php $hasposts = get_posts( $handout_args );
 
-<?php if ( ! empty( $hasposts ) ) : //check if handouts has posts ?>
+if ( ! $hasposts ) {
+
+	echo '<p> Sorry, there are no handouts available but you can easily add some <a href="' . esc_url( $add_handouts_url ) . '">here</a>.';
+
+	exit;
+}
+?>
 
 <p>
 	<input class="checkbox" type="checkbox" <?php echo esc_attr( checked( $description_check, 1 ) ); ?> id="<?php echo esc_attr( $this->get_field_id( 'description' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'description' ) ); ?>" />
@@ -73,9 +79,3 @@ $handout_args = array(
 
 </p>
 <!-- handout select -->
-
-<?php else : // no handouts suggest some ?>
-
-<p> Sorry, there are no handouts available but you can easily add some <a href="<?php echo esc_url( $add_handouts_url ); ?>">here</a>.
-
-<?php endif;
