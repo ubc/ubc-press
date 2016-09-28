@@ -173,8 +173,8 @@ class Setup {
 
 		ini_set( 'html_errors', 0 );
 
-		if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], $action ) ) {
-			wp_die( esc_html( __( 'Security check didn\'t pass, please check _wpnonce!', \UBC\Press::get_text_domain() ) ) );
+		if ( ! wp_verify_nonce( $_REQUEST['ubcajaxnonce'], $action ) ) {
+			wp_die( esc_html( __( 'Security check didn\'t pass, please check ubcajaxnonce!', \UBC\Press::get_text_domain() ) ) );
 		}
 
 		$shortinit = apply_filters( static::$ubc_press_ajax_tag . '_shortinit', false, $action );

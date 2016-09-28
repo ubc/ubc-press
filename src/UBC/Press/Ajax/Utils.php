@@ -43,10 +43,11 @@ class Utils {
 	 * @param (bool) $with_nonce - Whether to include a _wpnonce param in the URL
 	 * @param (string) $nonce - The WP nonce for this action
 	 * @param (array) $data - Any other query args to add to the url
+	 * @param (bool) $add_redirect - Do we add a redirect back to the currently accessed page?
 	 * @return (string) The URL for the AJAX request
 	 */
 
-	public static function get_ubc_press_ajax_action_url( $action, $with_nonce = false, $nonce = false, $data = false ) {
+	public static function get_ubc_press_ajax_action_url( $action, $with_nonce = false, $nonce = false, $data = false, $add_redirect = true ) {
 
 		$action = sanitize_text_field( $action );
 
@@ -63,7 +64,7 @@ class Utils {
 		$url = $raw_url . trailingslashit( $action );
 
 		if ( false !== $with_nonce ) {
-			$url = add_query_arg( '_wpnonce', $nonce, $url );
+			$url = add_query_arg( 'ubcajaxnonce', $nonce, $url );
 		}
 
 		if ( false !== $data && is_array( $data ) ) {
@@ -73,8 +74,8 @@ class Utils {
 		// Tack on a redirect URL which is where we came from
 		$redirect_url = ( isset( $_SERVER['REQUEST_URI'] ) ) ? esc_url( $_SERVER['REQUEST_URI'] ) : false;
 
-		if ( false !== $redirect_url ) {
-			$url = add_query_arg( 'redirect_to', home_url( $redirect_url ), $url );
+		if ( false !== $redirect_url && true === $add_redirect ) {
+			$url = add_query_arg( 'redirect_to', urlencode( home_url( $redirect_url ) ), $url );
 		}
 
 		return esc_url( apply_filters( 'ubc_press_ajax_action_url', $url, $action, $with_nonce, $nonce ) );
