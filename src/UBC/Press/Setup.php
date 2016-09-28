@@ -72,6 +72,9 @@ class Setup {
 		// onboarding
 		self::setup_onboarding();
 
+		// Setup Widgets
+		self::setup_widgets();
+
 	}/* init() */
 
 
@@ -257,6 +260,22 @@ class Setup {
 		$onboarding->init();
 
 	}/* setup_onboarding() */
+
+	/**
+	 * Set up the widgets
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function setup_widgets() {
+
+		$widgets = new \UBC\Press\Widgets\Setup;
+		$widgets->init();
+
+	}/* setup_widgets() */
 
 
 	/**
