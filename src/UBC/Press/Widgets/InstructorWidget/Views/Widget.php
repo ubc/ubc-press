@@ -16,7 +16,7 @@ $telephone_value 	= ( ! empty( $telephone ) ? $telephone : '' );
 <?php if ( $title ) : ?>
 
 <header>
-	<h4><span class="dashicons dashicons-businessman"></span> <?php echo esc_html( $title_value ); ?></h4>
+	<h3 class="widget-title"><svg class="ui-icon user" aria-hidden="true"><use xlink:href="#user"></use></svg> <?php echo esc_html( $title_value ); ?></h3>
 </header>
 
 <?php endif; ?>

@@ -17,7 +17,7 @@ $handout_description 	= get_post_meta( $handout_id, '_handout_details_descriptio
 <?php if ( $handout_id > 0  ) : ?>
 
 <header>
-	<h4><span class="dashicons dashicons-category"></span> <?php echo esc_html( $widget_title ); ?></h4>
+	<h3 class="widget-title"><svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-empty"></use></svg> <?php echo esc_html( $widget_title ); ?></h3>
 </header>
 
 
@@ -41,7 +41,7 @@ $handout_description 	= get_post_meta( $handout_id, '_handout_details_descriptio
 	case 'image/png':
 	case 'image/gif':
 
-		$dashicon = 'dashicons-format-image';
+		$dashicon = '<svg class="ui-icon picture-icon" aria-hidden="true"><use xlink:href="#picture"></use></svg>';
 
 	break;
 
@@ -51,7 +51,7 @@ $handout_description 	= get_post_meta( $handout_id, '_handout_details_descriptio
 	case 'application/pdf':
 	case 'application/msword':
 
-		$dashicon = 'dashicons-media-text';
+		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-empty"></use></svg>';
 
 	break;
 
@@ -59,35 +59,34 @@ $handout_description 	= get_post_meta( $handout_id, '_handout_details_descriptio
 	case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
 	case 'application/x-excel':
 
-		$dashicon = 'dashicons-media-spreadsheet';
+		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-empty"></use></svg>';
 
 	break;
 
 	case 'application/vnd.ms-powerpoint':
 
-		$dashicon = 'dashicons-media-interactive';
+		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-empty"></use></svg>';
 
 	break;
 
 	case 'application/zip':
 
-		$dashicon = 'dashicons-media-archive';
+		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-empty"></use></svg>';
 
 	break;
 
 	default:
 
-		$dashicon = 'dashicons-media-default';
+		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-empty"></use></svg>';
 
 	break;
 
 } ?>
 
 
-	<li><a href="<?php echo esc_url( $file ); ?>"><span aria-hidden="true" class="dashicons <?php echo esc_attr( $dashicon ); ?>"></span> <?php echo esc_html( $attachment_title ); ?> </a></li>
+	<li><a href="<?php echo esc_url( $file ); ?>"><?php echo $dashicon; ?> <?php echo esc_html( $attachment_title ); ?> </a></li>
 <?php endforeach; ?>
 
 </ul>
 
 <?php endif;
-

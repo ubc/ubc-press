@@ -45,7 +45,7 @@ $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_se
 		<div class="buttons columns">
 			<div class="text-right" data-responsive-toggle="mark-as-complete-<?php echo esc_attr( $get_the_id ); ?>">
 				<button id="actionbar-<?php echo esc_attr( $get_the_id ); ?>" class="mobile-button button <?php echo esc_attr( $mark_as_complete_classes ); ?> tiny" type="button" data-toggle=" actionbar-<?php echo esc_attr( $get_the_id ); ?> hamburger-<?php echo esc_attr( $get_the_id ); ?>" data-toggler=".active">
-					<span class="dashicons dashicons-menu" id="hamburger-<?php echo esc_attr( $get_the_id ); ?>"></span>
+					<svg id="hamburger-<?php echo esc_attr( $get_the_id ); ?>" class="ui-icon menu-icon"><use xlink:href="#menu"></use></svg>
 				</button>
 			</div>
 			<ul id="mark-as-complete-<?php echo esc_attr( $get_the_id ); ?>" class="button-group section-button-group small-horizontal menu float-right">
@@ -67,23 +67,23 @@ $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_se
 					>
 
 						<span class="button-text"><?php echo esc_html( $button_text ); ?></span>
-						<span class="dashicons dashicons-yes"></span>
+						<svg class="ui-icon menu-icon"><use xlink:href="#checkmark-circle"></use></svg>
 					</a><!-- .mark as-complete -->
 				</li>
 				<li>
-					<a role="button" href="<?php echo esc_url( $fav_url ); ?>" class="button alert <?php echo esc_html( $button_size ); ?> <?php echo esc_attr( $saved_for_later_classes ); ?> heart save-for-later" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Save for later" href="<?php echo esc_url( $fav_url ); ?>" data-nonce="<?php echo esc_html( $fav_nonce ); ?>" data-post_id="<?php echo absint( $data['post_id'] ); ?>">
-						<span class="dashicons dashicons-heart"></span>
+					<a role="button" href="<?php echo esc_url( $fav_url ); ?>" class="button alert <?php echo esc_html( $button_size ); ?> <?php echo esc_attr( $saved_for_later_classes ); ?> heart save-for-later" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Save for later" data-nonce="<?php echo esc_html( $fav_nonce ); ?>" data-post_id="<?php echo absint( $data['post_id'] ); ?>">
+						<svg class="ui-icon heart"><use xlink:href="#heart"></use></svg>
 					</a><!-- save for later -->
 					<!-- <p class="show-for-small-only"><small>Save for Later</small></p> -->
 				</li>
 				<li>
 					<a role="button" href="#" class="button hollow <?php echo esc_html( $button_size ); ?> share warning" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Share with group.">
-						<span class="dashicons dashicons-share"></span>
+						<svg class="ui-icon menu-icon"><use xlink:href="#users"></use></svg>
 					</a><!-- share -->
 				</li>
 				<li>
 					<a role="button" href="#" class="button hollow <?php echo esc_html( $button_size ); ?> feedback" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Provide feedback.">
-						<span class="dashicons dashicons-clipboard"></span>
+						<svg class="ui-icon menu-icon"><use xlink:href="#envelope"></use></svg>
 					</a><!-- feedback -->
 				</li>
 			</ul>

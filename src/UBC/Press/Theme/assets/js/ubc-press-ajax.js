@@ -330,12 +330,12 @@
 
 				if ( element.hasClass( 'secondary' ) ) {
 
-					element.attr( 'title', localized_data.text.mark_as_complete ).html( '<span class="button-text">' + localized_data.text.mark_as_complete + '</span><span class="dashicons dashicons-yes onhover"></span>' );
+					element.attr( 'title', localized_data.text.mark_as_complete ).html( '<span class="button-text">' + localized_data.text.mark_as_complete + '</span><svg class="ui-icon menu-icon"><use xlink:href="#checkmark-circle"></use></svg>' );
 					findToolTip.html( localized_data.text.mark_as_complete );
 
 				} else {
 
-					element.attr( 'title', localized_data.text.completed_just_now ).html( '<span class="button-text">' + localized_data.text.completed_just_now + '</span><span class="dashicons dashicons-yes onhover"></span>' );
+					element.attr( 'title', localized_data.text.completed_just_now ).html( '<span class="button-text">' + localized_data.text.completed_just_now + '</span><svg class="ui-icon menu-icon"><use xlink:href="#checkmark-circle"></use></svg>' );
 					findToolTip.html( localized_data.text.completed_just_now );
 				}
 
