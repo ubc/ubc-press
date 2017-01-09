@@ -91,7 +91,6 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 	 */
 
 	public static function init_widgets() {
-
 		$instructor_widget = new \UBC\Press\Widgets\InstructorWidget\Setup();
 		register_widget( '\UBC\Press\Widgets\InstructorWidget\Setup' );
 		// $instructor_widget->init();

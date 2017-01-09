@@ -43,10 +43,6 @@ class Setup extends \WP_Widget {
 		// load plugin text domain
 		add_action( 'init', array( $this, 'widget_textdomain' ) );
 
-		// Hooks fired when the Widget is activated and deactivated
-		register_activation_hook( __FILE__, array( $this, 'activate' ) );
-		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
-
 		parent::__construct(
 			$this->get_widget_slug(),
 			__( $this->get_widget_name(), $this->get_widget_slug() ),
@@ -55,14 +51,6 @@ class Setup extends \WP_Widget {
 				'description' => __( $this->get_widget_description(), $this->get_widget_slug() )
 			)
 		);
-
-		// Register admin styles and scripts
-		// add_action( 'admin_print_styles', array( $this, 'register_admin_styles' ) );
-		// add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ) );
-
-		// Register site styles and scripts
-		// add_action( 'wp_enqueue_scripts', array( $this, 'register_widget_styles' ) );
-		// add_action( 'wp_enqueue_scripts', array( $this, 'register_widget_scripts' ) );
 
 		// Refreshing the widget's cached output with each new post
 		add_action( 'save_post',    array( $this, 'flush_widget_cache' ) );
@@ -119,7 +107,6 @@ class Setup extends \WP_Widget {
 
 		// Check if there is a cached output
 		$cache = wp_cache_get( $this->get_widget_slug(), 'widget' );
-
 		if ( !is_array( $cache ) )
 			$cache = array();
 
