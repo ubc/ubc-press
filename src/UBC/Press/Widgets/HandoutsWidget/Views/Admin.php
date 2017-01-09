@@ -6,6 +6,7 @@
  *
  */
 
+
 $url = admin_url();
 
 $add_handouts_url 	= $url .'edit.php?post_type=handout';
@@ -36,7 +37,7 @@ if ( ! $hasposts ) {
 
 	echo '<p> Sorry, there are no handouts available but you can easily add some <a href="' . esc_url( $add_handouts_url ) . '">here</a>.';
 
-	exit;
+	return;
 }
 ?>
 

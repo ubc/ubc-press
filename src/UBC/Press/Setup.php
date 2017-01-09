@@ -30,7 +30,6 @@ class Setup {
 		if ( ! is_null( self::$instance ) ) {
 			return;
 		}
-
 		self::$instance = new self;
 
 		// Set up constants

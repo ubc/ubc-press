@@ -40,7 +40,10 @@ class Setup {
 		// WP Pro Quiz
 		$this->setup_wp_pro_quiz();
 
-		// Dequeue plugins' scripts and styles as we do it ourselves
+		// Additional pieces for when we add a new 'course'
+		$this->setup_sis_course_info_lookup();
+
+		// Dequeue plugins' scripts and styles as we do it ourselves. @TODO This is lazy. Move into own method.
 		add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_plugin_assets' ), 999 );
 
 	}/* init() */
@@ -147,6 +150,23 @@ class Setup {
 		$wpproquiz->init();
 
 	}/* setup_wp_pro_quiz() */
+
+
+	/**
+	 * UBC SIS Course Info Lookup setup
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function setup_sis_course_info_lookup() {
+
+		$courseinfolookup = new \UBC\Press\Plugins\SISCourseInfoLookup\Setup;
+		$courseinfolookup->init();
+
+	}/* setup_sis_course_info_lookup() */
 
 
 	/**
