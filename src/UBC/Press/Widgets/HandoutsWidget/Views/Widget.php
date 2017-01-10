@@ -17,7 +17,7 @@ $handout_description 	= get_post_meta( $handout_id, '_handout_details_descriptio
 <?php if ( $handout_id > 0  ) : ?>
 
 <header>
-	<h3 class="widget-title"><svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-empty"></use></svg> <?php echo esc_html( $widget_title ); ?></h3>
+	<h3 class="widget-title"><svg class="ui-icon file" aria-hidden="true"><use xlink:href="#download"></use></svg> <?php echo esc_html( $widget_title ); ?></h3>
 </header>
 
 
@@ -41,43 +41,48 @@ $handout_description 	= get_post_meta( $handout_id, '_handout_details_descriptio
 	case 'image/png':
 	case 'image/gif':
 
-		$dashicon = '<svg class="ui-icon picture-icon" aria-hidden="true"><use xlink:href="#picture"></use></svg>';
+		$dashicon = '<svg class="ui-icon picture-icon" aria-hidden="true"><use xlink:href="#file-image"></use></svg>';
 
 	break;
 
 	case 'text/plain':
 	case 'text/xml':
 	case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-	case 'application/pdf':
 	case 'application/msword':
 
-		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-empty"></use></svg>';
+		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-document"></use></svg>';
 
 	break;
+
+	case 'application/pdf':
+
+		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-pdf"></use></svg>';
+
+		break;
 
 	case 'text/csv':
 	case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
 	case 'application/x-excel':
 
-		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-empty"></use></svg>';
+		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-excel"></use></svg>';
 
 	break;
 
 	case 'application/vnd.ms-powerpoint':
 
-		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-empty"></use></svg>';
+		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-powerpoint"></use></svg>';
 
 	break;
 
 	case 'application/zip':
 
-		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-empty"></use></svg>';
+		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-document"></use></svg>';
 
 	break;
 
 	default:
 
-		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-empty"></use></svg>';
+		$dashicon = '<svg class="ui-icon file" aria-hidden="true"><use xlink:href="#file-document"></use></svg>';
 
 	break;
 

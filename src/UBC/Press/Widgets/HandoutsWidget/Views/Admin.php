@@ -11,7 +11,7 @@ $url = admin_url();
 
 $add_handouts_url 	= $url .'edit.php?post_type=handout';
 
-$widget_title 	= ! empty( $instance['widget_title'] ) ? $instance['widget_title'] : 'Handouts';
+$widget_title 	= ! empty( $instance['widget_title'] ) ? $instance['widget_title'] : 'Downloads';
 $handout_id 	= ! empty( $instance['handouts_id'] ) ? $instance['handouts_id'] : 0;
 
 $description_check = ! empty( $instance['description'] ) ? 1 : 0;

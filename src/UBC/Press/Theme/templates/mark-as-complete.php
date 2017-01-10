@@ -45,7 +45,7 @@ $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_se
 		<div class="buttons columns">
 			<div class="text-right" data-responsive-toggle="mark-as-complete-<?php echo esc_attr( $get_the_id ); ?>">
 				<button id="actionbar-<?php echo esc_attr( $get_the_id ); ?>" class="mobile-button button <?php echo esc_attr( $mark_as_complete_classes ); ?> tiny" type="button" data-toggle=" actionbar-<?php echo esc_attr( $get_the_id ); ?> hamburger-<?php echo esc_attr( $get_the_id ); ?>" data-toggler=".active">
-					<svg id="hamburger-<?php echo esc_attr( $get_the_id ); ?>" class="ui-icon menu-icon"><use xlink:href="#menu"></use></svg>
+					<svg id="hamburger-<?php echo esc_attr( $get_the_id ); ?>" class="ui-icon menu-icon"><use xlink:href="#dots-horizontal"></use></svg>
 				</button>
 			</div>
 			<ul id="mark-as-complete-<?php echo esc_attr( $get_the_id ); ?>" class="button-group section-button-group small-horizontal menu float-right">
@@ -78,12 +78,12 @@ $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_se
 				</li>
 				<li>
 					<a role="button" href="#" class="button hollow <?php echo esc_html( $button_size ); ?> share warning" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Share with group.">
-						<svg class="ui-icon menu-icon"><use xlink:href="#users"></use></svg>
+						<svg class="ui-icon menu-icon"><use xlink:href="#share"></use></svg>
 					</a><!-- share -->
 				</li>
 				<li>
 					<a role="button" href="#" class="button hollow <?php echo esc_html( $button_size ); ?> feedback" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Provide feedback.">
-						<svg class="ui-icon menu-icon"><use xlink:href="#envelope"></use></svg>
+						<svg class="ui-icon menu-icon"><use xlink:href="#feedback"></use></svg>
 					</a><!-- feedback -->
 				</li>
 			</ul>
