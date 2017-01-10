@@ -1,7 +1,6 @@
 {
     "name": "ubc/ubc-press",
     "description": "A plugin to help the WP dashboard look and feel more like a teaching and learning platform",
-    "version": "1.0.0",
     "type": "wordpress-plugin",
     "keywords": ["dashboard", "wordpress"],
     "homepage": "http://ctlt.ubc.ca",
