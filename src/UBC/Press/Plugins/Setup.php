@@ -206,8 +206,8 @@ class Setup {
 		$styles_to_remove = apply_filters( 'ubc_press_dequeue_plugin_assets_styles', $styles_to_remove );
 		$scripts_to_remove = apply_filters( 'ubc_press_dequeue_plugin_assets_scripts', $scripts_to_remove );
 
-		$this->deqeue_styles( $styles_to_remove );
-		$this->deqeue_scripts( $scripts_to_remove );
+		// $this->deqeue_styles( $styles_to_remove );
+		// $this->deqeue_scripts( $scripts_to_remove );
 
 	}/* dequeue_plugin_assets() */
 
