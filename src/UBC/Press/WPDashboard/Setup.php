@@ -969,7 +969,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		global $menu, $submenu;
 
-		$menu[55] = array(
+		$menu[555559] = array(
 			0 => 'Quizzes',
 			1 => 'wpProQuiz_show',
 			2 => 'admin.php?page=wpProQuiz',
@@ -978,6 +978,8 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			5 => 'menu-quizzes',
 			6 => 'dashicons-star-half',
 		);
+
+		unset( $menu[55] );
 
 	}/* admin_menu__adjust_quiz_menu() */
 
