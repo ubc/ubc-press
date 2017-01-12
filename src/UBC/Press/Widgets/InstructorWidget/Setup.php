@@ -117,11 +117,11 @@ class Setup extends \WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
-		$title 		= $instance['title'];
-		$name 		= $instance['name'];
-		$email 		= $instance['email'];
-		$telephone 	= $instance['telephone'];
-		$website 	= $instance['website'];
+		$title 			= ( ! empty( $instance['title'] ) ? $instance['title'] : '' );
+		$name 			= ( ! empty( $instance['name'] ) ? $instance['name'] : '' );
+		$email 			= ( ! empty( $instance['email'] ) ? $instance['email'] : '' );
+		$telephone 	= ( ! empty( $instance['telephone'] ) ? $instance['telephone'] : '' );
+		$website 		= ( ! empty( $instance['website'] ) ? $instance['website'] : '' );
 
 		// Check if there is a cached output
 		$cache = wp_cache_get( $this->get_widget_slug(), 'widget' );
