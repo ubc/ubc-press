@@ -255,8 +255,9 @@ class Setup {
 
 	public static function setup_onboarding() {
 
-		$onboarding = new \UBC\Press\Onboarding\Setup;
-		$onboarding->init();
+		// Disabled for now
+		//$onboarding = new \UBC\Press\Onboarding\Setup;
+		//$onboarding->init();
 
 	}/* setup_onboarding() */
 
