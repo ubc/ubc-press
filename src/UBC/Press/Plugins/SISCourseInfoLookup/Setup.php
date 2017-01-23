@@ -104,7 +104,7 @@ class Setup {
 		}
 
 		$path = $dept . '-' . $course . '-' . $section;
-		$path = apply_filters( 'ubc_press_new_site_path', $path, $dept, $course, $section, $id, $network );
+		$path = apply_filters( 'ubc_press_new_site_path', trailingslashit(  \UBC\Helpers::leadingslashit( $path ) ), $dept, $course, $section, $id, $network );
 
 		$new_site_id = wpmu_create_blog( $network_domain, $path, $post->post_title, get_current_user_id() );
 
