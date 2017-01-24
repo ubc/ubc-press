@@ -50,8 +50,11 @@
 		},
 
 		addEventHandlerForubcPressAllComponentsInSubSectionCompleted: function() {
-
 			window.addEventListener( 'ubcPressAllComponentsInSubSectionCompleted', this.all_components_in_subsection_completed__trigger_feedback );
+		},
+
+		addEventHandlerForubcPressAllComponentsInSectionCompleted: function() {
+			window.addEventListener( 'ubcPressAllComponentsInSectionCompleted', this.all_components_in_section_completed__trigger_feedback );
 		},
 
 		addAJAXSuccessHandlerForQuizCompletion: function() {
@@ -164,6 +167,10 @@
 
 		all_components_in_subsection_completed__trigger_feedback: function ( event ) {
 			console.log( 'All components in this sub-section are complete. Checking other sub-sections in this section.' );
+		},
+
+		all_components_in_section_completed__trigger_feedback: function ( event ) {
+			console.log( 'All components in this *section* are complete. Triggering feedback routine.' );
 		},
 
 		build_data_for_ajax_complete_item: function( component_id ) {
@@ -483,10 +490,58 @@
 
 				event.initEvent( 'ubcPressAllComponentsInSubSectionCompleted', true, true );
 				window.dispatchEvent( event );
+
+				// This is somewhat hacky. But probably the 'fastest'
+				// It falls down if one component is included in multiple places and is completed
+				// in one of them. Needs Replacing with proper AJAX calls
+				this.checkIfAllSubSectionsInThisSectionAreComplete();
 			}
 
 		},/* this.update_count_in_section_list() */
 
+
+		/**
+		 * Without making another AJAX call, we look in the sidebar to see if all the
+		 * sub-sections are at 100%. If they now are, then we fire a custom action.
+		 *
+		 * TODO: Replace this with an actual AJAX call to get all sub-sections completions
+		 *
+		 * @since 1.0.0
+		 *
+		 * @return null
+		 */
+		checkIfAllSubSectionsInThisSectionAreComplete: function() {
+
+			// Grab all of the progress meters
+			var allProgressMeters = document.getElementsByClassName( 'progress-meter-text' );
+
+			// Default is all complete, made false if any are not 100%
+			var allComplete = true;
+
+			for ( var i = 0; i < allProgressMeters.length; ++i ) {
+				var item = allProgressMeters[i];
+				var thisItemCompleteValue = item.innerHTML;
+
+				// If any one of them is not 100% then break
+				if ( '100%' !== thisItemCompleteValue ) {
+					allComplete = false;
+					break;
+				}
+			}
+
+			// If allComplete is still true, then fire a custom action to say all
+			// subsesctions in this section are complete
+			if ( true === allComplete ) {
+				var event = document.createEvent( 'Event' );
+				// Define that the event name is 'ubcPressAllComponentsInSectionCompleted'.
+
+				event.initEvent( 'ubcPressAllComponentsInSectionCompleted', true, true );
+				window.dispatchEvent( event );
+			}
+
+
+
+		},
 
 		/**
 		 * What's the new completed number of components. It's the old Number
@@ -1017,6 +1072,7 @@
 		this.addAJAXSubmissionHandlerForAssignmentCompletion();
 		this.addClickEventHandlerForSaveForLater();
 		this.addEventHandlerForubcPressAllComponentsInSubSectionCompleted();
+		this.addEventHandlerForubcPressAllComponentsInSectionCompleted();
 	};
 
 	// trick borrowed from jQuery so we don't have to use the 'new' keyword
