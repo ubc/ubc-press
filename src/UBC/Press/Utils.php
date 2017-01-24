@@ -611,17 +611,33 @@ class Utils {
 		// First we need to get the main site for the network of the current blog
 		$main_site_id 	= \UBC\Press\Utils::get_id_for_networks_main_site_of_blog_id( get_current_blog_id() );
 
-		// Now we need to know what program the current blog is attached to. That's stored
-		// in the onboarding options ubc_press_course_details::program
-		$course_details	= get_option( 'ubc_press_course_details' );
-		$program 		= ( isset( $course_details['program'] ) ) ? $course_details['program'] : false;
+		// The course site ID('course' post type) is stored as the post ID where on the main
+		// site, the meta_key ubc_press_course_site_id is equal to the current blog ID
+		// Getting that ID allows us to search the Program Association and then search that
+		// To get the terms
+		$current_blog_id = get_current_blog_id();
 
-		if ( false === $program ) {
+		global $wpdb;
+
+		$blog_prefix	= $wpdb->get_blog_prefix( $main_site_id );
+
+		// First get the post_id for the course post on the network's main site
+		$query			= "SELECT post_id FROM {$blog_prefix}postmeta WHERE meta_key = %s AND meta_value = %d";
+		$query 			= $wpdb->prepare( $query, 'ubc_press_course_site_id', $current_blog_id );
+		$post_id_of_course_site = $wpdb->get_var( $query );
+
+		// Now get the ubc_course_to_programs_program_association for this post
+		$query			= "SELECT meta_value FROM {$blog_prefix}postmeta WHERE meta_key = %s AND post_id = %d";
+		$query 			= $wpdb->prepare( $query, 'ubc_course_to_programs_program_association', $post_id_of_course_site );
+		$program_id 	= $wpdb->get_var( $query );
+		$program_id		= unserialize( $program_id );
+
+		if ( false === $program_id ) {
 			return array();
 		}
 
 		// Now we have that, we can look at the terms assoc
-		$program_objectives = static::get_program_objectives_for_post_of_site( $program, $main_site_id );
+		$program_objectives = static::get_program_objectives_for_post_of_site( $program_id[0], $main_site_id );
 
 		if ( false === $usable ) {
 			return $program_objectives;
