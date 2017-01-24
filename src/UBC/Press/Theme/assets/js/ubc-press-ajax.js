@@ -49,6 +49,11 @@
 			}
 		},
 
+		addEventHandlerForubcPressAllComponentsInSubSectionCompleted: function() {
+
+			window.addEventListener( 'ubcPressAllComponentsInSubSectionCompleted', this.all_components_in_subsection_completed__trigger_feedback );
+		},
+
 		addAJAXSuccessHandlerForQuizCompletion: function() {
 			// @TODO: Is there a event we can listen to here rather than rely on jQuery?
 			jQuery( document ).ajaxSuccess( function( event, xhr, settings ) {
@@ -157,6 +162,9 @@
 
 		},
 
+		all_components_in_subsection_completed__trigger_feedback: function ( event ) {
+			console.log( 'All components in this sub-section are complete. Checking other sub-sections in this section.' );
+		},
 
 		build_data_for_ajax_complete_item: function( component_id ) {
 
@@ -467,6 +475,15 @@
 			// Update the value
 			var updateSpan = jQuery( '.current_page_item .completed-components-details .completed-components' );
 			updateSpan.text( newValue );
+
+			// If this is now 100% we fire a custom action so we can ask for feedback
+			if ( newValue === maxCount ) {
+				var event = document.createEvent( 'Event' );
+				// Define that the event name is 'ubcPressAllComponentsInSubSectionCompleted'.
+
+				event.initEvent( 'ubcPressAllComponentsInSubSectionCompleted', true, true );
+				window.dispatchEvent( event );
+			}
 
 		},/* this.update_count_in_section_list() */
 
@@ -999,6 +1016,7 @@
 		this.addEventListerForYouTubeIFrameMessages();
 		this.addAJAXSubmissionHandlerForAssignmentCompletion();
 		this.addClickEventHandlerForSaveForLater();
+		this.addEventHandlerForubcPressAllComponentsInSubSectionCompleted();
 	};
 
 	// trick borrowed from jQuery so we don't have to use the 'new' keyword
