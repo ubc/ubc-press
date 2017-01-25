@@ -49,6 +49,9 @@ class Setup {
 		// When a new site is created, we need to run the Gravity Forms installer on that site
 		add_action( 'wpmu_new_blog', array( $this, 'wpmu_new_blog__run_gforms_installer' ), 10, 6 );
 
+		// Once the gForms installer has run, we need to create the feedback form
+		add_action( 'wpmu_new_blog', array( $this, 'wpmu_new_blog__create_feedback_form' ), 20, 6 );
+
 	}/* setup_actions() */
 
 
@@ -64,8 +67,14 @@ class Setup {
 
 	public function setup_filters() {
 
+		// Temp
+		// add_filter( 'gform_pre_render', array( $this, 'gform_pre_render__test' ), 10, 3 );
+
 	}/* setup_filters() */
 
+	public function gform_pre_render__test( $form, $ajax, $field_values ) {
+		// wp_die( '<pre>' . print_r( array( $form ), true ) . '</pre>' );
+	}
 
 	/**
 	 * When a Course post is published, we go ahead and create a course site on the
@@ -104,7 +113,7 @@ class Setup {
 		}
 
 		$path = $dept . '-' . $course . '-' . $section;
-		$path = apply_filters( 'ubc_press_new_site_path', trailingslashit(  \UBC\Helpers::leadingslashit( $path ) ), $dept, $course, $section, $id, $network );
+		$path = apply_filters( 'ubc_press_new_site_path', trailingslashit( \UBC\Helpers::leadingslashit( $path ) ), $dept, $course, $section, $id, $network );
 
 		$new_site_id = wpmu_create_blog( $network_domain, $path, $post->post_title, get_current_user_id() );
 
@@ -143,5 +152,242 @@ class Setup {
 		restore_current_blog();
 
 	}/* wpmu_new_blog__run_gforms_installer() */
+
+
+	/**
+	 * When a new site is created from the Courses list, it's done so programatically.
+	 * After it's created we run the gForm installer (in wpmu_new_blog__run_gforms_installer())
+	 * After that's been done we need to create a feedback form which is shown when a student
+	 * completes all components in all sub-sections of a section.
+	 *
+	 * This form has multiple questions, including asking about the usefullness of the content
+	 * of that section for particular program objectives. The form will list ALL of the P/Os
+	 * and then hide the ones not applicable to this section.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int	$blog_id Blog ID.
+	 * @param int	$user_id User ID.
+	 * @param string $domain  Site domain.
+	 * @param string $path	Site path.
+	 * @param int	$site_id Site ID. Only relevant on multi-network installs.
+	 * @param array  $meta	Meta data. Used to set initial site options.
+	 * @return null
+	 */
+
+	public function wpmu_new_blog__create_feedback_form( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
+
+		$form_array = array();
+
+		$form_array['title'] = 'Content Feedback';
+		$form_array['description'] = 'Do not delete this form.
+
+It is shown when a student completes all components for a section.';
+
+		$form_array['labelPlacement'] = 'top_label';
+		$form_array['descriptionPlacement'] = 'below';
+		$form_array['button'] = array(
+			'type' => 'text',
+			'text' => 'Submit Feedback',
+			'imageUrl' => '',
+		);
+
+		$form_array['date_created'] = date( 'Y-m-d H:i:s' );
+		$form_array['is_active'] = true;
+		$form_array['cssClass'] = 'ubc-press-content-feedback-form';
+		$form_array['requireLogin'] = true;
+		$form_array['useCurrentUserAsAuthor'] = true;
+
+		// Confirmations
+		$conf_id = \UBC\Press\Utils::random_string_of_length( 13 );
+		$form_array['confirmations'] = array(
+			$conf_id => array(
+				'id' 		=> $conf_id,
+				'name' 		=> 'Default Confirmation',
+				'isDefault'	=> 1,
+				'type' 		=> 'message',
+				'message' 	=> 'Thank you for providing feedback.',
+			),
+		);
+
+		// We have several yes/no fields, re-use this for the choices
+		$yes_no_choices = array(
+			array( 'text' => 'Yes', 'value' => 'Yes' ),
+			array( 'text' => 'No', 'value' => 'No' ),
+		);
+
+		$form_array['fields'] = array(
+			array(
+				'id' => 1,
+				'content' => 'Did you find this content:',
+				'type' => 'html',
+				'isRequired' => false,
+				'size' => 'medium',
+				'cssClass' => 'ubc-press-did-you-find-this-content-label',
+			),
+			array(
+				'id' => 2,
+				'label' => 'Engaging?',
+				'type' => 'radio',
+				'cssClass' => 'ubc-press-engaging-yes-no',
+				'choices' => $yes_no_choices,
+			),
+			array(
+				'id' => 3,
+				'label' => '(Optional) Why did you not find the content engaging? How could it be improved?',
+				'type' => 'textarea',
+				'cssClass' => 'ubc-press-engaging-feedback',
+				'conditionalLogic' => array(
+					'actionType' => 'show',
+					'logicType' => 'all',
+					'rules' => array(
+						array(
+							'fieldId' => 2,
+							'operator' => 'is',
+							'value' => 'No',
+						),
+					),
+				),
+			),
+			array(
+				'id' => 4,
+				'label' => 'Concise?',
+				'type' => 'radio',
+				'cssClass' => 'ubc-press-concise-yes-no',
+				'choices' => $yes_no_choices,
+			),
+			array(
+				'id' => 5,
+				'label' => '(Optional) Why was the content not concise enough?',
+				'type' => 'textarea',
+				'cssClass' => 'ubc-press-concise-feedback',
+				'conditionalLogic' => array(
+					'actionType' => 'show',
+					'logicType' => 'all',
+					'rules' => array(
+						array(
+							'fieldId' => 4,
+							'operator' => 'is',
+							'value' => 'No',
+						),
+					),
+				),
+			),
+			array(
+				'id' => 6,
+				'label' => 'Clear?',
+				'type' => 'radio',
+				'cssClass' => 'ubc-press-clear-yes-no',
+				'choices' => $yes_no_choices,
+			),
+			array(
+				'id' => 7,
+				'label' => '(Optional) What was not clear about this content?',
+				'type' => 'textarea',
+				'cssClass' => 'ubc-press-clear-feedback',
+				'conditionalLogic' => array(
+					'actionType' => 'show',
+					'logicType' => 'all',
+					'rules' => array(
+						array(
+							'fieldId' => 6,
+							'operator' => 'is',
+							'value' => 'No',
+						),
+					),
+				),
+			),
+			array(
+				'id' => 8,
+				'label' => 'Well Presented?',
+				'type' => 'radio',
+				'cssClass' => 'ubc-press-well-presented-yes-no',
+				'choices' => $yes_no_choices,
+			),
+			array(
+				'id' => 9,
+				'label' => '(Optional) How could the presentation of this content be improved?',
+				'type' => 'textarea',
+				'cssClass' => 'ubc-press-presentation-feedback',
+				'conditionalLogic' => array(
+					'actionType' => 'show',
+					'logicType' => 'all',
+					'rules' => array(
+						array(
+							'fieldId' => 8,
+							'operator' => 'is',
+							'value' => 'No',
+						),
+					),
+				),
+			),
+			array(
+				'id' => 10,
+				'label' => 'Section Break',
+				'type' => 'section',
+				'cssClass' => 'ubc-press-section-break',
+			),
+			array(
+				'id' => 11,
+				'label' => 'LO Title',
+				'type' => 'html',
+				'cssClass' => 'ubc-press-html',
+				'content' => 'Did this content help you better understand:',
+			),
+		);
+
+		// Now we add 2 fields for each learning objective. One for the 'did it help you'
+		// And one for the free-form text area used to give feedback if the answer is 'no'
+		$learning_objectives = \UBC\Press\Utils::get_program_objectives( true );
+
+		// If there are no LOs then bail
+		if ( empty( $learning_objectives ) || ! is_array( $learning_objectives ) ) {
+			$result = \GFAPI::add_form( $form_array );
+			return;
+		}
+
+		// OK we have LOs so we add a radio field and textarea for each one.
+		// $id starts are 12 because we've already got a field with id => 11 above
+		$id = 12;
+		$count = 1;
+		foreach ( $learning_objectives as $term_id => $name ) {
+
+			$form_array['fields'][] = array(
+				'id' => $id,
+				'label' => 'Did this content help you better understand ' . $name . '?',
+				'type' => 'radio',
+				'cssClass' => 'ubc-press-lo-yes-no-' . $count,
+				'choices' => $yes_no_choices,
+			);
+
+			$feedback_id = $id + 1;
+
+			$form_array['fields'][] = array(
+				'id' => $feedback_id,
+				'label' => '(Optional) How could the content be improved to help you better understand ' . $name . '?',
+				'type' => 'textarea',
+				'cssClass' => 'ubc-press-lo-feedback-' . $count,
+				'conditionalLogic' => array(
+					'actionType' => 'show',
+					'logicType' => 'all',
+					'rules' => array(
+						array(
+							'fieldId' => $id,
+							'operator' => 'is',
+							'value' => 'No',
+						)
+					),
+				),
+			);
+
+			$id = $id + 2;
+			$count = $count + 1;
+
+		}
+
+		$result = \GFAPI::add_form( $form_array );
+		return;
+
+	}/* wpmu_new_blog__create_feedback_form() */
 
 }
