@@ -76,16 +76,6 @@ $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_se
 					</a><!-- save for later -->
 					<!-- <p class="show-for-small-only"><small>Save for Later</small></p> -->
 				</li>
-				<li>
-					<a role="button" href="#" class="button hollow <?php echo esc_html( $button_size ); ?> share warning" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Share with group.">
-						<svg class="ui-icon menu-icon"><use xlink:href="#share"></use></svg>
-					</a><!-- share -->
-				</li>
-				<li>
-					<a role="button" href="#" class="button hollow <?php echo esc_html( $button_size ); ?> feedback" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Provide feedback.">
-						<svg class="ui-icon menu-icon"><use xlink:href="#feedback"></use></svg>
-					</a><!-- feedback -->
-				</li>
 			</ul>
 		</div>
 		<!-- end .button-bar -->
