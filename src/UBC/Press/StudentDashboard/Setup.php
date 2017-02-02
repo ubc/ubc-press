@@ -85,6 +85,9 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		add_filter( 'query_vars', array( $this, 'query_vars__add_dashboard_rewrite_rule' ) );
 
+		// add the 'ubc_cs_redirect' param to sign in URLs
+		add_filter( 'login_url', array( $this, 'login_url__add_cs_redirect' ), 20, 3 );
+
 	}/* setup_filters() */
 
 
@@ -141,5 +144,26 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		return \UBC\Press::get_plugin_path() . '/src/UBC/Press/StudentDashboard/templates/dashboard.php';
 
 	}/* template_include__add_dashboard_rewrite_rule() */
+
+
+	/**
+	 * CAS Plugin a ubc_cs_redirect parameter for us for wp-admin requests, but that
+	 * doesn't apply for wp-login.php URLs. So let's add that.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $login_url    The login URL.
+	 * @param string $redirect     The path to redirect to on login, if supplied.
+	 * @param bool   $force_reauth Whether to force reauthorization, even if a cookie is present.
+	 * @return $login_url
+	 */
+
+	public function login_url__add_cs_redirect( $login_url, $redirect, $force_reauth ) {
+
+		$login_url = add_query_arg( 'ubc_cs_redirect', urlencode( $redirect ), $login_url );
+
+		return $login_url;
+
+	}/* login_url__add_cs_redirect() */
 
 }/* class Setup */
