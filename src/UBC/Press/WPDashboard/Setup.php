@@ -96,6 +96,12 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		// Custom columns for Assignments
 		add_action( 'manage_assignment_posts_custom_column', array( $this, 'manage_assignment_posts_custom_column__custom_columns' ), 10, 2 );
 
+		// Add a button which allows instructors to pull student list into course site
+		add_action( 'restrict_manage_users', array( $this, 'restrict_manage_users__import_users_via_ldap' ) );
+
+		// Handle AJAX Request for bulk synching users
+		add_action( 'ubcpressajax_admin_sync_users_with_eldap', array( $this, 'ubcpressajax_admin_sync_users_with_eldap__process' ) );
+
 	}/* setup_actions() */
 
 
@@ -1309,5 +1315,127 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		}
 
 	}/* ubcpressajax_admin_view_submissions__process() */
+
+
+	/**
+	 * Add a button which allows the instructor to batch import the users for the course
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $which The location of the extra table nav markup: 'top' or 'bottom'.
+	 * @return null
+	 */
+
+	public function restrict_manage_users__import_users_via_ldap( $which ) {
+
+		// Grab the site meta to ensure we're getting the correct course details
+		$course_details = get_option( 'ubc_press_course_details', array() );
+
+		// No course details? Run away.
+		if ( empty ( $course_details ) ) {
+			echo 'Error: No Course Details';
+			return;
+		}
+
+		// Generate the AJAX URL
+		$ajax_url = \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'admin_sync_users_with_eldap', true, null, false );
+
+		echo ' <input type="submit" name="submit" data-ajax_url="' . esc_url( $ajax_url ) . '" data-dept="' . esc_attr( $course_details['department'] ) . '" data-course="' . esc_attr( $course_details['course'] ) . '" data-section="' . esc_attr( $course_details['section'] ) . '" data-year="' . esc_attr( $course_details['year'] ) . '" data-session="' . esc_attr( $course_details['session'] ) . '" data-campus="' . esc_attr( $course_details['campus'] ) . '" id="synch-students-' . $which . '" class="button sync-students-list" value="Sync Student List">';
+
+	}/* restrict_manage_users__import_users_via_ldap() */
+
+	/**
+	 * AJAX handler for bull synching users with ELDAP
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (array) $request_data - the $_REQUEST data
+	 * @return null
+	 */
+
+	public function ubcpressajax_admin_sync_users_with_eldap__process( $request_data ) {
+
+		// Sanitize and then check we have everything
+		$dept		= sanitize_text_field( $request_data['dept'] );
+		$course		= sanitize_text_field( $request_data['course'] );
+		$section	= sanitize_text_field( $request_data['section'] );
+		$year		= sanitize_text_field( $request_data['year'] );
+		$session	= sanitize_text_field( $request_data['session'] );
+		$campus		= sanitize_text_field( $request_data['campus'] );
+
+		// Ensure we have all of them
+		$data 			= array( 'dept' => $dept, 'course' => $course, 'section' => $section, 'year' => $year, 'session' => $session, 'campus' => $campus );
+		$data_filtered	= array_filter( $data );
+
+		// Assume true
+		$result = true;
+
+		if ( $data !== $data_filtered ) {
+			$result = false;
+		}
+
+		$is_ajax 		= ( ! empty( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && 'xmlhttprequest' === strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) );
+		$redirect_to	= ( isset( $request_data['redirect_to'] ) ) ? esc_url( $request_data['redirect_to'] ) : false;
+
+		// Bail early
+		if ( false === (bool) $result ) {
+			\UBC\Press\Ajax\Utils::send_json_error( 'Not all course details sent.', $redirect_to );
+		}
+
+		// OK so we have everything we need to run an ELDAP lookup
+
+		// First, we get the 'cn' for the section
+		$cn = \UBC\Press\ELDAP\Utils::get_cn_for_section( $data );
+
+		// And use that cn to get the classlist from ELDAP
+		$class_list = \UBC\Press\ELDAP\Utils::get_classlist_for_section( $cn );
+
+		if ( false === $class_list ) {
+			\UBC\Press\Ajax\Utils::send_json_error( 'No class list found.', $redirect_to );
+		}
+
+		// OK we have a list of CWLs. Now we need to match them up with the current list of users
+		// on this site. If the list is the same, we don't do anything.
+		$current_user_list = get_users(
+			array(
+				'blog_id' => get_current_blog_id(),
+				'role' => 'student',
+				'fields' => array( 'user_login' ),
+			)
+		);
+
+		$current_users = array();
+
+		if ( $current_user_list && is_array( $current_user_list ) ) {
+			foreach ( $current_user_list as $id => $user_object ) {
+				$current_users[] = $user_object->user_login;
+			}
+		}
+
+		// We now have a list of the current site's students and a list of the students that SHOULD be on this site.
+		// If they are the same, we do nothing
+		$not_on_site = array_diff( $class_list, $current_users );
+
+		if ( empty( $not_on_site ) ) {
+			\UBC\Press\Ajax\Utils::send_json_error( 'All users correct.', $redirect_to );
+		}
+
+		// $not_on_site contains a list of users in the ELDAP classlist, but NOT on the current site
+		// Test if user exists (if not, create) and then add to site as a student
+		foreach ( $not_on_site as $id => $username ) {
+			file_put_contents( trailingslashit( WP_CONTENT_DIR ) . 'debug.log', print_r( array( $username . ' not on site. Adding.' ), true ), FILE_APPEND );
+			$user_id = \UBC\Press\ELDAP\Utils::create_user_and_add_eldap_properties( $username );
+			file_put_contents( trailingslashit( WP_CONTENT_DIR ) . 'debug.log', print_r( array( $user_id . ' added.' ), true ), FILE_APPEND );
+			add_user_to_blog( get_current_blog_id(), $user_id, 'student' );
+		}
+
+		// Handle the removal of users.
+		// $type_of_user_removal = \UBC\Press\
+
+		// Handle the adding of users
+
+		\UBC\Press\Ajax\Utils::send_json_success( array( $class_list, $current_users, $not_on_site ), $redirect_to );
+
+	}/* ubcpressajax_admin_sync_users_with_eldap__process() */
 
 }/* class Setup */

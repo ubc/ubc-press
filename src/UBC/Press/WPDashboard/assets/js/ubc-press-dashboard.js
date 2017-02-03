@@ -31,6 +31,64 @@
 		},
 
 		/**
+		 * Bind click handler for the 'Sync Student List' in the dashboard
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param null
+		 * @return null
+		 */
+
+		addClickHandlerForSyncStudentList: function() {
+
+			var syncStudentListButtons = document.getElementsByClassName( 'sync-students-list' );
+			if ( null === syncStudentListButtons || 0 === syncStudentListButtons.length ) {
+				return;
+			}
+
+			var i;
+			for ( i = 0; i < syncStudentListButtons.length; i++ ) {
+			    syncStudentListButtons[i].addEventListener( 'click', this.click_sync_student_list_button__send_ajax );
+			}
+
+		},
+
+		click_sync_student_list_button__send_ajax: function( event ) {
+
+			// Stop the normal PHP processing
+			event.stopPropagation();
+			event.preventDefault();
+
+			var thisItem = event.target;
+
+			var dept 	= jQuery( thisItem ).data( 'dept' );
+			var course 	= jQuery( thisItem ).data( 'course' );
+			var section	= jQuery( thisItem ).data( 'section' );
+			var year 	= jQuery( thisItem ).data( 'year' );
+			var session = jQuery( thisItem ).data( 'session' );
+			var campus 	= jQuery( thisItem ).data( 'campus' );
+
+			var url 	= jQuery( thisItem ).data( 'ajax_url' );
+
+			var data = {
+				dept : dept,
+				course : course,
+				section : section,
+				year : year,
+				session : session,
+				campus : campus,
+			}
+
+			// Change button value from "Sync Student List" to "Synching Students"
+			jQuery( thisItem ).val( 'Synching Students' );
+			// Disable
+			jQuery( thisItem ).attr( 'disabled', 'disabled' );
+
+			ubc_press_dashboard.prototype.syncStudentListForCourse( data, url, thisItem );
+
+		},/* click_sync_student_list_button__send_ajax() */
+
+		/**
 		 * The click handler for when someone clicks on a 'View Assignments' link. We
 		 * grab the post ID and then fire an AJAX Request
 		 *
@@ -122,6 +180,55 @@
 		},
 
 		/**
+		 * Run the AJAX call to sync the student list for a course
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param (object) data - data to send, info about the course
+		 * @param (string) the AJAX url
+		 * @param (jQuery event target) the item that has been clicked (the button)
+		 * @return null
+		 */
+
+		syncStudentListForCourse: function ( data, url, item ) {
+
+			console.log( [data, url, item] );
+
+			jQuery.ajax( {
+				type : 'post',
+				dataType : 'json',
+				url : url,
+				data : data,
+				beforeSend: function( jqXHR, settings ) {
+					console.log( ['beforeSend', jqXHR, settings] );
+				},
+				success: function( response ){
+
+					console.log( ['response', response] );
+					if ( response.success ) {
+
+
+
+					} else {
+
+
+
+					}
+
+				},
+				complete: function( jqXHR, textStatus ) {
+					console.log( 'complete' );
+				},
+				error: function( jqXHR, textStatus, errorThrown ) {
+					// console.error( [jqXHR, textStatus, errorThrown] );
+					console.log( jqXHR.responseText );
+				}
+			} );
+
+		},
+
+
+		/**
 		 * To show our submissions under each assignment, and it not look like a
 		 * bag of garbage, we need to inject a new <tr> after the assignment for
 		 * which we are grabbing the assignments.
@@ -206,6 +313,7 @@
 
 	ubc_press_dashboard.init = function() {
 		this.addClickHandlerForViewSubmissions();
+		this.addClickHandlerForSyncStudentList();
 	};
 
 	// trick borrowed from jQuery so we don't have to use the 'new' keyword
