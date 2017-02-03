@@ -246,10 +246,12 @@ class Role {
 
 		// In order to ensure that the capabilities are changed for a role should that
 		// role already exist, we call remove_role() first
-		remove_role( static::$role );
+		if ( get_role( static::$role ) ) {
+			remove_role( static::$role );
+		}
 
 		// Now we add the role
-		add_role( static::$role, static::$display_name, static::$capabilities );
+		$add_role = add_role( static::$role, static::$display_name, static::$capabilities );
 
 	}/* create() */
 
