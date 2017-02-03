@@ -103,4 +103,72 @@ class Utils {
 
 	}/* get_ubc_press_ajax_url() */
 
+
+	/**
+	 * Helper method to bail out of an AJAX call when something goes wrong.
+	 * Detects if this is an AJAX request and if so sends wp_send_json_error() with
+	 * passed $message. If not AJAX, and redirect_to is passed, then redirects
+	 * the browser to that location.
+	 *
+	 * Usage: \UBC\Press\Ajax\Utils::send_json_error( $message, $redirect_to );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $message - the message to send upon AJAX failure
+	 * @param $redirect_to - the URL to redirect when not an AJAX request
+	 * @return null
+	 */
+
+	public static function send_json_error( $message = '', $redirect_to = false ) {
+
+		$is_ajax 		= ( ! empty( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && 'xmlhttprequest' === strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) );
+		$redirect_to	= ( isset( $redirect_to ) ) ? esc_url( $redirect_to ) : false;
+
+		if ( true === $is_ajax ) {
+			wp_send_json_error( array( 'message' => $message ) );
+		}
+
+		if ( false !== $redirect_to ) {
+			header( 'Location: ' . $redirect_to );
+		} else {
+			header( 'Location:' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] );
+		}
+
+	}/* send_json_error() */
+
+	/**
+	 * Helper method to send a successful AJAX call.
+	 * Detects if this is an AJAX request and if so sends wp_send_json_success() with
+	 * passed $data. If not AJAX, and redirect_to is passed, then redirects
+	 * the browser to that location.
+	 *
+	 * Usage: \UBC\Press\Ajax\Utils::send_json_success( $data, $redirect_to );
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $message - the message to send upon AJAX failure
+	 * @param $redirect_to - the URL to redirect when not an AJAX request
+	 * @return null
+	 */
+
+	public static function send_json_success( $data = array(), $redirect_to = false ) {
+
+		$is_ajax 		= ( ! empty( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && 'xmlhttprequest' === strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) );
+		$redirect_to	= ( isset( $redirect_to ) ) ? esc_url( $redirect_to ) : false;
+
+		if ( true === $is_ajax ) {
+			wp_send_json_success( array(
+				'completed' => true,
+				'data' => $data,
+			) );
+		}
+
+		if ( false !== $redirect_to ) {
+			header( 'Location: ' . $redirect_to );
+		} else {
+			header( 'Location:' . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] );
+		}
+
+	}/* send_json_success() */
+
 }/* class Utils */
