@@ -52,6 +52,12 @@ class Setup {
 		// Once the gForms installer has run, we need to create the feedback form
 		add_action( 'wpmu_new_blog', array( $this, 'wpmu_new_blog__create_feedback_form' ), 20, 6 );
 
+		// Register course details as site meta (options)
+		add_action( 'wpmu_new_blog', array( $this, 'wpmu_new_blog__add_course_meta_to_site' ), 30, 6 );
+
+		// Set up roles
+		add_action( 'wpmu_new_blog', array( $this, 'wpmu_new_blog__setup_roles' ), 40, 6 );
+
 	}/* setup_actions() */
 
 
@@ -67,14 +73,8 @@ class Setup {
 
 	public function setup_filters() {
 
-		// Temp
-		// add_filter( 'gform_pre_render', array( $this, 'gform_pre_render__test' ), 10, 3 );
-
 	}/* setup_filters() */
 
-	public function gform_pre_render__test( $form, $ajax, $field_values ) {
-		// wp_die( '<pre>' . print_r( array( $form ), true ) . '</pre>' );
-	}
 
 	/**
 	 * When a Course post is published, we go ahead and create a course site on the
@@ -115,7 +115,7 @@ class Setup {
 		$path = $dept . '-' . $course . '-' . $section;
 		$path = apply_filters( 'ubc_press_new_site_path', trailingslashit( \UBC\Helpers::leadingslashit( $path ) ), $dept, $course, $section, $id, $network );
 
-		$new_site_id = wpmu_create_blog( $network_domain, $path, $post->post_title, get_current_user_id() );
+		$new_site_id = wpmu_create_blog( $network_domain, $path, $post->post_title, get_current_user_id(), null, $network_id );
 
 		$register_meta_args = array(
 			'show_in_rest' => true,
@@ -152,6 +152,46 @@ class Setup {
 		restore_current_blog();
 
 	}/* wpmu_new_blog__run_gforms_installer() */
+
+
+	/**
+	 * When a new blog is registered, grab the details about the course and add as an option so
+	 * we can access that data on the site.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int	$blog_id Blog ID.
+	 * @param int	$user_id User ID.
+	 * @param string $domain  Site domain.
+	 * @param string $path	Site path.
+	 * @param int	$site_id Site ID. Only relevant on multi-network installs.
+	 * @param array  $meta	Meta data. Used to set initial site options.
+	 * @return null
+	 */
+
+	public function wpmu_new_blog__add_course_meta_to_site( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
+
+		$dept 		= sanitize_text_field( $_POST['ubc_sis_course_info_lookup_department'] );
+		$course 	= sanitize_text_field( $_POST['ubc_sis_course_info_lookup_course'] );
+		$section	= sanitize_text_field( $_POST['ubc_sis_course_info_lookup_section'] );
+		$year		= sanitize_text_field( $_POST['ubc_sis_course_info_lookup_year'] );
+		$session	= sanitize_text_field( $_POST['ubc_sis_course_info_lookup_session'] );
+		$campus		= sanitize_text_field( $_POST['ubc_sis_course_info_lookup_campus'] );
+
+		$ubc_press_course_details = array(
+			'department' => $dept,
+			'course' => $course,
+			'section' => $section,
+			'year' => $year,
+			'session' => $session,
+			'campus' => $campus,
+		);
+
+		switch_to_blog( $blog_id );
+		update_option( 'ubc_press_course_details', $ubc_press_course_details );
+		restore_current_blog();
+
+	}/* wpmu_new_blog__add_course_meta_to_site() */
 
 
 	/**
@@ -389,5 +429,28 @@ It is shown when a student completes all components for a section.';
 		return;
 
 	}/* wpmu_new_blog__create_feedback_form() */
+
+	/**
+	 * We have several custom roles, when a new site is created, ensure the roles are set up.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int	$blog_id Blog ID.
+	 * @param int	$user_id User ID.
+	 * @param string $domain  Site domain.
+	 * @param string $path	Site path.
+	 * @param int	$site_id Site ID. Only relevant on multi-network installs.
+	 * @param array  $meta	Meta data. Used to set initial site options.
+	 * @return null
+	 */
+
+	public function wpmu_new_blog__setup_roles( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
+
+		switch_to_blog( $blog_id );
+		$roles = new \UBC\Press\Roles\Setup;
+		$roles->init();
+		restore_current_blog();
+
+	}/* wpmu_new_blog__setup_roles() */
 
 }
