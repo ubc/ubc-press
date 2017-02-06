@@ -189,6 +189,10 @@ class Setup {
 
 	protected function create_calendar_post( $associated_post_id, $date, $time_start, $time_end, $type_term ) {
 
+		if ( false === $data || false === $time_start || false === $time_end  ) {
+			return;
+		}
+
 		$post_content = $post_title = get_the_title( $associated_post_id );
 
 		$create_post_args = array(
