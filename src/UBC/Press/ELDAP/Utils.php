@@ -212,7 +212,7 @@ class Utils {
 	public static function create_user_and_add_eldap_properties( $uid ) {
 
 		$eldap_properties = static::get_user_data_from_uid( $uid );
-file_put_contents( trailingslashit( WP_CONTENT_DIR ) . 'debug.log', print_r( array( 'User Data for ' . $uid, $eldap_properties ), true ), FILE_APPEND );
+
 		$user_data = array(
 			'user_login' => sanitize_text_field( $uid ),
 			'user_pass' => wp_generate_password( 24, true, true ),

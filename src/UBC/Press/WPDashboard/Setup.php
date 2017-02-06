@@ -1423,9 +1423,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		// $not_on_site contains a list of users in the ELDAP classlist, but NOT on the current site
 		// Test if user exists (if not, create) and then add to site as a student
 		foreach ( $not_on_site as $id => $username ) {
-			file_put_contents( trailingslashit( WP_CONTENT_DIR ) . 'debug.log', print_r( array( $username . ' not on site. Adding.' ), true ), FILE_APPEND );
 			$user_id = \UBC\Press\ELDAP\Utils::create_user_and_add_eldap_properties( $username );
-			file_put_contents( trailingslashit( WP_CONTENT_DIR ) . 'debug.log', print_r( array( $user_id . ' added.' ), true ), FILE_APPEND );
 			add_user_to_blog( get_current_blog_id(), $user_id, 'student' );
 		}
 
