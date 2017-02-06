@@ -68,10 +68,16 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 			'student' => array(
 				'role' 			=> 'student',
-				'display_name' 	=> __( 'Student', \UBC\Press::get_text_domain() ),
+				'display_name' 	=> __( 'Current Student', \UBC\Press::get_text_domain() ),
 				'capabilities' 	=> array(
 					'read' => true,
 				),
+			),
+
+			'coursealumnus' => array(
+				'role' 			=> 'coursealumnus',
+				'display_name' 	=> __( 'Course alumnus', \UBC\Press::get_text_domain() ),
+				'capabilities' 	=> array(),
 			),
 
 			'ta' => array(
@@ -141,7 +147,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 					'export' => true,
 					'import' => true,
 					'edit_theme_options' => true,
-					'manage_options' => true
+					'manage_options' => true,
 				),
 			),
 
