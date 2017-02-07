@@ -58,6 +58,9 @@ class Setup {
 		// Set up roles
 		add_action( 'wpmu_new_blog', array( $this, 'wpmu_new_blog__setup_roles' ), 40, 6 );
 
+		// Add students/instructor to new site
+		add_action( 'ubc_press_after_publish_course_and_associate_meta', array( $this, 'ubc_press_after_publish_course_and_associate_meta__add_users' ), 10, 3 );
+
 	}/* setup_actions() */
 
 
@@ -125,6 +128,9 @@ class Setup {
 
 		// Now associate this Course Post with the new blog ID
 		add_post_meta( $id, 'ubc_press_course_site_id', $new_site_id );
+
+		// Run an action here so we can go ahead and add students/instructor separately
+		do_action( 'ubc_press_after_publish_course_and_associate_meta', $id, $post, $new_site_id );
 
 	}/* publish_course__create_course_site() */
 
@@ -452,5 +458,44 @@ It is shown when a student completes all components for a section.';
 		restore_current_blog();
 
 	}/* wpmu_new_blog__setup_roles() */
+
+
+	/**
+	 * When a new course post is published, right at the end we have an action after all meta is
+	 * associated and the site has been created. We hook in here to go and add instructor(s) and
+	 * students to this newly created site.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function ubc_press_after_publish_course_and_associate_meta__add_users( $id, $post, $new_site_id ) {
+
+		switch_to_blog( $new_site_id );
+		$ubc_press_course_details = get_option( 'ubc_press_course_details' );
+		restore_current_blog();
+
+		$instructor = sanitize_text_field( $_POST['ubc_sis_course_info_lookup_instructor'] );
+
+		// Add instructor to this site
+		$instructor_id = \UBC\Press\ELDAP\Utils::create_user_and_add_eldap_properties( $instructor );
+
+		add_user_to_blog( $new_site_id, $instructor_id, 'instructor' );
+
+		// Now add students
+		$data = array( 'dept' => $ubc_press_course_details['department'], 'course' => $ubc_press_course_details['course'], 'section' => $ubc_press_course_details['section'], 'year' => $ubc_press_course_details['year'], 'session' => $ubc_press_course_details['session'], 'campus' => $ubc_press_course_details['campus'] );
+		$cn = \UBC\Press\ELDAP\Utils::get_cn_for_section( $data );
+
+		// And use that cn to get the classlist from ELDAP
+		$class_list = \UBC\Press\ELDAP\Utils::get_classlist_for_section( $cn );
+
+		foreach ( $class_list as $id => $username ) {
+			$user_id = \UBC\Press\ELDAP\Utils::create_user_and_add_eldap_properties( $username );
+			add_user_to_blog( $new_site_id, $user_id, 'student' );
+		}
+
+	}/* ubc_press_after_publish_course_and_associate_meta__add_users() */
 
 }

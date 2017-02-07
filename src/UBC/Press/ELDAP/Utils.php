@@ -213,6 +213,13 @@ class Utils {
 
 		$eldap_properties = static::get_user_data_from_uid( $uid );
 
+		// Bail if username exists
+		if ( username_exists( sanitize_text_field( $uid ) ) ) {
+			$user = get_user_by( 'user_login', $uid );
+			update_user_meta( $user->ID, 'puid', $eldap_properties['ubceducwlpuid'] );
+			return $user->ID;
+		}
+
 		$user_data = array(
 			'user_login' => sanitize_text_field( $uid ),
 			'user_pass' => wp_generate_password( 24, true, true ),
@@ -241,6 +248,8 @@ class Utils {
 	 */
 
 	public static function get_user_data_from_uid( $uid ) {
+
+		static::setup_connection_details();
 
 		$ldap = new \Zend\Ldap\Ldap( static::$connection_options );
 		$bind = $ldap->bind();
@@ -283,5 +292,54 @@ class Utils {
 		return $user_data;
 
 	}/* get_user_data_from_uid() */
+
+
+	/**
+	 * Make an ELDAP lookup to retrieve the instructors registered to teach a specific section
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (string) $section - the section for which we want the instructors
+	 * @return (array|false) An array of instructors for the passed $section
+	 */
+
+	public static function get_instructors_for_section( $section ) {
+
+		static::setup_connection_details();
+
+		$ldap = new \Zend\Ldap\Ldap( static::$connection_options );
+		$bind = $ldap->bind();
+
+		$base_dn = static::$base_dn;
+
+		$instructors_list = $ldap->search(
+			"(&(objectClass=*)(cn=$section))",
+			"ou=INSTRUCTOR,$base_dn",
+			\Zend\Ldap\Ldap::SEARCH_SCOPE_SUB,
+			array(
+				'uniqueMember',
+			),
+			'',
+			null,
+			10,
+			30
+		);
+
+		$instructors_list = $instructors_list->toArray();
+
+		if ( ! $instructors_list || empty( $instructors_list ) || ! is_array( $instructors_list ) ) {
+			return false;
+		}
+
+		$instructors = array();
+
+		foreach ( $instructors_list[0]['uniquemember'] as $id => $details ) {
+			$uid = \UBC\Helpers::get_string_between( $details, 'uid=', ',ou=PEOPLE' );
+			$instructors[] = $uid;
+		}
+
+		return $instructors;
+
+	}/* get_instructors_for_section() */
 
 }
