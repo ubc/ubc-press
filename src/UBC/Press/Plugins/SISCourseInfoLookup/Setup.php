@@ -49,9 +49,6 @@ class Setup {
 		// When a new site is created, we need to run the Gravity Forms installer on that site
 		add_action( 'wpmu_new_blog', array( $this, 'wpmu_new_blog__run_gforms_installer' ), 10, 6 );
 
-		// Once the gForms installer has run, we need to create the feedback form
-		add_action( 'wpmu_new_blog', array( $this, 'wpmu_new_blog__create_feedback_form' ), 20, 6 );
-
 		// Register course details as site meta (options)
 		add_action( 'wpmu_new_blog', array( $this, 'wpmu_new_blog__add_course_meta_to_site' ), 30, 6 );
 
@@ -60,6 +57,9 @@ class Setup {
 
 		// Add students/instructor to new site
 		add_action( 'ubc_press_after_publish_course_and_associate_meta', array( $this, 'ubc_press_after_publish_course_and_associate_meta__add_users' ), 10, 3 );
+
+		// Once the gForms installer has run, we need to create the feedback form
+		add_action( 'ubc_press_after_publish_course_and_associate_meta', array( $this, 'ubc_press_after_publish_course_and_associate_meta__create_feedback_form' ), 20, 3 );
 
 	}/* setup_actions() */
 
@@ -212,16 +212,10 @@ class Setup {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param int	$blog_id Blog ID.
-	 * @param int	$user_id User ID.
-	 * @param string $domain  Site domain.
-	 * @param string $path	Site path.
-	 * @param int	$site_id Site ID. Only relevant on multi-network installs.
-	 * @param array  $meta	Meta data. Used to set initial site options.
 	 * @return null
 	 */
 
-	public function wpmu_new_blog__create_feedback_form( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
+	public function ubc_press_after_publish_course_and_associate_meta__create_feedback_form( $id, $post, $blog_id ) {
 
 		$form_array = array();
 
@@ -384,11 +378,14 @@ It is shown when a student completes all components for a section.';
 
 		// Now we add 2 fields for each learning objective. One for the 'did it help you'
 		// And one for the free-form text area used to give feedback if the answer is 'no'
-		$learning_objectives = \UBC\Press\Utils::get_program_objectives( true );
+		switch_to_blog( $blog_id );
+		$programs = absint( $_POST['ubc_course_to_programs_program_association'][0] );
+		$learning_objectives = \UBC\Press\Utils::get_program_objectives_for_post_of_site( $programs, \UBC\Press\Utils::get_id_for_networks_main_site_of_blog_id( $blog_id ) );
 
 		// If there are no LOs then bail
 		if ( empty( $learning_objectives ) || ! is_array( $learning_objectives ) ) {
 			$result = \GFAPI::add_form( $form_array );
+			restore_current_blog();
 			return;
 		}
 
@@ -396,11 +393,11 @@ It is shown when a student completes all components for a section.';
 		// $id starts are 12 because we've already got a field with id => 11 above
 		$id = 12;
 		$count = 1;
-		foreach ( $learning_objectives as $term_id => $name ) {
+		foreach ( $learning_objectives as $term_id => $term ) {
 
 			$form_array['fields'][] = array(
 				'id' => $id,
-				'label' => 'Did this content help you better understand ' . $name . '?',
+				'label' => 'Did this content help you better understand ' . $term->name . '?',
 				'type' => 'radio',
 				'cssClass' => 'ubc-press-lo-yes-no-' . $count,
 				'choices' => $yes_no_choices,
@@ -410,7 +407,7 @@ It is shown when a student completes all components for a section.';
 
 			$form_array['fields'][] = array(
 				'id' => $feedback_id,
-				'label' => '(Optional) How could the content be improved to help you better understand ' . $name . '?',
+				'label' => '(Optional) How could the content be improved to help you better understand ' . $term->name . '?',
 				'type' => 'textarea',
 				'cssClass' => 'ubc-press-lo-feedback-' . $count,
 				'conditionalLogic' => array(
@@ -432,9 +429,10 @@ It is shown when a student completes all components for a section.';
 		}
 
 		$result = \GFAPI::add_form( $form_array );
+		restore_current_blog();
 		return;
 
-	}/* wpmu_new_blog__create_feedback_form() */
+	}/* ubc_press_after_publish_course_and_associate_meta__create_feedback_form() */
 
 	/**
 	 * We have several custom roles, when a new site is created, ensure the roles are set up.
