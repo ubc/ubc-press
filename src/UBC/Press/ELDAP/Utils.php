@@ -215,7 +215,7 @@ class Utils {
 
 		// Bail if username exists
 		if ( username_exists( sanitize_text_field( $uid ) ) ) {
-			$user = get_user_by( 'user_login', $uid );
+			$user = get_user_by( 'login', $uid );
 			update_user_meta( $user->ID, 'puid', $eldap_properties['ubceducwlpuid'] );
 			return $user->ID;
 		}
