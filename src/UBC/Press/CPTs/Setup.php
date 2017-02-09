@@ -87,7 +87,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			'wp_args' => array(
 				'capability_type' => 'section',
 				'map_meta_cap' => true,
-				'supports' => array( 'title', 'page-attributes' ),
+				'supports' => array( 'title', 'page-attributes', 'thumbnail' ),
 				'rewrite' => array(
 					'with_front' => false,
 					'slug' => 'section',
