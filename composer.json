@@ -32,7 +32,7 @@
         "webdevstudios/cmb2": "dev-master",
         "mustardBees/cmb-field-select2": "dev-master",
         "origgami/CMB2-grid": "dev-master",
-        "zendframework/zend-ldap": "^2.7"
+        "zendframework/zend-ldap": "~2.7"
     },
     "minimum-stability": "dev",
     "autoload": {
