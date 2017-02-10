@@ -77,6 +77,8 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		add_action( 'init', array( $this, 'ag_add_oembed_handlers' ) );
 
+		add_action( 'ubcpressajax_fetch_feedback_form', array( $this, 'ubcpressajax_fetch_feedback_form__process' ) );
+
 	}/* setup_actions() */
 
 	function ag_add_oembed_handlers() {
@@ -302,5 +304,49 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 
 	}/* init__load_temp_stylesheet() */
+
+
+	/**
+	 * When a student completes all components in a section, the feedback form is grabbed and shown.
+	 * This is the AJAX handler to do that,
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function ubcpressajax_fetch_feedback_form__process( $request_data ) {
+
+		// Sanitize and then check we have everything
+		$redirect_to	= ( isset( $request_data['redirect_to'] ) ) ? esc_url( $request_data['redirect_to'] ) : false;
+		$sub_section_id = ( isset( $request_data['post_id'] ) ) ? absint( $request_data['post_id'] ) : get_the_ID();
+
+		// Fetch the Form ID which is saved as an option: ubc_press_feedback_form_id
+		$feddback_form_id = get_option( 'ubc_press_feedback_form_id' );
+
+		if ( empty( $feddback_form_id ) ) {
+			\UBC\Press\Ajax\Utils::send_json_error( 'No feedback form found.', $redirect_to );
+		}
+
+		gravity_form_enqueue_scripts( $feddback_form_id, true );
+
+		$form = gravity_form( $feddback_form_id, false, false, true, false, true, false, false );
+
+		// Assume true
+		$result = true;
+
+		if ( empty( $form ) ) {
+			$result = false;
+		}
+
+		// Bail early
+		if ( false === (bool) $result ) {
+			\UBC\Press\Ajax\Utils::send_json_error( 'No feedback form content from shortcode.', $redirect_to );
+		}
+
+		\UBC\Press\Ajax\Utils::send_json_success( array( 'form' => $form ), $redirect_to );
+
+	}/* ubcpressajax_fetch_feedback_form__process() */
 
 }/* class Setup */

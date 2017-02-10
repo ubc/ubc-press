@@ -170,7 +170,48 @@
 		},
 
 		all_components_in_section_completed__trigger_feedback: function ( event ) {
-			console.log( 'All components in this *section* are complete. Triggering feedback routine.' );
+			ubc$.prototype.ajax_get_feedback_form( event );
+		},
+
+		ajax_get_feedback_form: function ( event ) {
+
+			var feedbackFormAjaxURL = ubc$.prototype.getFeedbackFormAjaxURL();
+			var data = { 'url': feedbackFormAjaxURL }
+			jQuery.ajax( {
+				type : 'post',
+				dataType : 'json',
+				url : feedbackFormAjaxURL,
+				data : data,
+				beforeSend: function( jqXHR, settings ) {
+					console.log( 'Before get form' );
+				},
+				success: function( response ) {
+console.log( response );
+					if ( response.success ) {
+
+						// Grab form and inject it into html
+						var formMarkup = response.data.data.form;
+						jQuery( '#feedback-canvas' ).html( formMarkup );
+						if( window['gformInitDatepicker'] ) {
+							gformInitDatepicker();
+						}
+
+						jQuery( '#feedback-canvas' ).foundation( 'open', false, false );
+
+					}
+				},
+				complete: function( jqXHR, textStatus ) {
+					console.log( 'completed get form' );
+				},
+				error: function( jqXHR, textStatus, errorThrown ) {
+					console.error( [jqXHR, textStatus, errorThrown] );
+				}
+			} );
+
+		},
+
+		getFeedbackFormAjaxURL: function () {
+			return jQuery( '#feedback-canvas' ).data( 'feedbackurl' );
 		},
 
 		build_data_for_ajax_complete_item: function( component_id ) {
