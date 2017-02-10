@@ -429,6 +429,9 @@ It is shown when a student completes all components for a section.';
 		}
 
 		$result = \GFAPI::add_form( $form_array );
+
+		// Now to make it easier to grab this form when we need it, add an option to save this new form ID
+		add_option( 'ubc_press_feedback_form_id', $result, null, 'no' );
 		restore_current_blog();
 		return;
 
