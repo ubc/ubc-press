@@ -58,6 +58,7 @@ class Setup {
 		// Limit the visibility of a sub-section based on a group
 		add_filter( 'wp_clf_lite_display_course_section_list_item', array( $this, 'wp_clf_lite_display_course_section_list_item__subsection_listings_visibility' ), 10, 2 );
 
+		add_action( 'admin_head-edit.php', array( $this, 'adjust_section_titles_for_groups' ) );
 	}/* setup_actions() */
 
 	/**
@@ -375,4 +376,52 @@ class Setup {
 
 	}/* wp_clf_lite_display_course_section_list_item__subsection_listings_visibility() */
 
+	/**
+	 * Add a filter to the title when we're displaying items on the admin edit screen.
+	 * This allows us to add group assignments to the title of a(ny) post.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 *
+	 * @return null
+	 */
+	public function adjust_section_titles_for_groups() {
+
+		add_filter( 'the_title', array( $this, 'adjust_section_titles_content_for_groups' ), 100, 2 );
+
+		return null;
+
+	}/* manage_section_posts_custom_column__add_groups_to_title() */
+
+	/**
+	 * Add group assignments to the title of a post in a WP_List_Table
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $title - the title of the current post
+	 *
+	 * @return string Modified title as necessary
+	 */
+	public function adjust_section_titles_content_for_groups( $title ) {
+
+		$post_id = get_the_ID();
+		$post_user_groups = get_post_meta( $post_id, '_member_access_user_groups', false );
+
+		if ( ! $post_user_groups || empty( $post_user_groups ) || ! is_array( $post_user_groups ) ) {
+			return $title;
+		}
+
+		// OK, so this section has group assignments.
+		$output = __( ' (Groups:', 'ubc-press' );
+
+		foreach ( $post_user_groups as $id => $group ) {
+			$output .= ', ' . $group;
+		}
+
+		$output .= ')';
+
+		return $title . wp_kses_post( $output );
+
+	}
 }/* class Setup */
