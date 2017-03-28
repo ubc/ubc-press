@@ -54,9 +54,10 @@ class Setup {
 		// Add user-group visibility settings to members_can_user_view_post
 		add_filter( 'members_can_user_view_post', array( $this, 'members_can_user_view_post__add_user_groups_visibility' ), 15, 3 );
 
+		// Limit the visibility of a sub-section based on a group
+		add_filter( 'wp_clf_lite_display_course_section_list_item', array( $this, 'wp_clf_lite_display_course_section_list_item__subsection_listings_visibility' ), 10, 2 );
+
 	}/* setup_actions() */
-
-
 
 	/**
 	 * Filters to modify items in SiteBuilder
@@ -286,5 +287,87 @@ class Setup {
 		}
 
 	}/* members_can_user_view_post__add_user_groups_visibility() */
+
+	/**
+	 * The members plugin handles the visibility of individual sub-sections when
+	 * attempting to view them, however we need to handle the output of the listing
+	 * for sub-sections within a section (i.e. on the main section listings page or
+	 * for the sidebar)
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param (int) $post_id - the current post's ID being displayed.
+	 *
+	 * @return mixed null if the user can see this sub-section, bool false otherwise.
+	 */
+	public function wp_clf_lite_display_course_section_list_item__subsection_listings_visibility( $short_circuit, $post_id ) {
+
+		// Find out if this post has group assertions. If not, then bail.
+		$post_id = absint( $post_id );
+
+		// Returns single metadata value or array of values
+		$post_user_groups = get_post_meta( $post_id, '_member_access_user_groups', false );
+
+		if ( ! $post_user_groups || empty( $post_user_groups ) || ! is_array( $post_user_groups ) ) {
+			return null;
+		}
+
+		// OK, there are user group assignments. This means that a user must be signed in
+		// to see this, so let's check that.
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		// User is signed in, now check if user is part of group
+		$user_id = get_current_user_id();
+
+		// Sanity check
+		if ( ! $user_id || empty( $user_id ) ) {
+			return false;
+		}
+
+		// Admins/TAs/etc. can see it all
+		$limit_by_roles = array(
+			'student',
+			'coursealumnus',
+		);
+
+		$limit_by_roles = apply_filters( 'ubc_press_roles_affected_by_content_visibility', $limit_by_roles, $post_id, $user_id );
+
+		if ( ! \UBC\Press\Utils::current_users_role_is_one_of( $limit_by_roles ) ) {
+			return null;
+		}
+
+		$users_in_groups_allowed = array();
+
+		foreach ( $post_user_groups as $id => $term ) {
+			$users_in_groups_allowed[] = wp_get_users_of_group( array( 'term' => $term, 'taxonomy' => 'user-group' ) );
+		}
+
+		// No users in groups? Then no access.
+		if ( empty( $users_in_groups_allowed ) || ! is_array( $users_in_groups_allowed ) ) {
+			return false;
+		}
+
+		// Check if the current user is in groups allowed for this content. Default not.
+		$user_in_group = false;
+
+		foreach ( $users_in_groups_allowed as $id => $user_objects_array ) {
+			foreach ( $user_objects_array as $id => $user_object ) {
+				if ( $user_id === $user_object->ID ) {
+					$user_in_group = true;
+					break;
+				}
+			}
+		}
+
+		if ( false === $user_in_group ) {
+			return false;
+		}
+
+		// User *is* in group, so let's allow them to see it.
+		return null;
+
+	}/* wp_clf_lite_display_course_section_list_item__subsection_listings_visibility() */
 
 }/* class Setup */
