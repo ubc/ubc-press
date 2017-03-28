@@ -11,7 +11,6 @@ namespace UBC\Press\Plugins\Members;
  *
  */
 
-
 class Setup {
 
 	/**
@@ -20,6 +19,7 @@ class Setup {
 	 * @since 1.0.0
 	 *
 	 * @param null
+	 *
 	 * @return null
 	 */
 
@@ -37,6 +37,7 @@ class Setup {
 	 * @since 1.0.0
 	 *
 	 * @param null
+	 *
 	 * @return null
 	 */
 
@@ -65,14 +66,13 @@ class Setup {
 	 * @since 1.0.0
 	 *
 	 * @param null
+	 *
 	 * @return null
 	 */
 
 	public function setup_filters() {
 
 	}/* setup_filters() */
-
-
 
 	/**
 	 * Hook into the top of the content permissions metabox created by Members and
@@ -81,6 +81,7 @@ class Setup {
 	 * @since 1.0.0
 	 *
 	 * @param (object) $post - The current WP Post object
+	 *
 	 * @return null
 	 */
 
@@ -90,6 +91,7 @@ class Setup {
 
 		if ( ! $user_groups || ! is_array( $user_groups ) || empty( $user_groups ) ) {
 			echo esc_html_e( 'No user groups set up or users not added to groups.', \UBC\Press::get_text_domain() );
+
 			return;
 		}
 
@@ -100,29 +102,29 @@ class Setup {
 		?>
 		<div class="members-cp-tabs-wrap">
 
-			<p>
-				<?php esc_html_e( 'Limit access to this post\'s content to users of the selected groups.', \UBC\Press::get_text_domain() ); ?>
-			</p>
-			<div class="members-cp-role-list-wrap">
+		<p>
+			<?php esc_html_e( 'Limit access to this post\'s content to users of the selected groups.', \UBC\Press::get_text_domain() ); ?>
+		</p>
+		<div class="members-cp-role-list-wrap">
 
-				<ul class="members-cp-user-group-list">
+			<ul class="members-cp-user-group-list">
 
 				<?php foreach ( $user_groups as $id => $term ) : ?>
 					<li>
 						<label>
-							<input type="checkbox" name="members_access_user_group[]" <?php checked( is_array( $post_user_groups ) && in_array( $term->slug, $post_user_groups ) ); ?> value="<?php echo esc_attr( $term->slug ); ?>" />
+							<input type="checkbox"
+								   name="members_access_user_group[]" <?php checked( is_array( $post_user_groups ) && in_array( $term->slug, $post_user_groups, true ) ); ?>
+								   value="<?php echo esc_attr( $term->slug ); ?>"/>
 							<?php echo esc_html( $term->name ); ?>
 						</label>
 					</li>
 				<?php endforeach; ?>
 
-				</ul>
-			</div>
+			</ul>
+		</div>
 		<?php
 
 	}/* members_cp_metabox_before__add_tabs_and_groups() */
-
-
 
 	/**
 	 * Outputs at the bottom of the content permissions metabox. Closes the
@@ -131,6 +133,7 @@ class Setup {
 	 * @since 1.0.0
 	 *
 	 * @param (object) $post - The WP Post Object
+	 *
 	 * @return null
 	 */
 
@@ -148,7 +151,6 @@ class Setup {
 
 	}/* members_cp_metabox_after__close_tabs() */
 
-
 	/**
 	 * When a post is saved, we look for the content permissions being saved
 	 * and see if there are any user groups, if so, save them
@@ -156,7 +158,8 @@ class Setup {
 	 * @since 1.0.0
 	 *
 	 * @param (int) $post_id - The ID of the post being saved
-	 * @param (object) $post - the WP Post object
+	 * @param string $post - the WP Post object
+	 *
 	 * @return null
 	 */
 
@@ -176,11 +179,14 @@ class Setup {
 		}
 
 		$existing_post_user_groups = get_post_meta( $post->ID, '_member_access_user_groups', false );
-		$new_post_user_groups = isset( $_POST['members_access_user_group'] ) ? $_POST['members_access_user_group'] : '';
+		$new_post_user_groups      = isset( $_POST['members_access_user_group'] ) ? $_POST['members_access_user_group'] : '';
 
 		if ( is_array( $new_post_user_groups ) ) {
 			// If we have an array of new user groups, set them
-			$this->set_post_user_groups( $post_id, array_map( array( $this, 'sanitize_user_groups' ), $new_post_user_groups ) );
+			$this->set_post_user_groups( $post_id, array_map( array(
+				$this,
+				'sanitize_user_groups',
+			), $new_post_user_groups ) );
 		} elseif ( ! empty( $existing_post_user_groups ) ) {
 			// Else, if we have current user groups but no new groups, delete them all
 			delete_post_meta( $post_id, '_member_access_user_groups' );
@@ -188,14 +194,14 @@ class Setup {
 
 	}/* save_post__save_user_groups() */
 
-
 	/**
 	 * Sanitize the user groups submitted. Checks that the term exists
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param (string) $group - The group to check
-	 * @return (string) Validated user group or an empty string
+	 *
+	 * @return string Validated user group or an empty string
 	 */
 
 	public function sanitize_user_groups( $group ) {
@@ -208,15 +214,14 @@ class Setup {
 
 	}/* sanitize_user_groups() */
 
-
-
 	/**
 	 * Utility method to set a post's access user groups given an array of groups
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param   -
-	 * @return
+	 *
+	 * @return null
 	 */
 
 	public function set_post_user_groups( $post_id, $user_groups ) {
@@ -228,9 +233,8 @@ class Setup {
 			add_post_meta( $post_id, '_member_access_user_groups', $user_group, false );
 		}
 
+		return null;
 	}/* set_post_user_groups() */
-
-
 
 	/**
 	 * Members provides the members_can_user_view_post method which provides the
@@ -246,7 +250,8 @@ class Setup {
 	 * @param (bool) $can_view - Can the user (with user ID, $user_id) view this post
 	 * @param (int) $user_id - The ID of the user we're checking if they can see the post
 	 * @param (int) $post_id - The ID of the post we're looking to see if $user_id $can_view
-	 * @return (bool) Whether the user can see the post
+	 *
+	 * @return bool Whether the user can see the post
 	 */
 
 	public function members_can_user_view_post__add_user_groups_visibility( $can_view, $user_id, $post_id ) {
@@ -275,7 +280,7 @@ class Setup {
 		$user_in_group_in_post_restricted_list = false;
 
 		foreach ( $usable_user_groups as $id => $user_group ) {
-			if ( in_array( $user_group, $existing_post_user_groups ) ) {
+			if ( in_array( $user_group, $existing_post_user_groups, true ) ) {
 				$user_in_group_in_post_restricted_list = true;
 			}
 		}
