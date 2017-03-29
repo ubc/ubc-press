@@ -52,13 +52,9 @@ class Setup {
 		// Save the additional user-groups meta to this post
 		add_action( 'save_post', array( $this, 'save_post__save_user_groups' ), 10, 2 );
 
-		// Add user-group visibility settings to members_can_user_view_post
-		add_filter( 'members_can_user_view_post', array( $this, 'members_can_user_view_post__add_user_groups_visibility' ), 15, 3 );
-
-		// Limit the visibility of a sub-section based on a group
-		add_filter( 'wp_clf_lite_display_course_section_list_item', array( $this, 'wp_clf_lite_display_course_section_list_item__subsection_listings_visibility' ), 10, 2 );
-
+		// Add the group assignments to the admin columns, titles.  @TODO: Own column? Label?
 		add_action( 'admin_head-edit.php', array( $this, 'adjust_section_titles_for_groups' ) );
+
 	}/* setup_actions() */
 
 	/**
@@ -72,6 +68,13 @@ class Setup {
 	 */
 
 	public function setup_filters() {
+
+		// Add user-group visibility settings to members_can_user_view_post
+		add_filter( 'members_can_user_view_post', array( $this, 'members_can_user_view_post__add_user_groups_visibility' ), 15, 3 );
+
+		// Limit the visibility of a sub-section based on a group
+		add_filter( 'wp_clf_lite_display_course_section_list_item', array( $this, 'wp_clf_lite_display_course_section_list_item__subsection_listings_visibility' ), 10, 2 );
+		add_filter( 'wp_clf_lite_display_handout_list_item', array( $this, 'wp_clf_lite_display_course_section_list_item__subsection_listings_visibility' ), 10, 2 );
 
 	}/* setup_filters() */
 
