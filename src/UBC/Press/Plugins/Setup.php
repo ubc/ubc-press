@@ -43,6 +43,9 @@ class Setup {
 		// Additional pieces for when we add a new 'course'
 		$this->setup_sis_course_info_lookup();
 
+		// bbPress
+		$this->setup_bbpress();
+
 		// Dequeue plugins' scripts and styles as we do it ourselves. @TODO This is lazy. Move into own method.
 		add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_plugin_assets' ), 999 );
 
@@ -168,6 +171,21 @@ class Setup {
 
 	}/* setup_sis_course_info_lookup() */
 
+	/**
+	 * bbPress mods
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 *
+	 * @return null
+	 */
+	public function setup_bbpress() {
+
+		$bbpress = new \UBC\Press\Plugins\BBPress\Setup;
+		$bbpress->init();
+
+	}/* setup_bbpress() */
 
 	/**
 	 * Dequeue plugin assets from the mu-plugins we use. This allows us to include the styles ourselves in
