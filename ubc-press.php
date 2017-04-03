@@ -6,7 +6,7 @@
  * Plugin Name:       UBC Press
  * Plugin URI:        http://ctlt.ubc.ca/
  * Description:       A plugin to help the WP dashboard look and feel more like a teaching and learning platform
- * Version:           0.5.18
+ * Version:           0.5.19
  * Author:            Richard Tape, David Brabbins
  * Author URI:        http://ctlt.ubc.ca/
  * License:           GPL-2.0+
@@ -42,7 +42,7 @@ class Press {
 	 * @var (string) $version The version of this plugin
 	 */
 
-	protected static $version = '0.5.18';
+	protected static $version = '0.5.19';
 
 
 	/**
