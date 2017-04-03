@@ -101,10 +101,8 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 	 */
 
 	public function init__add_dashboard_rewrite_rule() {
-
-		// /dashboard
-		add_rewrite_rule( 'me[\/]?', 'index.php?studentdashboard=yes', 'top' );
-
+		add_rewrite_rule( '^me[\/]?', 'index.php?studentdashboard=yes', 'top' );
+		add_rewrite_tag( '%me%','([^&]+)' );
 	}/* init__add_dashboard_rewrite_rule() */
 
 
