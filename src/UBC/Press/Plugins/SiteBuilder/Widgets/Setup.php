@@ -50,6 +50,9 @@ class Setup {
 		// Discusion forums (bb-press)
 		$this->add_discussion_forum_widget();
 
+		// Inidividual Forum Topic (bbPress)
+		$this->add_discussion_topic_widget();
+
 		// Add a lecture
 		$this->add_lecture_widget();
 
@@ -201,6 +204,28 @@ class Setup {
 
 	}/* add_discussion_forum_widget() */
 
+
+	/**
+	 * If we have bbPress installed, add a widget enabling the display of a
+	 * discussion forum as part of a section
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function add_discussion_topic_widget() {
+
+		if ( ! $this->check_dependencies( 'bbPress' ) ) {
+			return;
+		}
+
+		$widget = new \UBC\Press\Plugins\SiteBuilder\Widgets\AddDiscussionTopic\AddDiscussionTopicWidget;
+
+		static::$registered_ubc_press_widgets[] = 'AddDiscussionTopicWidget';
+
+	}/* add_discussion_topic_widget() */
 
 	/**
 	 * Register the Add Lecture widget
