@@ -58,7 +58,7 @@ class Setup {
 	}/* setup_actions() */
 
 	/**
-	 * Filters to modify items in SiteBuilder
+	 * Filters to modify items in Members
 	 *
 	 * @since 1.0.0
 	 *
