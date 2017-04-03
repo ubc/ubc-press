@@ -145,9 +145,9 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		$localized_data = array(
 			'ajax_url'	=> \UBC\Press\Ajax\Utils::get_ubc_press_ajax_url(),
 			'text'		=> array(
-				'loading' => __( 'Loading', \UBC\Press::get_text_domain() ),
-				'completed' => __( 'Completed', \UBC\Press::get_text_domain() ),
-				'please_correct' => __( 'Please correct the highlighted fields.', \UBC\Press::get_text_domain() ),
+				'loading' => __( 'Loading', 'ubc-press' ),
+				'completed' => __( 'Completed', 'ubc-press' ),
+				'please_correct' => __( 'Please correct the highlighted fields.', 'ubc-press' ),
 			),
 		);
 
@@ -174,7 +174,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		// Create the metabox
 		$section_description = new_cmb2_box( array(
 			'id'            => $prefix . 'metabox',
-			'title'         => __( 'Section Details', \UBC\Press::get_text_domain() ),
+			'title'         => __( 'Section Details', 'ubc-press' ),
 			'object_types'  => array( 'section' ),
 			'context'    	=> 'normal',
 			'priority' 		=> 'low',
@@ -182,15 +182,15 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		// Add fields to the metabox
 		$section_help = $section_description->add_field( array(
-			'name' => __( 'Where are section details displayed?', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Where are section details displayed?', 'ubc-press' ),
 			'id'   => $prefix . 'title_info',
-			'desc' => __( 'Section details are shown on the listings page for the course (which may include the course home page).', \UBC\Press::get_text_domain() ),
+			'desc' => __( 'Section details are shown on the listings page for the course (which may include the course home page).', 'ubc-press' ),
 			'type' => 'title',
 		) );
 
 		$section_description_content = $section_description->add_field( array(
-			'name'    => __( '', \UBC\Press::get_text_domain() ),
-			'desc'	  => __( 'Give a brief (20-30 word) description of the content students will find in this course section. Perhaps an overview of the content within each component.', \UBC\Press::get_text_domain() ),
+			'name'    => __( '', 'ubc-press' ),
+			'desc'	  => __( 'Give a brief (20-30 word) description of the content students will find in this course section. Perhaps an overview of the content within each component.', 'ubc-press' ),
 			'id'      => $prefix . 'content',
 			'type'    => 'wysiwyg',
 			'options' => array(
@@ -227,7 +227,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		// Create the metabox
 		$handout_details = new_cmb2_box( array(
 			'id'            => $prefix . 'metabox',
-			'title'         => __( 'Handout Details', \UBC\Press::get_text_domain() ),
+			'title'         => __( 'Handout Details', 'ubc-press' ),
 			'object_types'  => array( 'handout' ),
 			'context'    	=> 'normal',
 			'priority' 		=> 'low',
@@ -235,17 +235,17 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		) );
 
 		$handout_media = $handout_details->add_field( array(
-			'name'         => __( 'Handout Files', \UBC\Press::get_text_domain() ),
-			'desc'         => __( 'Upload or add multiple images/attachments.', \UBC\Press::get_text_domain() ),
+			'name'         => __( 'Handout Files', 'ubc-press' ),
+			'desc'         => __( 'Upload or add multiple images/attachments.', 'ubc-press' ),
 			'id'           => $prefix . 'file_list',
 			'type'         => 'file_list',
 		) );
 
 		$handout_description = $handout_details->add_field( array(
-			'name' => __( 'Handout Description', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Handout Description', 'ubc-press' ),
 			'id'   => $prefix . 'description',
 			'type' => 'textarea',
-			'desc' => __( 'A brief description of the handout, perhaps the file type, size or contents of a zip file.', \UBC\Press::get_text_domain() ),
+			'desc' => __( 'A brief description of the handout, perhaps the file type, size or contents of a zip file.', 'ubc-press' ),
 		) );
 
 	}/* cmb2_init__handout_details() */
@@ -267,7 +267,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		// Create the metabox
 		$link_details = new_cmb2_box( array(
 			'id'            => $prefix . 'metabox',
-			'title'         => __( 'Link Details', \UBC\Press::get_text_domain() ),
+			'title'         => __( 'Link Details', 'ubc-press' ),
 			'object_types'  => array( 'link' ),
 			'context'    	=> 'normal',
 			'priority' 		=> 'low',
@@ -278,25 +278,25 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			'id'          => $prefix . 'link_details_group',
 			'type'        => 'group',
 			'options'     => array(
-				'group_title'   => __( 'Link {#}', \UBC\Press::get_text_domain() ),
-				'add_button'    => __( 'Add Another Link', \UBC\Press::get_text_domain() ),
-				'remove_button' => __( 'Remove Link', \UBC\Press::get_text_domain() ),
+				'group_title'   => __( 'Link {#}', 'ubc-press' ),
+				'add_button'    => __( 'Add Another Link', 'ubc-press' ),
+				'remove_button' => __( 'Remove Link', 'ubc-press' ),
 				'sortable'      => true, // beta
 			),
 		) );
 
 		$link_url = $link_details->add_group_field( $link_details_group, array(
-			'name'			=> __( 'Link URL(s)', \UBC\Press::get_text_domain() ),
+			'name'			=> __( 'Link URL(s)', 'ubc-press' ),
 			'id'			=> $prefix . 'link_list',
 			'type' 			=> 'text_url',
 			'repeatable' 	=> true,
 			'options' => array(
-				'add_row_text' => __( 'Add URL', \UBC\Press::get_text_domain() ),
+				'add_row_text' => __( 'Add URL', 'ubc-press' ),
 			),
 		) );
 
 		$link_description = $link_details->add_group_field( $link_details_group, array(
-			'name'			=> __( 'Link Description', \UBC\Press::get_text_domain() ),
+			'name'			=> __( 'Link Description', 'ubc-press' ),
 			'id'			=> $prefix . 'link__description',
 			'type' 			=> 'textarea',
 		) );
@@ -319,7 +319,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		$course_settings = new_cmb2_box( array(
 			'id'			=> $prefix . 'metabox',
-			'title'			=> __( 'Course Settings', \UBC\Press::get_text_domain() ),
+			'title'			=> __( 'Course Settings', 'ubc-press' ),
 			'show_on'		=> array(
 				'key'   	=> 'options-page',
 				'value' 	=> array( 'ubc_course_settings' ),
@@ -329,14 +329,14 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		) );
 
 		$course_settings->add_field( array(
-			'name'       => __( 'Course Code', \UBC\Press::get_text_domain() ),
-			'desc'       => __( 'i.e. Arts101 or PHYS305d', \UBC\Press::get_text_domain() ),
+			'name'       => __( 'Course Code', 'ubc-press' ),
+			'desc'       => __( 'i.e. Arts101 or PHYS305d', 'ubc-press' ),
 			'id'         => $prefix . 'course_code',
 			'type'       => 'text',
 		) );
 
 		$course_settings->add_field( array(
-			'name'             => __( 'Faculty', \UBC\Press::get_text_domain() ),
+			'name'             => __( 'Faculty', 'ubc-press' ),
 			'id'               => $prefix . 'faculty',
 			'type'             => 'select',
 			'show_option_none' => true,
@@ -349,7 +349,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 			foreach ( $departments as $faculty => $departments ) {
 				$course_settings->add_field( array(
-					'name'             => __( 'Department', \UBC\Press::get_text_domain() ),
+					'name'             => __( 'Department', 'ubc-press' ),
 					'id'               => $prefix . 'department_' . $faculty,
 					'type'             => 'select',
 					'show_option_none' => true,
@@ -376,7 +376,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		$item_date = new_cmb2_box( array(
 			'id'			=> $prefix . 'metabox',
-			'title'			=> __( 'Date/Time', \UBC\Press::get_text_domain() ),
+			'title'			=> __( 'Date/Time', 'ubc-press' ),
 			'object_types'  => array( 'lecture' ),
 			'context'    	=> 'normal',
 			'priority' 		=> 'low',
@@ -384,36 +384,36 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		) );
 
 		$title = $item_date->add_field( array(
-			'name' => __( '', \UBC\Press::get_text_domain() ),
+			'name' => __( '', 'ubc-press' ),
 			'id'   => $prefix . 'date_title',
-			'desc' => __( 'Adding a date and time will add this item to the calendar automatically.', \UBC\Press::get_text_domain() ),
+			'desc' => __( 'Adding a date and time will add this item to the calendar automatically.', 'ubc-press' ),
 			'type' => 'title',
 		) );
 
 		$text_date = $item_date->add_field( array(
-			'name'       => __( 'Date', \UBC\Press::get_text_domain() ),
-			'desc'       => __( 'e.g. MM/DD/YYYY', \UBC\Press::get_text_domain() ),
+			'name'       => __( 'Date', 'ubc-press' ),
+			'desc'       => __( 'e.g. MM/DD/YYYY', 'ubc-press' ),
 			'id'         => $prefix . 'item_date',
 			'type'       => 'text_date',
 		) );
 
 		$hidden_timestamp = $item_date->add_field( array(
-			'name'       => __( 'Hidden Timestamp', \UBC\Press::get_text_domain() ),
-			'desc'       => __( '', \UBC\Press::get_text_domain() ),
+			'name'       => __( 'Hidden Timestamp', 'ubc-press' ),
+			'desc'       => __( '', 'ubc-press' ),
 			'id'         => $prefix . 'hidden_timestamp',
 			'type'       => 'hidden',
 		) );
 
 		$text_time_start = $item_date->add_field( array(
-			'name'       => __( 'Start Time', \UBC\Press::get_text_domain() ),
-			'desc'       => __( 'e.g. 09:00 AM', \UBC\Press::get_text_domain() ),
+			'name'       => __( 'Start Time', 'ubc-press' ),
+			'desc'       => __( 'e.g. 09:00 AM', 'ubc-press' ),
 			'id'         => $prefix . 'item_time_start',
 			'type'       => 'text_time',
 		) );
 
 		$text_time_end = $item_date->add_field( array(
-			'name'       => __( 'End Time', \UBC\Press::get_text_domain() ),
-			'desc'       => __( 'e.g. 10:30 AM', \UBC\Press::get_text_domain() ),
+			'name'       => __( 'End Time', 'ubc-press' ),
+			'desc'       => __( 'e.g. 10:30 AM', 'ubc-press' ),
 			'id'         => $prefix . 'item_time_end',
 			'type'       => 'text_time',
 		) );
@@ -434,7 +434,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		$item_date = new_cmb2_box( array(
 			'id'			=> $prefix . 'metabox',
-			'title'			=> __( 'Date/Time', \UBC\Press::get_text_domain() ),
+			'title'			=> __( 'Date/Time', 'ubc-press' ),
 			'object_types'  => array( 'assignment' ),
 			'context'    	=> 'normal',
 			'priority' 		=> 'low',
@@ -442,50 +442,50 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		) );
 
 		$title = $item_date->add_field( array(
-			'name' => __( '', \UBC\Press::get_text_domain() ),
+			'name' => __( '', 'ubc-press' ),
 			'id'   => $prefix . 'date_title',
-			'desc' => __( 'Adding a date and time will add this item to the calendar automatically.', \UBC\Press::get_text_domain() ),
+			'desc' => __( 'Adding a date and time will add this item to the calendar automatically.', 'ubc-press' ),
 			'type' => 'title',
 		) );
 
 		$text_date = $item_date->add_field( array(
-			'name'       => __( 'Opening Date', \UBC\Press::get_text_domain() ),
-			'desc'       => __( 'e.g. MM/DD/YYYY', \UBC\Press::get_text_domain() ),
+			'name'       => __( 'Opening Date', 'ubc-press' ),
+			'desc'       => __( 'e.g. MM/DD/YYYY', 'ubc-press' ),
 			'id'         => $prefix . 'item_date',
 			'type'       => 'text_date',
 		) );
 
 		$hidden_timestamp = $item_date->add_field( array(
-			'name'       => __( 'Hidden Timestamp', \UBC\Press::get_text_domain() ),
-			'desc'       => __( '', \UBC\Press::get_text_domain() ),
+			'name'       => __( 'Hidden Timestamp', 'ubc-press' ),
+			'desc'       => __( '', 'ubc-press' ),
 			'id'         => $prefix . 'hidden_timestamp',
 			'type'       => 'hidden',
 		) );
 
 		$text_time_start = $item_date->add_field( array(
-			'name'       => __( 'Start Time', \UBC\Press::get_text_domain() ),
-			'desc'       => __( 'e.g. 09:00 AM', \UBC\Press::get_text_domain() ),
+			'name'       => __( 'Start Time', 'ubc-press' ),
+			'desc'       => __( 'e.g. 09:00 AM', 'ubc-press' ),
 			'id'         => $prefix . 'item_time_start',
 			'type'       => 'text_time',
 		) );
 
 		$hidden_title = $item_date->add_field( array(
-			'name' => __( '', \UBC\Press::get_text_domain() ),
+			'name' => __( '', 'ubc-press' ),
 			'id'   => $prefix . 'date_title_hidden',
-			'desc' => __( '&nbsp;', \UBC\Press::get_text_domain() ),
+			'desc' => __( '&nbsp;', 'ubc-press' ),
 			'type' => 'title',
 		) );
 
 		$text_date_end = $item_date->add_field( array(
-			'name'       => __( 'Closing Date', \UBC\Press::get_text_domain() ),
-			'desc'       => __( 'e.g. MM/DD/YYYY', \UBC\Press::get_text_domain() ),
+			'name'       => __( 'Closing Date', 'ubc-press' ),
+			'desc'       => __( 'e.g. MM/DD/YYYY', 'ubc-press' ),
 			'id'         => $prefix . 'item_date_closing',
 			'type'       => 'text_date',
 		) );
 
 		$text_time_end = $item_date->add_field( array(
-			'name'       => __( 'End Time', \UBC\Press::get_text_domain() ),
-			'desc'       => __( 'e.g. 10:30 AM', \UBC\Press::get_text_domain() ),
+			'name'       => __( 'End Time', 'ubc-press' ),
+			'desc'       => __( 'e.g. 10:30 AM', 'ubc-press' ),
 			'id'         => $prefix . 'item_time_end',
 			'type'       => 'text_time',
 		) );
@@ -596,7 +596,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		$user_notes = new_cmb2_box( array(
 			'id'			=> $prefix . 'metabox',
-			'title'			=> __( 'Your notes', \UBC\Press::get_text_domain() ),
+			'title'			=> __( 'Your notes', 'ubc-press' ),
 			'object_types'  => array( 'any' ),
 			'context'    	=> 'normal',
 			'priority' 		=> 'low',
@@ -604,9 +604,9 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		) );
 
 		$notes = $user_notes->add_field( array(
-			'name' => __( '', \UBC\Press::get_text_domain() ),
+			'name' => __( '', 'ubc-press' ),
 			'id'   => $prefix . 'content',
-			'desc' => __( '', \UBC\Press::get_text_domain() ),
+			'desc' => __( '', 'ubc-press' ),
 			'type' => 'wysiwyg',
 			'options' => array(
 				'media_buttons' => false,
@@ -753,26 +753,26 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		$onboarding = new_cmb2_box( array(
 			'id'			=> $prefix . 'metabox',
-			'title'			=> __( 'Course Details', \UBC\Press::get_text_domain() ),
+			'title'			=> __( 'Course Details', 'ubc-press' ),
 			'object_types'  => array( 'all' ),
 			'context'    	=> 'normal',
 			'priority' 		=> 'low',
 		) );
 
 		$session = $onboarding->add_field( array(
-			'name' => __( 'Session', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Session', 'ubc-press' ),
 			'id'   => $prefix . 'session',
 			'type' => 'select',
 			'default'          => 'winter',
 		    'options'          => array(
-		        'winter' => __( 'Winter', \UBC\Press::get_text_domain() ),
-		        'summer' => __( 'Summer', \UBC\Press::get_text_domain() ),
-		        'other'   => __( 'Other', \UBC\Press::get_text_domain() ),
+		        'winter' => __( 'Winter', 'ubc-press' ),
+		        'summer' => __( 'Summer', 'ubc-press' ),
+		        'other'   => __( 'Other', 'ubc-press' ),
 		    ),
 		) );
 
 		$year = $onboarding->add_field( array(
-			'name' => __( 'Year', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Year', 'ubc-press' ),
 			'id'   => $prefix . 'year',
 			'type' => 'text_small',
 			'attributes' => array(
@@ -783,7 +783,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		$all_faculties = \UBC\Press\Utils::get_faculty_list();
 
 		$faculty = $onboarding->add_field( array(
-			'name' => __( 'Faculty', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Faculty', 'ubc-press' ),
 			'id'   => $prefix . 'faculty',
 			'type' => 'select',
 			'default' => '',
@@ -802,7 +802,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 				$faculty_real_name = $all_faculties[ $fac ];
 
 				$dept = $onboarding->add_field( array(
-					'name' => __( $faculty_real_name . ' Departments', \UBC\Press::get_text_domain() ),
+					'name' => __( $faculty_real_name . ' Departments', 'ubc-press' ),
 					'id'   => $prefix . $fac . '_department',
 					'type' => 'select',
 					'default' => '',
@@ -813,7 +813,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		}
 
 		$course_num = $onboarding->add_field( array(
-			'name' => __( 'Course Number', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Course Number', 'ubc-press' ),
 			'id'   => $prefix . 'course_num',
 			'type' => 'text_small',
 			'attributes' => array(
@@ -822,7 +822,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		) );
 
 		$section_num = $onboarding->add_field( array(
-			'name' => __( 'Section Number', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Section Number', 'ubc-press' ),
 			'id'   => $prefix . 'section_num',
 			'type' => 'text_small',
 			'attributes' => array(
@@ -840,7 +840,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		}
 
 		$program = $onboarding->add_field( array(
-			'name' => __( 'Program', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Program', 'ubc-press' ),
 			'id'   => $prefix . 'program',
 			'type' => 'select',
 			'default' => '',
@@ -866,7 +866,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		$objectives = new_cmb2_box( array(
 			'id'			=> $prefix . 'metabox',
-			'title'			=> __( 'Learning Objectives', \UBC\Press::get_text_domain() ),
+			'title'			=> __( 'Learning Objectives', 'ubc-press' ),
 			'object_types'  => array( 'section' ),
 			'context'    	=> 'side',
 			'priority' 		=> 'low',
@@ -1194,28 +1194,28 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		$create_assignment_form = new_cmb2_box( array(
 			'id'			=> $prefix . 'metabox',
-			'title'			=> __( 'Create Assignment Form', \UBC\Press::get_text_domain() ),
+			'title'			=> __( 'Create Assignment Form', 'ubc-press' ),
 			'object_types'  => array( 'Assignment' ),
 			'context'    	=> 'normal',
 			'priority' 		=> 'low',
 		) );
 
 		$create_assignment_form->add_field( array(
-			'name' => __( 'What\'s this?', \UBC\Press::get_text_domain() ),
+			'name' => __( 'What\'s this?', 'ubc-press' ),
 			'id'   => $prefix . 'title',
-			'desc' => __( 'Each assignment component contains a customizable form. Fill out some details below and click the "Create Assignment Form" button. A form will be made and associated with this component. Any submissions of that form will be associated with this form. We will automatically take the title of this assignment and use that for the form and also set the opening and closing dates for submission based on the details you provide.', \UBC\Press::get_text_domain() ),
+			'desc' => __( 'Each assignment component contains a customizable form. Fill out some details below and click the "Create Assignment Form" button. A form will be made and associated with this component. Any submissions of that form will be associated with this form. We will automatically take the title of this assignment and use that for the form and also set the opening and closing dates for submission based on the details you provide.', 'ubc-press' ),
 			'type' => 'title',
 		) );
 
 		$with_textarea = $create_assignment_form->add_field( array(
-			'name'	=> __( 'Content Submission Type', \UBC\Press::get_text_domain() ),
-			'desc' 	=> __( 'How would you like your students to submit their content? As a file upload (.pdf, .doc, .docx, .pages) or enter it as text in a WYSIWYG editor, or both?', \UBC\Press::get_text_domain() ),
+			'name'	=> __( 'Content Submission Type', 'ubc-press' ),
+			'desc' 	=> __( 'How would you like your students to submit their content? As a file upload (.pdf, .doc, .docx, .pages) or enter it as text in a WYSIWYG editor, or both?', 'ubc-press' ),
 			'id'  	=> $prefix . 'text_area_or_file_upload_or_both',
 			'type'	=> 'radio',
 			'options' => array(
-				'file_upload'	=> __( 'File Upload', \UBC\Press::get_text_domain() ),
-				'textarea' 		=> __( 'WYSIWYG', \UBC\Press::get_text_domain() ),
-				'both'			=> __( 'Both', \UBC\Press::get_text_domain() ),
+				'file_upload'	=> __( 'File Upload', 'ubc-press' ),
+				'textarea' 		=> __( 'WYSIWYG', 'ubc-press' ),
+				'both'			=> __( 'Both', 'ubc-press' ),
 			),
 			'after_row'	=> array( $this, 'after__submit_button_for_assignment_form' ),
 		) );
@@ -1262,7 +1262,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		$create_assignment_form = new_cmb2_box( array(
 			'id'			=> $prefix . 'metabox',
-			'title'			=> __( 'Assignment Form Details', \UBC\Press::get_text_domain() ),
+			'title'			=> __( 'Assignment Form Details', 'ubc-press' ),
 			'object_types'  => array( 'Assignment' ),
 			'context'    	=> 'normal',
 			'priority' 		=> 'low',
@@ -1271,7 +1271,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		$metabox_content = $this->get_content_for_already_assigned_form( $associated_form_id );
 
 		$create_assignment_form->add_field( array(
-			'name' => __( 'What\'s this?', \UBC\Press::get_text_domain() ),
+			'name' => __( 'What\'s this?', 'ubc-press' ),
 			'id'   => $prefix . 'title',
 			'desc' => $metabox_content,
 			'type' => 'title',
@@ -1297,7 +1297,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		// Build the gravity form edit form link: wp-admin/admin.php?page=gf_edit_forms&id=3
 		$form_edit_url = $this->get_form_edit_url( $form_id );
 
-		$content = __( 'You have associated a <a href="' . $form_edit_url . '" title="">form</a> with this assignment. You may <a href="' . $form_edit_url . '" title="">edit the form</a> using the form builder.', \UBC\Press::get_text_domain() );
+		$content = __( 'You have associated a <a href="' . $form_edit_url . '" title="">form</a> with this assignment. You may <a href="' . $form_edit_url . '" title="">edit the form</a> using the form builder.', 'ubc-press' );
 
 		return $content;
 
@@ -1351,13 +1351,13 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		// We need Gravity Forms
 		if ( ! class_exists( 'RGFormsModel' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Gravity Forms is not active', \UBC\Press::get_text_domain() ) ) );
+			wp_send_json_error( array( 'message' => __( 'Gravity Forms is not active', 'ubc-press' ) ) );
 			return;
 		}
 
 		// Check if a form with this title already exists
 		if ( \UBC\Press\Utils::gform_exists( $title ) ) {
-			wp_send_json_error( array( 'message' => __( 'A form with this name already exists', \UBC\Press::get_text_domain() ) ) );
+			wp_send_json_error( array( 'message' => __( 'A form with this name already exists', 'ubc-press' ) ) );
 			return;
 		}
 
@@ -1366,7 +1366,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		$end_time_parts		= $this->TARDIS( $end_time );
 
 		// Generate a sign in link
-		$sign_in_link = wp_kses_post( '<a href="' . wp_login_url( get_permalink() ) . '" title="">' . __( 'Sign In', \UBC\Press::get_text_domain() ) . '</a>' );
+		$sign_in_link = wp_kses_post( '<a href="' . wp_login_url( get_permalink() ) . '" title="">' . __( 'Sign In', 'ubc-press' ) . '</a>' );
 
 		// OK form doesn't exist, let's make one
 		$form_array = array();
@@ -1393,12 +1393,12 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		$form_array['scheduleEndMinute'] = $end_time_parts['minute'];
 		$form_array['scheduleEndAmpm'] = $end_time_parts['AMPM'];
 
-		$form_array['schedulePendingMessage'] = __( 'This assignment can be submitted after ' . $start_time . ' on ' .  $date . '.', \UBC\Press::get_text_domain() );
-		$form_array['scheduleMessage'] = __( 'This assignment can no longer be submitted.', \UBC\Press::get_text_domain() );
+		$form_array['schedulePendingMessage'] = __( 'This assignment can be submitted after ' . $start_time . ' on ' .  $date . '.', 'ubc-press' );
+		$form_array['scheduleMessage'] = __( 'This assignment can no longer be submitted.', 'ubc-press' );
 
 		// Require login
 		$form_array['requireLogin'] = true;
-		$form_array['requireLoginMessage'] = __( 'You must ' . $sign_in_link .' to submit this assignment', \UBC\Press::get_text_domain() );
+		$form_array['requireLoginMessage'] = __( 'You must ' . $sign_in_link .' to submit this assignment', 'ubc-press' );
 
 		// Confirmations
 		$conf_id = \UBC\Press\Utils::random_string_of_length( 13 );
@@ -1760,7 +1760,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		 */
 		$cmb_demo = new_cmb2_box( array(
 			'id'            => $prefix . 'metabox',
-			'title'         => __( 'Test Metabox', \UBC\Press::get_text_domain() ),
+			'title'         => __( 'Test Metabox', 'ubc-press' ),
 			'object_types'  => array( 'assignment' ), // Post type
 			// 'show_on_cb' => 'yourprefix_show_if_front_page', // function should return a bool value
 			// 'context'    => 'normal',
@@ -1771,8 +1771,8 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		) );
 
 		$cmb_demo->add_field( array(
-			'name'       => __( 'Test Text', \UBC\Press::get_text_domain() ),
-			'desc'       => __( 'field description (optional)', \UBC\Press::get_text_domain() ),
+			'name'       => __( 'Test Text', 'ubc-press' ),
+			'desc'       => __( 'field description (optional)', 'ubc-press' ),
 			'id'         => $prefix . 'text',
 			'type'       => 'text',
 			'show_on_cb' => 'yourprefix_hide_if_no_cats', // function should return a bool value
@@ -1783,20 +1783,20 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		) );
 
 		$cmb_demo->add_field( array(
-			'name' => __( 'Test Text Small', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Test Text Small', 'ubc-press' ),
 			'id'   => $prefix . 'textsmall',
 			'type' => 'text_small',
 			// 'repeatable' => true,
 		) );
 
 		$cmb_demo->add_field( array(
-			'name' => __( 'Test Text Medium', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Test Text Medium', 'ubc-press' ),
 			'id'   => $prefix . 'textmedium',
 			'type' => 'text_medium',
 			// 'repeatable' => true,
 		) );
 		$test_field_1 = $cmb_demo->add_field( array(
-			'name' => __( 'Website URL', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Website URL', 'ubc-press' ),
 			'id'   => $prefix . 'url',
 			'type' => 'text_url',
 			// 'protocols' => array('http', 'https', 'ftp', 'ftps', 'mailto', 'news', 'irc', 'gopher', 'nntp', 'feed', 'telnet'), // Array of allowed protocols
@@ -1804,34 +1804,34 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		) );
 
 		$test_field_2 = $cmb_demo->add_field( array(
-			'name' => __( 'Test Text Email', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Test Text Email', 'ubc-press' ),
 			'id'   => $prefix . 'email',
 			'type' => 'text_email',
 			// 'repeatable' => true,
 		) );
 		$test_field_3 = $cmb_demo->add_field( array(
-			'name' => __( 'Test Time', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Test Time', 'ubc-press' ),
 			'id'   => $prefix . 'time',
 			'type' => 'text_time',
 		) );
 		$cmb_demo->add_field( array(
-			'name' => __( 'Time zone', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Time zone', 'ubc-press' ),
 			'id'   => $prefix . 'timezone',
 			'type' => 'select_timezone',
 		) );
 		$cmb_demo->add_field( array(
-			'name' => __( 'Test Date Picker', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Test Date Picker', 'ubc-press' ),
 			'id'   => $prefix . 'textdate',
 			'type' => 'text_date',
 		) );
 		$cmb_demo->add_field( array(
-			'name' => __( 'Test Date Picker (UNIX timestamp)', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Test Date Picker (UNIX timestamp)', 'ubc-press' ),
 			'id'   => $prefix . 'textdate_timestamp',
 			'type' => 'text_date_timestamp',
 			// 'timezone_meta_key' => $prefix . 'timezone', // Optionally make this field honor the timezone selected in the select_timezone specified above
 		) );
 		$cmb_demo->add_field( array(
-			'name' => __( 'Test Date/Time Picker Combo (UNIX timestamp)', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Test Date/Time Picker Combo (UNIX timestamp)', 'ubc-press' ),
 			'id'   => $prefix . 'datetime_timestamp',
 			'type' => 'text_datetime_timestamp',
 		) );
@@ -1839,135 +1839,135 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		// is only compatible with PHP versions 5.3 or above.
 		// Feel free to uncomment and use if your server meets the requirement
 		$cmb_demo->add_field( array(
-			'name' => __( 'Test Date/Time Picker/Time zone Combo (serialized DateTime object)', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Test Date/Time Picker/Time zone Combo (serialized DateTime object)', 'ubc-press' ),
 			'id'   => $prefix . 'datetime_timestamp_timezone',
 			'type' => 'text_datetime_timestamp_timezone',
 		) );
 		$cmb_demo->add_field( array(
-			'name' => __( 'Test Money', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Test Money', 'ubc-press' ),
 			'id'   => $prefix . 'textmoney',
 			'type' => 'text_money',
 			// 'before_field' => '£', // override '$' symbol if needed
 			// 'repeatable' => true,
 		) );
 		$cmb_demo->add_field( array(
-			'name'    => __( 'Test Color Picker', \UBC\Press::get_text_domain() ),
+			'name'    => __( 'Test Color Picker', 'ubc-press' ),
 			'id'      => $prefix . 'colorpicker',
 			'type'    => 'colorpicker',
 			'default' => '#ffffff',
 		) );
 		$cmb_demo->add_field( array(
-			'name' => __( 'Test Text Area', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Test Text Area', 'ubc-press' ),
 			'id'   => $prefix . 'textarea',
 			'type' => 'textarea',
 		) );
 		$cmb_demo->add_field( array(
-			'name' => __( 'Test Text Area Small', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Test Text Area Small', 'ubc-press' ),
 			'id'   => $prefix . 'textareasmall',
 			'type' => 'textarea_small',
 		) );
 		$cmb_demo->add_field( array(
-			'name' => __( 'Test Text Area for Code', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Test Text Area for Code', 'ubc-press' ),
 			'id'   => $prefix . 'textarea_code',
 			'type' => 'textarea_code',
 		) );
 		$cmb_demo->add_field( array(
-			'name' => __( 'Test Title Weeeee', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Test Title Weeeee', 'ubc-press' ),
 			'id'   => $prefix . 'title',
-			'desc' => __( 'Titles can have descriptions, too', \UBC\Press::get_text_domain() ),
+			'desc' => __( 'Titles can have descriptions, too', 'ubc-press' ),
 			'type' => 'title',
 		) );
 		$cmb_demo->add_field( array(
-			'name'             => __( 'Test Select', \UBC\Press::get_text_domain() ),
+			'name'             => __( 'Test Select', 'ubc-press' ),
 			'id'               => $prefix . 'select',
 			'type'             => 'select',
 			'show_option_none' => true,
 			'options'          => array(
-				'standard' => __( 'Option One', \UBC\Press::get_text_domain() ),
-				'custom'   => __( 'Option Two', \UBC\Press::get_text_domain() ),
-				'none'     => __( 'Option Three', \UBC\Press::get_text_domain() ),
+				'standard' => __( 'Option One', 'ubc-press' ),
+				'custom'   => __( 'Option Two', 'ubc-press' ),
+				'none'     => __( 'Option Three', 'ubc-press' ),
 			),
 		) );
 		$cmb_demo->add_field( array(
-			'name'             => __( 'Test Radio inline', \UBC\Press::get_text_domain() ),
+			'name'             => __( 'Test Radio inline', 'ubc-press' ),
 			'id'               => $prefix . 'radio_inline',
 			'type'             => 'radio_inline',
 			'show_option_none' => 'No Selection',
 			'options'          => array(
-				'standard' => __( 'Option One', \UBC\Press::get_text_domain() ),
-				'custom'   => __( 'Option Two', \UBC\Press::get_text_domain() ),
-				'none'     => __( 'Option Three', \UBC\Press::get_text_domain() ),
+				'standard' => __( 'Option One', 'ubc-press' ),
+				'custom'   => __( 'Option Two', 'ubc-press' ),
+				'none'     => __( 'Option Three', 'ubc-press' ),
 			),
 		) );
 		$cmb_demo->add_field( array(
-			'name'    => __( 'Test Radio', \UBC\Press::get_text_domain() ),
+			'name'    => __( 'Test Radio', 'ubc-press' ),
 			'id'      => $prefix . 'radio',
 			'type'    => 'radio',
 			'options' => array(
-				'option1' => __( 'Option One', \UBC\Press::get_text_domain() ),
-				'option2' => __( 'Option Two', \UBC\Press::get_text_domain() ),
-				'option3' => __( 'Option Three', \UBC\Press::get_text_domain() ),
+				'option1' => __( 'Option One', 'ubc-press' ),
+				'option2' => __( 'Option Two', 'ubc-press' ),
+				'option3' => __( 'Option Three', 'ubc-press' ),
 			),
 		) );
 		$cmb_demo->add_field( array(
-			'name'     => __( 'Test Taxonomy Radio', \UBC\Press::get_text_domain() ),
+			'name'     => __( 'Test Taxonomy Radio', 'ubc-press' ),
 			'id'       => $prefix . 'text_taxonomy_radio',
 			'type'     => 'taxonomy_radio',
 			'taxonomy' => 'category', // Taxonomy Slug
 			// 'inline'  => true, // Toggles display to inline
 		) );
 		$cmb_demo->add_field( array(
-			'name'     => __( 'Test Taxonomy Select', \UBC\Press::get_text_domain() ),
+			'name'     => __( 'Test Taxonomy Select', 'ubc-press' ),
 			'id'       => $prefix . 'taxonomy_select',
 			'type'     => 'taxonomy_select',
 			'taxonomy' => 'category', // Taxonomy Slug
 		) );
 		$cmb_demo->add_field( array(
-			'name'     => __( 'Test Taxonomy Multi Checkbox', \UBC\Press::get_text_domain() ),
+			'name'     => __( 'Test Taxonomy Multi Checkbox', 'ubc-press' ),
 			'id'       => $prefix . 'multitaxonomy',
 			'type'     => 'taxonomy_multicheck',
 			'taxonomy' => 'post_tag', // Taxonomy Slug
 			// 'inline'  => true, // Toggles display to inline
 		) );
 		$cmb_demo->add_field( array(
-			'name' => __( 'Test Checkbox', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Test Checkbox', 'ubc-press' ),
 			'id'   => $prefix . 'checkbox',
 			'type' => 'checkbox',
 		) );
 		$cmb_demo->add_field( array(
-			'name'    => __( 'Test Multi Checkbox', \UBC\Press::get_text_domain() ),
+			'name'    => __( 'Test Multi Checkbox', 'ubc-press' ),
 			'id'      => $prefix . 'multicheckbox',
 			'type'    => 'multicheck',
 			// 'multiple' => true, // Store values in individual rows
 			'options' => array(
-				'check1' => __( 'Check One', \UBC\Press::get_text_domain() ),
-				'check2' => __( 'Check Two', \UBC\Press::get_text_domain() ),
-				'check3' => __( 'Check Three', \UBC\Press::get_text_domain() ),
+				'check1' => __( 'Check One', 'ubc-press' ),
+				'check2' => __( 'Check Two', 'ubc-press' ),
+				'check3' => __( 'Check Three', 'ubc-press' ),
 			),
 			// 'inline'  => true, // Toggles display to inline
 		) );
 		$cmb_demo->add_field( array(
-			'name'    => __( 'Test wysiwyg', \UBC\Press::get_text_domain() ),
+			'name'    => __( 'Test wysiwyg', 'ubc-press' ),
 			'id'      => $prefix . 'wysiwyg',
 			'type'    => 'wysiwyg',
 			'options' => array( 'textarea_rows' => 5 ),
 		) );
 		$cmb_demo->add_field( array(
-			'name' => __( 'Test Image', \UBC\Press::get_text_domain() ),
-			'desc' => __( 'Upload an image or enter a URL.', \UBC\Press::get_text_domain() ),
+			'name' => __( 'Test Image', 'ubc-press' ),
+			'desc' => __( 'Upload an image or enter a URL.', 'ubc-press' ),
 			'id'   => $prefix . 'image',
 			'type' => 'file',
 		) );
 		$cmb_demo->add_field( array(
-			'name'         => __( 'Multiple Files', \UBC\Press::get_text_domain() ),
-			'desc'         => __( 'Upload or add multiple images/attachments.', \UBC\Press::get_text_domain() ),
+			'name'         => __( 'Multiple Files', 'ubc-press' ),
+			'desc'         => __( 'Upload or add multiple images/attachments.', 'ubc-press' ),
 			'id'           => $prefix . 'file_list',
 			'type'         => 'file_list',
 			'preview_size' => array( 100, 100 ), // Default: array( 50, 50 )
 		) );
 		$cmb_demo->add_field( array(
-			'name' => __( 'oEmbed', \UBC\Press::get_text_domain() ),
-			'desc' => __( 'Enter a youtube, twitter, or instagram URL. Supports services listed at <a href="http://codex.wordpress.org/Embeds">http://codex.wordpress.org/Embeds</a>.', \UBC\Press::get_text_domain() ),
+			'name' => __( 'oEmbed', 'ubc-press' ),
+			'desc' => __( 'Enter a youtube, twitter, or instagram URL. Supports services listed at <a href="http://codex.wordpress.org/Embeds">http://codex.wordpress.org/Embeds</a>.', 'ubc-press' ),
 			'id'   => $prefix . 'embed',
 			'type' => 'oembed',
 		) );

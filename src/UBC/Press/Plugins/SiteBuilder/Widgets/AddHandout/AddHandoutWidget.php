@@ -18,9 +18,9 @@ class AddHandoutWidget extends \SiteOrigin_Widget {
 		// $id, $name, $widget_options, $control_options, $form_options, $base_folder
 		parent::__construct(
 			'ubc-handout',
-			__( 'Handout', \UBC\Press::get_text_domain() ),
+			__( 'Handout', 'ubc-press' ),
 			array(
-				'description' => __( 'Select a handout to add', \UBC\Press::get_text_domain() ),
+				'description' => __( 'Select a handout to add', 'ubc-press' ),
 				'help' => '#',
 				'has_preview' => false,
 			),
@@ -28,8 +28,8 @@ class AddHandoutWidget extends \SiteOrigin_Widget {
 			array(
 				'handout_post_id' => array(
 					'type' => 'select',
-					'label' => __( 'Choose Handout', \UBC\Press::get_text_domain() ),
-					'prompt' => __( 'Choose Handout', \UBC\Press::get_text_domain() ),
+					'label' => __( 'Choose Handout', 'ubc-press' ),
+					'prompt' => __( 'Choose Handout', 'ubc-press' ),
 					'options' => \UBC\Press\Plugins\SiteBuilder\Widgets\Utils::get_array_of_posts_for_cpt( 'handout' ),
 					'state_emitter' => array(
 						'callback' => 'set_this_value_to_other',

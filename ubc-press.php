@@ -199,7 +199,7 @@ class Press {
 
 	/**
 	 * Quick getter for the text domain of this plugin
-	 * Usage: \UBC\Press::get_text_domain()
+	 * Usage: 'ubc-press'
 	 *
 	 * @since 1.0.0
 	 *

@@ -313,7 +313,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		$version = (string) \UBC\Press::get_version();
 
 		$sign_out_url = wp_logout_url( network_home_url() );
-		$sign_out_link = '<a href="' . esc_url( $sign_out_url ) . '" title="' . esc_attr__( 'Sign Out', \UBC\Press::get_text_domain() ) . '">' . esc_attr__( 'Sign Out', \UBC\Press::get_text_domain() ) . '</a>';
+		$sign_out_link = '<a href="' . esc_url( $sign_out_url ) . '" title="' . esc_attr__( 'Sign Out', 'ubc-press' ) . '">' . esc_attr__( 'Sign Out', 'ubc-press' ) . '</a>';
 
 		$message = '';
 
@@ -324,7 +324,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		$message .= 'UBC Press version ' . $version . ' and powered by WordPress. ' . $sign_out_link;
 
-		return wp_kses_post( apply_filters( 'ubc_press_admin_footer_text', $message ), \UBC\Press::get_text_domain() );
+		return wp_kses_post( apply_filters( 'ubc_press_admin_footer_text', $message ), 'ubc-press' );
 
 	}/* admin_footer_text__change_footer_text() */
 
@@ -428,7 +428,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			return;
 		}
 
-		$menu[5][0] = __( 'Blog', \UBC\Press::get_text_domain() ); // Change Posts to Recipes
+		$menu[5][0] = __( 'Blog', 'ubc-press' ); // Change Posts to Recipes
 		$menu[5][6] = 'dashicons-welcome-write-blog';
 
 		// Shuffle it down the list, too.
@@ -453,7 +453,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		// Add comments to the Blog menu
 		$submenu['edit.php'][7] = array(
-			__( 'Comments', \UBC\Press::get_text_domain() ),
+			__( 'Comments', 'ubc-press' ),
 			'edit_posts',
 			'edit-comments.php',
 		);
@@ -559,7 +559,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			return;
 		}
 
-		$menu[20][0] = __( 'Course Info', \UBC\Press::get_text_domain() );
+		$menu[20][0] = __( 'Course Info', 'ubc-press' );
 
 		// Shuffle it down
 		$menu[50] = $menu[20];
@@ -584,7 +584,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		global $menu, $submenu;
 
 		// Rename Appearance to Site Settings
-		$menu[60][0] = __( 'Site Settings', \UBC\Press::get_text_domain() );
+		$menu[60][0] = __( 'Site Settings', 'ubc-press' );
 
 		// Hide the normal 'Settings' menu
 		unset( $menu[80] );
@@ -600,68 +600,68 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		// Put the Users/Tools/Settings Menus into Site Settings
 		$submenu['themes.php'][110] = array(
-			__( 'General', \UBC\Press::get_text_domain() ),
+			__( 'General', 'ubc-press' ),
 			'manage_options',
 			'options-general.php',
 		);
 
 		$submenu['themes.php'][115] = array(
-			__( 'Writing', \UBC\Press::get_text_domain() ),
+			__( 'Writing', 'ubc-press' ),
 			'manage_options',
 			'options-writing.php',
 		);
 
 		$submenu['themes.php'][120] = array(
-			__( 'Reading', \UBC\Press::get_text_domain() ),
+			__( 'Reading', 'ubc-press' ),
 			'manage_options',
 			'options-reading.php',
 		);
 
 		$submenu['themes.php'][125] = array(
-			__( 'Discussion', \UBC\Press::get_text_domain() ),
+			__( 'Discussion', 'ubc-press' ),
 			'manage_options',
 			'options-discussion.php',
 		);
 
 		$submenu['themes.php'][130] = array(
-			__( 'Media', \UBC\Press::get_text_domain() ),
+			__( 'Media', 'ubc-press' ),
 			'manage_options',
 			'options-media.php',
 		);
 
 		$submenu['themes.php'][140] = array(
-			__( 'Permalinks', \UBC\Press::get_text_domain() ),
+			__( 'Permalinks', 'ubc-press' ),
 			'manage_options',
 			'options-permalink.php',
 		);
 
 		$submenu['themes.php'][141] = array(
-			__( 'Akismet', \UBC\Press::get_text_domain() ),
+			__( 'Akismet', 'ubc-press' ),
 			'manage_options',
 			'akismet-key-config',
 			'Akismet',
 		);
 
 		$submenu['themes.php'][210] = array(
-			__( 'Import', \UBC\Press::get_text_domain() ),
+			__( 'Import', 'ubc-press' ),
 			'import',
 			'import.php',
 		);
 
 		$submenu['themes.php'][215] = array(
-			__( 'Export', \UBC\Press::get_text_domain() ),
+			__( 'Export', 'ubc-press' ),
 			'export',
 			'export.php',
 		);
 
 		$submenu['themes.php'][315] = array(
-			__( 'Users', \UBC\Press::get_text_domain() ),
+			__( 'Users', 'ubc-press' ),
 			'list_users',
 			'users.php',
 		);
 
 		$submenu['themes.php'][325] = array(
-			__( 'Plugins', \UBC\Press::get_text_domain() ),
+			__( 'Plugins', 'ubc-press' ),
 			'activate_plugins',
 			'plugins.php',
 		);
@@ -694,14 +694,14 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		// Add topic to forum menu
 		$submenu['edit.php?post_type=forum'][20] = array(
-			0 => __( 'All Topics', \UBC\Press::get_text_domain() ),
+			0 => __( 'All Topics', 'ubc-press' ),
 			'edit_topics',
 			'edit.php?post_type=topic'
 		);
 
 		// Add replies to forum menu
 		$submenu['edit.php?post_type=forum'][25] = array(
-			0 => __( 'All Replies', \UBC\Press::get_text_domain() ),
+			0 => __( 'All Replies', 'ubc-press' ),
 			'edit_replies',
 			'edit.php?post_type=reply'
 		);
@@ -738,7 +738,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		// Events gets added as '44' but links to the events listing. We need to
 		// change it to be Calendar and link to edit.php?post_type=event&page=event-calendar
-		$menu[44][0] = __( 'Calendar', \UBC\Press::get_text_domain() );
+		$menu[44][0] = __( 'Calendar', 'ubc-press' );
 		$menu[44][2] = 'edit.php?post_type=event&page=event-calendar';
 
 		// Let's move it to the top menu item up
@@ -881,7 +881,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		global $menu, $submenu;
 
 		$submenu['index.php'][10] = array(
-			__( 'Sign Out', \UBC\Press::get_text_domain() ),
+			__( 'Sign Out', 'ubc-press' ),
 			'read',
 			wp_logout_url( network_admin_url() ),
 		);
@@ -903,7 +903,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		global $menu, $submenu;
 
 		$submenu['index.php'][9] = array(
-			__( 'View Site', \UBC\Press::get_text_domain() ),
+			__( 'View Site', 'ubc-press' ),
 			'read',
 			home_url(),
 		);
@@ -954,7 +954,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			return;
 		}
 
-		$menu[10][0] = __( 'Files', \UBC\Press::get_text_domain() );
+		$menu[10][0] = __( 'Files', 'ubc-press' );
 
 		$menu[85] = $menu[10];
 		unset( $menu[10] );
@@ -1076,11 +1076,11 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 				$now = strtotime( 'now' );
 
 				if ( $start_datetime < $now && $now < $end_datetime ) {
-					echo wp_kses_post( __( 'Open', \UBC\Press::get_text_domain() ) );
+					echo wp_kses_post( __( 'Open', 'ubc-press' ) );
 				} elseif ( $now < $start_datetime ) {
-					echo wp_kses_post( __( 'Pending', \UBC\Press::get_text_domain() ) );
+					echo wp_kses_post( __( 'Pending', 'ubc-press' ) );
 				} else {
-					echo wp_kses_post( __( 'Closed', \UBC\Press::get_text_domain() ) );
+					echo wp_kses_post( __( 'Closed', 'ubc-press' ) );
 				}
 
 			break;
@@ -1101,8 +1101,8 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 	public function manage_assignment_posts_columns__assignment_columns( $columns ) {
 
 		unset( $columns['date'] );
-		$columns['submissions'] = __( 'Submissions', \UBC\Press::get_text_domain() );
-		$columns['status'] = __( 'Status', \UBC\Press::get_text_domain() );
+		$columns['submissions'] = __( 'Submissions', 'ubc-press' );
+		$columns['status'] = __( 'Status', 'ubc-press' );
 
 		return $columns;
 
@@ -1154,9 +1154,9 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		// Date should be Published Date
 		unset( $columns['date'] );
-		// $columns['date'] = __( 'Published Date', \UBC\Press::get_text_domain() );
+		// $columns['date'] = __( 'Published Date', 'ubc-press' );
 
-		$columns['lecturedate'] = __( 'Lecture Date', \UBC\Press::get_text_domain() );
+		$columns['lecturedate'] = __( 'Lecture Date', 'ubc-press' );
 
 		return $columns;
 
@@ -1245,7 +1245,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		// Build the URL
 		$url = \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'admin_view_submissions', true, false, array( 'post_id' => $post->ID ) );
 
-		$actions['view_submissions'] = '<a data-post_id="' . $post->ID . '" href="' . $url . '" title="" class="hide-if-no-js ubc-press-view-submissions">' . __( 'View Submissions', \UBC\Press::get_text_domain() ) . '</a><span class="spinner"></span>';
+		$actions['view_submissions'] = '<a data-post_id="' . $post->ID . '" href="' . $url . '" title="" class="hide-if-no-js ubc-press-view-submissions">' . __( 'View Submissions', 'ubc-press' ) . '</a><span class="spinner"></span>';
 
 		return $actions;
 

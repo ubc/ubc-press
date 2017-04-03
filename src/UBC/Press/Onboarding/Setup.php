@@ -91,7 +91,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		if ( ! \UBC\Press\Onboarding\Utils::show_onboarding() ) {
 			return;
 		}
-		wp_add_dashboard_widget( 'ubc_press_onboarding', __( 'Welcome to UBC Spaces', \UBC\Press::get_text_domain() ), array( $this, 'wp_add_dashboard_widget__widget_output' ) );
+		wp_add_dashboard_widget( 'ubc_press_onboarding', __( 'Welcome to UBC Spaces', 'ubc-press' ), array( $this, 'wp_add_dashboard_widget__widget_output' ) );
 	}/* wp_dashboard_setup__add_dashboard_widget() */
 
 

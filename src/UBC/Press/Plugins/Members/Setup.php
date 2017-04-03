@@ -94,7 +94,7 @@ class Setup {
 		$user_groups = get_terms( 'user-group' );
 
 		if ( ! $user_groups || ! is_array( $user_groups ) || empty( $user_groups ) ) {
-			echo esc_html_e( 'No user groups set up or users not added to groups.', \UBC\Press::get_text_domain() );
+			echo esc_html_e( 'No user groups set up or users not added to groups.', 'ubc-press' );
 
 			return;
 		}
@@ -107,7 +107,7 @@ class Setup {
 		<div class="members-cp-tabs-wrap">
 
 		<p>
-			<?php esc_html_e( 'Limit access to this post\'s content to users of the selected groups.', \UBC\Press::get_text_domain() ); ?>
+			<?php esc_html_e( 'Limit access to this post\'s content to users of the selected groups.', 'ubc-press' ); ?>
 		</p>
 		<div class="members-cp-role-list-wrap">
 

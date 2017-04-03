@@ -119,7 +119,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 	public function query_vars__add_dashboard_rewrite_rule( $vars ) {
 
-		$vars[] = __( 'studentdashboard', \UBC\Press::get_text_domain() );
+		$vars[] = __( 'studentdashboard', 'ubc-press' );
 		return $vars;
 
 	}/* query_vars__add_dashboard_rewrite_rule() */

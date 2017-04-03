@@ -28,7 +28,7 @@ class Utils {
 
 		if ( ! $query->have_posts() ) {
 			wp_reset_postdata();
-			return array( 'none_found', __( 'No ' . $cpt_name . ' found', \UBC\Press::get_text_domain() ) );
+			return array( 'none_found', __( 'No ' . $cpt_name . ' found', 'ubc-press' ) );
 		}
 
 		// Start fresh
@@ -118,7 +118,7 @@ class Utils {
 		$quiz_results = $wpdb->get_results( $query );
 
 		if ( empty( $quiz_results ) || ! is_array( $quiz_results ) ) {
-			return array( 'none_found', __( 'No quizzes found', \UBC\Press::get_text_domain() ) );
+			return array( 'none_found', __( 'No quizzes found', 'ubc-press' ) );
 		}
 
 		$quizzes = array();

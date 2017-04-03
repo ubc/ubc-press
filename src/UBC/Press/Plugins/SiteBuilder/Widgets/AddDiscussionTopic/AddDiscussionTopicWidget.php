@@ -18,9 +18,9 @@ class AddDiscussionTopicWidget extends \SiteOrigin_Widget {
 		// $id, $name, $widget_options, $control_options, $form_options, $base_folder
 		parent::__construct(
 			'ubc-discussion-topic',
-			__( 'Discussion Topic', \UBC\Press::get_text_domain() ),
+			__( 'Discussion Topic', 'ubc-press' ),
 			array(
-				'description' => __( 'Select a discussion topic to add', \UBC\Press::get_text_domain() ),
+				'description' => __( 'Select a discussion topic to add', 'ubc-press' ),
 				'help' => '#',
 				'has_preview' => false,
 			),
@@ -28,8 +28,8 @@ class AddDiscussionTopicWidget extends \SiteOrigin_Widget {
 			array(
 				'discussion_topic_post_id' => array(
 					'type' => 'select',
-					'label' => __( 'Choose Topic', \UBC\Press::get_text_domain() ),
-					'prompt' => __( 'Choose Topic', \UBC\Press::get_text_domain() ),
+					'label' => __( 'Choose Topic', 'ubc-press' ),
+					'prompt' => __( 'Choose Topic', 'ubc-press' ),
 					'options' => \UBC\Press\Plugins\SiteBuilder\Widgets\Utils::get_array_of_posts_for_cpt( 'topic' ),
 					'state_emitter' => array(
 						'callback' => 'set_this_value_to_other',

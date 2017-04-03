@@ -68,7 +68,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 			'student' => array(
 				'role' 			=> 'student',
-				'display_name' 	=> __( 'Current Student', \UBC\Press::get_text_domain() ),
+				'display_name' 	=> __( 'Current Student', 'ubc-press' ),
 				'capabilities' 	=> array(
 					'read' => true,
 				),
@@ -76,13 +76,13 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 			'coursealumnus' => array(
 				'role' 			=> 'coursealumnus',
-				'display_name' 	=> __( 'Course alumnus', \UBC\Press::get_text_domain() ),
+				'display_name' 	=> __( 'Course alumnus', 'ubc-press' ),
 				'capabilities' 	=> array(),
 			),
 
 			'ta' => array(
 				'role' 			=> 'ta',
-				'display_name' 	=> __( 'Teaching Assistant', \UBC\Press::get_text_domain() ),
+				'display_name' 	=> __( 'Teaching Assistant', 'ubc-press' ),
 				'capabilities' 	=> array(
 					'read' => true,
 					'edit_posts' => true,
@@ -102,7 +102,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 			'instructor' => array(
 				'role' 			=> 'instructor',
-				'display_name' 	=> __( 'Instructor', \UBC\Press::get_text_domain() ),
+				'display_name' 	=> __( 'Instructor', 'ubc-press' ),
 				'capabilities' 	=> array(
 					'read' => true,
 					'edit_posts' => true,

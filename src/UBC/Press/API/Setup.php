@@ -178,7 +178,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		$ids = $this->get_ids( $ids );
 
 		if ( empty( $ids ) ) {
-			return new \WP_Error( 'no_component_id', __( 'No component ID Passed', \UBC\Press::get_text_domain() ) );
+			return new \WP_Error( 'no_component_id', __( 'No component ID Passed', 'ubc-press' ) );
 		}
 
 		// $ids is now an array with 1 or more items
@@ -195,7 +195,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		$posts = $query->posts;
 
 		if ( empty( $posts ) ) {
-			return new \WP_Error( 'no_component_found_in_loop', __( 'Nothing found for this component ID', \UBC\Press::get_text_domain() ) );
+			return new \WP_Error( 'no_component_found_in_loop', __( 'Nothing found for this component ID', 'ubc-press' ) );
 		}
 
 		$response = new \WP_REST_Response( $posts );

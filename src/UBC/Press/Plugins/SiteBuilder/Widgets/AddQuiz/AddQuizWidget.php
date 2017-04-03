@@ -14,9 +14,9 @@ class AddQuizWidget extends \SiteOrigin_Widget {
 		// $id, $name, $widget_options, $control_options, $form_options, $base_folder
 		parent::__construct(
 			'ubc-quiz',
-			__( 'Quiz', \UBC\Press::get_text_domain() ),
+			__( 'Quiz', 'ubc-press' ),
 			array(
-				'description' => __( 'Select a quiz to add', \UBC\Press::get_text_domain() ),
+				'description' => __( 'Select a quiz to add', 'ubc-press' ),
 				'help' => '#',
 				'has_preview' => false,
 			),
@@ -24,8 +24,8 @@ class AddQuizWidget extends \SiteOrigin_Widget {
 			array(
 				'quiz_post_id' => array(
 					'type' => 'select',
-					'label' => __( 'Choose quiz', \UBC\Press::get_text_domain() ),
-					'prompt' => __( 'Choose quiz', \UBC\Press::get_text_domain() ),
+					'label' => __( 'Choose quiz', 'ubc-press' ),
+					'prompt' => __( 'Choose quiz', 'ubc-press' ),
 					'options' => \UBC\Press\Plugins\SiteBuilder\Widgets\Utils::get_array_of_posts_for_cpt( 'hiddenquiz' ),
 					'state_emitter' => array(
 						'callback' => 'set_this_value_to_other',

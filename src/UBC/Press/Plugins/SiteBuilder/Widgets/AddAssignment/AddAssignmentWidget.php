@@ -18,9 +18,9 @@ class AddAssignmentWidget extends \SiteOrigin_Widget {
 		// $id, $name, $widget_options, $control_options, $form_options, $base_folder
 		parent::__construct(
 			'ubc-assignment',
-			__( 'Assignment', \UBC\Press::get_text_domain() ),
+			__( 'Assignment', 'ubc-press' ),
 			array(
-				'description' => __( 'Select an assignment to add', \UBC\Press::get_text_domain() ),
+				'description' => __( 'Select an assignment to add', 'ubc-press' ),
 				'help' => '#',
 				'has_preview' => false,
 			),
@@ -28,8 +28,8 @@ class AddAssignmentWidget extends \SiteOrigin_Widget {
 			array(
 				'assignment_post_id' => array(
 					'type' => 'select',
-					'label' => __( 'Choose Assignment', \UBC\Press::get_text_domain() ),
-					'prompt' => __( 'Choose Assignment', \UBC\Press::get_text_domain() ),
+					'label' => __( 'Choose Assignment', 'ubc-press' ),
+					'prompt' => __( 'Choose Assignment', 'ubc-press' ),
 					'options' => \UBC\Press\Plugins\SiteBuilder\Widgets\Utils::get_array_of_posts_for_cpt( 'assignment' ),
 					'state_emitter' => array(
 						'callback' => 'set_this_value_to_other',

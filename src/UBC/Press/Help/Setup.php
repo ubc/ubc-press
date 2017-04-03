@@ -143,13 +143,13 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		$tabs = array(
 			'PRESSDASHBOARDHELP' => array(
-				'title'   => __( 'UBC Press', \UBC\Press::get_text_domain() ),
+				'title'   => __( 'UBC Press', 'ubc-press' ),
 				'content' => __( '
 					<h3>About</h3>
 					<p>UBC Press is a focused teaching and learning platform powered by WordPress. It is designed to provide a consistent experience for students on the front-end and a straightforward user interface for instructors and TAs.</p>
 					<h3>Course Content</h3>
 					<p>Your course is made up of content <em>sections</em>. Each section comprises of <em>components</em>. Components are items such as Handouts, Readings or Course Notes.</p>
-					' , \UBC\Press::get_text_domain()
+					' , 'ubc-press'
 				),
 			),
 		);
@@ -158,8 +158,8 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 			get_current_screen()->add_help_tab( array(
 				 'id'       => $id,
-				 'title'    => __( $data['title'], \UBC\Press::get_text_domain() ),
-				 'content'  => __( $data['content'], \UBC\Press::get_text_domain() ),
+				 'title'    => __( $data['title'], 'ubc-press' ),
+				 'content'  => __( $data['content'], 'ubc-press' ),
 			) );
 		}
 
@@ -170,11 +170,11 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		$tabs = array(
 			'PRESSCALENDARHELP' => array(
-				'title'   => __( 'UBC Press Calendar', \UBC\Press::get_text_domain() ),
+				'title'   => __( 'UBC Press Calendar', 'ubc-press' ),
 				'content' => __( '
 					<h3>Course Calendar</h3>
 					<p>This is your course calendar. It will auto populate based on the times you enter for the different components (i.e. lectures or assignments).</p>
-					' , \UBC\Press::get_text_domain()
+					' , 'ubc-press'
 				),
 			),
 		);
@@ -183,8 +183,8 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 			get_current_screen()->add_help_tab( array(
 				 'id'       => $id,
-				 'title'    => __( $data['title'], \UBC\Press::get_text_domain() ),
-				 'content'  => __( $data['content'], \UBC\Press::get_text_domain() ),
+				 'title'    => __( $data['title'], 'ubc-press' ),
+				 'content'  => __( $data['content'], 'ubc-press' ),
 			) );
 		}
 

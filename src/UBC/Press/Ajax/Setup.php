@@ -174,7 +174,7 @@ class Setup {
 		ini_set( 'html_errors', 0 );
 
 		if ( ! wp_verify_nonce( $_REQUEST['ubcajaxnonce'], $action ) ) {
-			wp_die( esc_html( __( 'Security check didn\'t pass, please check ubcajaxnonce!', \UBC\Press::get_text_domain() ) ) );
+			wp_die( esc_html( __( 'Security check didn\'t pass, please check ubcajaxnonce!', 'ubc-press' ) ) );
 		}
 
 		$shortinit = apply_filters( static::$ubc_press_ajax_tag . '_shortinit', false, $action );
@@ -197,7 +197,7 @@ class Setup {
 			do_action( static::$ubc_press_ajax_tag . '_nopriv_' . $action, $_REQUEST );
 		}
 
-		wp_die( esc_html( __( 'Your ' . static::$ubc_press_ajax_tag . ' call does not exists or exit is missing in action!', \UBC\Press::get_text_domain() ) ) );
+		wp_die( esc_html( __( 'Your ' . static::$ubc_press_ajax_tag . ' call does not exists or exit is missing in action!', 'ubc-press' ) ) );
 		exit;
 
 	}/* ajax() */

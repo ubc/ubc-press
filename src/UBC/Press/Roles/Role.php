@@ -66,7 +66,7 @@ class Role {
 	public function __construct( $role = '', $display_name = '', $capabilities = array() ) {
 
 		if ( empty( $role ) || empty( $display_name ) || ! is_array( $capabilities ) || empty( $capabilities ) ) {
-			return new \WP_Error( 'incorrect_role_args', __( 'Incorrect arguments were passed to \UBC\Press\Roles\Role', \UBC\Press::get_text_domain() ) );
+			return new \WP_Error( 'incorrect_role_args', __( 'Incorrect arguments were passed to \UBC\Press\Roles\Role', 'ubc-press' ) );
 		}
 
 		// Set our class properties so we have access to them easily

@@ -18,9 +18,9 @@ class AddDiscussionForumWidget extends \SiteOrigin_Widget {
 		// $id, $name, $widget_options, $control_options, $form_options, $base_folder
 		parent::__construct(
 			'ubc-discussion-forum',
-			__( 'Discussion Forum', \UBC\Press::get_text_domain() ),
+			__( 'Discussion Forum', 'ubc-press' ),
 			array(
-				'description' => __( 'Select a discussion forum to add', \UBC\Press::get_text_domain() ),
+				'description' => __( 'Select a discussion forum to add', 'ubc-press' ),
 				'help' => '#',
 				'has_preview' => false,
 			),
@@ -28,8 +28,8 @@ class AddDiscussionForumWidget extends \SiteOrigin_Widget {
 			array(
 				'discussion_forum_post_id' => array(
 					'type' => 'select',
-					'label' => __( 'Choose Forum', \UBC\Press::get_text_domain() ),
-					'prompt' => __( 'Choose Forum', \UBC\Press::get_text_domain() ),
+					'label' => __( 'Choose Forum', 'ubc-press' ),
+					'prompt' => __( 'Choose Forum', 'ubc-press' ),
 					'options' => \UBC\Press\Plugins\SiteBuilder\Widgets\Utils::get_array_of_posts_for_cpt( 'forum' ),
 					'state_emitter' => array(
 						'callback' => 'set_this_value_to_other',

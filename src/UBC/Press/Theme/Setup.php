@@ -263,12 +263,12 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		$localized_data = array(
 			'ajax_url'	=> \UBC\Press\Ajax\Utils::get_ubc_press_ajax_url(),
 			'text'		=> array(
-				'save' => __( 'Save', \UBC\Press::get_text_domain() ),
-				'saved' => __( 'Saved', \UBC\Press::get_text_domain() ),
-				'loading' => __( 'Loading', \UBC\Press::get_text_domain() ),
-				'completed' => __( 'Completed', \UBC\Press::get_text_domain() ),
-				'mark_as_complete' => __( 'Mark as complete', \UBC\Press::get_text_domain() ),
-				'completed_just_now' => __( 'Completed just now', \UBC\Press::get_text_domain() ),
+				'save' => __( 'Save', 'ubc-press' ),
+				'saved' => __( 'Saved', 'ubc-press' ),
+				'loading' => __( 'Loading', 'ubc-press' ),
+				'completed' => __( 'Completed', 'ubc-press' ),
+				'mark_as_complete' => __( 'Mark as complete', 'ubc-press' ),
+				'completed_just_now' => __( 'Completed just now', 'ubc-press' ),
 			),
 		);
 

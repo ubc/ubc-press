@@ -18,9 +18,9 @@ class AddLectureWidget extends \SiteOrigin_Widget {
 		// $id, $name, $widget_options, $control_options, $form_options, $base_folder
 		parent::__construct(
 			'ubc-lecture',
-			__( 'Lecture', \UBC\Press::get_text_domain() ),
+			__( 'Lecture', 'ubc-press' ),
 			array(
-				'description' => __( 'Select a lecture to add', \UBC\Press::get_text_domain() ),
+				'description' => __( 'Select a lecture to add', 'ubc-press' ),
 				'help' => '#',
 				'has_preview' => false,
 			),
@@ -28,8 +28,8 @@ class AddLectureWidget extends \SiteOrigin_Widget {
 			array(
 				'lecture_post_id' => array(
 					'type' => 'select',
-					'label' => __( 'Choose Lecture', \UBC\Press::get_text_domain() ),
-					'prompt' => __( 'Choose Lecture', \UBC\Press::get_text_domain() ),
+					'label' => __( 'Choose Lecture', 'ubc-press' ),
+					'prompt' => __( 'Choose Lecture', 'ubc-press' ),
 					'options' => \UBC\Press\Plugins\SiteBuilder\Widgets\Utils::get_array_of_posts_for_cpt( 'lecture' ),
 					'state_emitter' => array(
 						'callback' => 'set_this_value_to_other',

@@ -18,9 +18,9 @@ class AddReadingWidget extends \SiteOrigin_Widget {
 		// $id, $name, $widget_options, $control_options, $form_options, $base_folder
 		parent::__construct(
 			'ubc-reading',
-			__( 'Reading', \UBC\Press::get_text_domain() ),
+			__( 'Reading', 'ubc-press' ),
 			array(
-				'description' => __( 'Select a reading to add', \UBC\Press::get_text_domain() ),
+				'description' => __( 'Select a reading to add', 'ubc-press' ),
 				'help' => '#',
 				'has_preview' => false,
 			),
@@ -28,8 +28,8 @@ class AddReadingWidget extends \SiteOrigin_Widget {
 			array(
 				'reading_post_id' => array(
 					'type' => 'select',
-					'label' => __( 'Choose Reading', \UBC\Press::get_text_domain() ),
-					'prompt' => __( 'Choose Reading', \UBC\Press::get_text_domain() ),
+					'label' => __( 'Choose Reading', 'ubc-press' ),
+					'prompt' => __( 'Choose Reading', 'ubc-press' ),
 					'options' => \UBC\Press\Plugins\SiteBuilder\Widgets\Utils::get_array_of_posts_for_cpt( 'reading' ),
 					'state_emitter' => array(
 						'callback' => 'set_this_value_to_other',

@@ -351,7 +351,7 @@ class Setup {
 			return $translations;
 		}
 
-		return __( 'Content Builder', \UBC\Press::get_text_domain() );
+		return __( 'Content Builder', 'ubc-press' );
 
 	}/* gettext__change_page_builder() */
 
@@ -392,7 +392,7 @@ class Setup {
 			return $translations;
 		}
 
-		return __( '', \UBC\Press::get_text_domain() );
+		return __( '', 'ubc-press' );
 
 	}/* gettext__change_switch_to_editor() */
 
@@ -418,7 +418,7 @@ class Setup {
 			return $translations;
 		}
 
-		return __( 'Add a 1{component}, 2{row} or 3{prebuilt layout} to get started.', \UBC\Press::get_text_domain() );
+		return __( 'Add a 1{component}, 2{row} or 3{prebuilt layout} to get started.', 'ubc-press' );
 
 	}/* gettext__change_no_component_message() */
 
@@ -560,7 +560,7 @@ class Setup {
 
 	public function manage_section_posts_columns__add_components( $columns ) {
 
-		$columns = array_slice( $columns, 0, 2, true ) + array( 'components' => __( 'Components', \UBC\Press::get_text_domain() ) ) + array_slice( $columns, 2, count( $columns ) - 1, true );
+		$columns = array_slice( $columns, 0, 2, true ) + array( 'components' => __( 'Components', 'ubc-press' ) ) + array_slice( $columns, 2, count( $columns ) - 1, true );
 
 		return $columns;
 
@@ -589,7 +589,7 @@ class Setup {
 
 				// No panels or no widgets
 				if ( empty( $panel_meta ) || ! isset( $panel_meta['widgets'] ) || empty( $panel_meta['widgets'] ) ) {
-					echo esc_html__( 'No Components', \UBC\Press::get_text_domain() );
+					echo esc_html__( 'No Components', 'ubc-press' );
 					return;
 				}
 
@@ -664,57 +664,57 @@ class Setup {
 		switch ( $class ) {
 
 			case 'AddQuizWidget':
-				$nice_name = __( 'Quiz', \UBC\Press::get_text_domain() );
+				$nice_name = __( 'Quiz', 'ubc-press' );
 				break;
 			case 'AddLectureWidget':
-				$nice_name = __( 'Lecture', \UBC\Press::get_text_domain() );
+				$nice_name = __( 'Lecture', 'ubc-press' );
 				break;
 			case 'AddAssignmentWidget':
-				$nice_name = __( 'Assignment', \UBC\Press::get_text_domain() );
+				$nice_name = __( 'Assignment', 'ubc-press' );
 				break;
 			case 'AddReadingWidget':
-				$nice_name = __( 'Reading', \UBC\Press::get_text_domain() );
+				$nice_name = __( 'Reading', 'ubc-press' );
 				break;
 			case 'AddLinkWidget':
-				$nice_name = __( 'Link', \UBC\Press::get_text_domain() );
+				$nice_name = __( 'Link', 'ubc-press' );
 				break;
 			case 'AddDiscussionForumWidget':
-				$nice_name = __( 'Forum', \UBC\Press::get_text_domain() );
+				$nice_name = __( 'Forum', 'ubc-press' );
 				break;
 			case 'AddHandoutWidget':
-				$nice_name = __( 'Handout', \UBC\Press::get_text_domain() );
+				$nice_name = __( 'Handout', 'ubc-press' );
 				break;
 
 			case 'WP_Widget_Black_Studio_TinyMCE':
-				$nice_name = __( 'Text', \UBC\Press::get_text_domain() );
+				$nice_name = __( 'Text', 'ubc-press' );
 				break;
 
 			case 'SiteOrigin_Widget_Editor_Widget':
-				$nice_name = __( 'Text', \UBC\Press::get_text_domain() );
+				$nice_name = __( 'Text', 'ubc-press' );
 				break;
 
 			case 'SiteOrigin_Widget_GoogleMap_Widget':
-				$nice_name = __( 'Map', \UBC\Press::get_text_domain() );
+				$nice_name = __( 'Map', 'ubc-press' );
 				break;
 
 			case 'SiteOrigin_Widget_Button_Widget':
-				$nice_name = __( 'Button', \UBC\Press::get_text_domain() );
+				$nice_name = __( 'Button', 'ubc-press' );
 				break;
 
 			case 'SiteOrigin_Widget_Features_Widget':
-				$nice_name = __( 'Feature', \UBC\Press::get_text_domain() );
+				$nice_name = __( 'Feature', 'ubc-press' );
 				break;
 
 			case 'SiteOrigin_Widget_Image_Widget':
-				$nice_name = __( 'Image', \UBC\Press::get_text_domain() );
+				$nice_name = __( 'Image', 'ubc-press' );
 				break;
 
 			case 'SiteOrigin_Widget_PostCarousel_Widget':
-				$nice_name = __( 'Posts', \UBC\Press::get_text_domain() );
+				$nice_name = __( 'Posts', 'ubc-press' );
 				break;
 
 			case 'SiteOrigin_Widget_Slider_Widget':
-				$nice_name = __( 'Slider', \UBC\Press::get_text_domain() );
+				$nice_name = __( 'Slider', 'ubc-press' );
 				break;
 
 			default:
@@ -747,7 +747,7 @@ class Setup {
 				$section_associations = get_post_meta( $post_id, 'section_associations', true );
 
 				if ( ! $section_associations || empty( $section_associations ) ) {
-					echo esc_html__( 'No associated sections', \UBC\Press::get_text_domain() );
+					echo esc_html__( 'No associated sections', 'ubc-press' );
 					return;
 				}
 
@@ -774,7 +774,7 @@ class Setup {
 
 	public function manage_assignment_posts_columns__add_section( $columns ) {
 
-		$columns = array_slice( $columns, 0, 2, true ) + array( 'sections' => __( 'Sections', \UBC\Press::get_text_domain() ) ) + array_slice( $columns, 2, count( $columns ) - 1, true );
+		$columns = array_slice( $columns, 0, 2, true ) + array( 'sections' => __( 'Sections', 'ubc-press' ) ) + array_slice( $columns, 2, count( $columns ) - 1, true );
 
 		return $columns;
 

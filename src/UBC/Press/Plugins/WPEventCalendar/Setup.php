@@ -282,7 +282,7 @@ class Setup {
 
 	public function query_vars__add_calendar_rewrite_rule( $vars ) {
 
-		$vars[] = __( 'mode', \UBC\Press::get_text_domain() );
+		$vars[] = __( 'mode', 'ubc-press' );
 		return $vars;
 
 	}/* query_vars__add_calendar_rewrite_rule() */

@@ -17,9 +17,9 @@ $get_the_id				= get_the_id();
 
 $button_size			= 'medium';
 
-$button_text 			= ( isset( $data['completed'] ) && true === $data['completed'] ) ? __( 'Mark Uncomplete', \UBC\Press::get_text_domain() ) : __( 'Mark Complete', \UBC\Press::get_text_domain() );
+$button_text 			= ( isset( $data['completed'] ) && true === $data['completed'] ) ? __( 'Mark Uncomplete', 'ubc-press' ) : __( 'Mark Complete', 'ubc-press' );
 $when_completed_text	= ( isset( $data['when_completed'] ) ) ? human_time_diff( $data['when_completed'], current_time( 'timestamp' ) ) : false;
-$tooltip_when_completed	= ( isset( $data['when_completed'] ) ) ? sprintf( _x( 'Completed %s ago', '%s = human-readable time difference', \UBC\Press::get_text_domain() ), $when_completed_text ) : 'Mark as Complete';
+$tooltip_when_completed	= ( isset( $data['when_completed'] ) ) ? sprintf( _x( 'Completed %s ago', '%s = human-readable time difference', 'ubc-press' ), $when_completed_text ) : 'Mark as Complete';
 $mark_as_complete_classes = ( isset( $data['completed'] ) && true === $data['completed'] ) ? 'success' : 'secondary hollow';
 
 $saved_for_later 		= ( isset( $data['saved_for_later'] ) ) ? $data['saved_for_later'] : false;

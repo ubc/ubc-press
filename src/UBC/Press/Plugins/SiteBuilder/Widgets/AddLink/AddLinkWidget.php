@@ -18,9 +18,9 @@ class AddLinkWidget extends \SiteOrigin_Widget {
 		// $id, $name, $widget_options, $control_options, $form_options, $base_folder
 		parent::__construct(
 			'ubc-link',
-			__( 'Link', \UBC\Press::get_text_domain() ),
+			__( 'Link', 'ubc-press' ),
 			array(
-				'description' => __( 'Select a link to add', \UBC\Press::get_text_domain() ),
+				'description' => __( 'Select a link to add', 'ubc-press' ),
 				'help' => '#',
 				'has_preview' => false,
 			),
@@ -28,8 +28,8 @@ class AddLinkWidget extends \SiteOrigin_Widget {
 			array(
 				'link_post_id' => array(
 					'type' => 'select',
-					'label' => __( 'Choose Link', \UBC\Press::get_text_domain() ),
-					'prompt' => __( 'Choose Link', \UBC\Press::get_text_domain() ),
+					'label' => __( 'Choose Link', 'ubc-press' ),
+					'prompt' => __( 'Choose Link', 'ubc-press' ),
 					'options' => \UBC\Press\Plugins\SiteBuilder\Widgets\Utils::get_array_of_posts_for_cpt( 'link' ),
 					'state_emitter' => array(
 						'callback' => 'set_this_value_to_other',
