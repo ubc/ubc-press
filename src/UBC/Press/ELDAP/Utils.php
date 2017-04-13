@@ -18,6 +18,8 @@ class Utils {
 	public static $password = '';
 	public static $uid = '';
 	public static $base_dn = '';
+	public static $host = '';
+	public static $port = '';
 
 	/**
 	 * Set up the connection details for ELDAP connections.
@@ -43,6 +45,8 @@ class Utils {
 		// TODO Abstract this abomination
 		static::$password	= constant( 'UBC_PRESS_ELDAP_PASSWORD' );
 		static::$uid		= constant( 'UBC_PRESS_ELDAP_UID' );
+		static::$host       = constant( 'UBC_PRESS_ELDAP_HOST' );
+		static::$port       = constant( 'UBC_PRESS_ELDAP_PORT' );
 
 		$user = static::$uid;
 		static::$base_dn = 'dc=id,dc=ubc,dc=ca';
@@ -50,12 +54,12 @@ class Utils {
 		$base_ou = 'ou=ADMINS,ou=IDM';
 
 		static::$connection_options = array(
-			'host' => 'eldapcons.id.ubc.ca',
-			'port' => '636',
+			'host' => static::$host,
+			'port' => static::$port,
 			'useSsl' => true,
 			'bindRequiresDn' => true,
 			'username' => "$user,$base_ou,$base_dn",
-			'password' => 'HRNe&02S766&',
+			'password' => static::$password,
 			'baseDn' => $base_dn,
 		);
 
