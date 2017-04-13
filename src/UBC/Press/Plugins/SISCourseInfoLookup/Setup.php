@@ -154,7 +154,8 @@ class Setup {
 	public function wpmu_new_blog__run_gforms_installer( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
 
 		switch_to_blog( $blog_id );
-		\GFForms::setup();
+
+		gf_upgrade()->upgrade( null, true );
 		restore_current_blog();
 
 	}/* wpmu_new_blog__run_gforms_installer() */
