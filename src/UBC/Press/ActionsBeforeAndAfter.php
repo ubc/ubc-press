@@ -25,7 +25,7 @@ abstract class ActionsBeforeAndAfter {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param (string) $action_name - The action name to run (defaults to using the class path)
+	 * @param string|bool $action_name - The action name to run (defaults to using the class path)
 	 * @return null
 	 */
 
@@ -120,7 +120,7 @@ abstract class ActionsBeforeAndAfter {
 	 * @since 1.0.0
 	 *
 	 * @param null
-	 * @return nul
+	 * @return null
 	 */
 
 	public function get_just_class_name() {
