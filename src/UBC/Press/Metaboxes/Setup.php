@@ -196,7 +196,8 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			'options' => array(
 				'textarea_rows' => 8,
 				'media_buttons' => false,
-				'teeny' => true,
+				'quicktags' => false,
+				'drag_drop_upload' => false,
 			),
 		) );
 
