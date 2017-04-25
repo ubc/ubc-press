@@ -80,7 +80,9 @@ class Setup {
 			return $redirect_url;
 		}
 
-		return get_permalink();
+		// If the forum is empty, then the redirect we want falls apart.
+		// If it is, then we need to use the current URL
+		return esc_url ( home_url( $_POST['_wp_http_referer'] ) );
 
 	}/* bbp_new_topicreply_redirect_to__do_not_redirect_to_bbpress_urls() */
 
