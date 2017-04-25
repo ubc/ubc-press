@@ -1440,7 +1440,7 @@ class Utils {
 	/**
 	 * A getter for all user notes
 	 *
-	 * Usage: \UBC\Utils::get_user_notes( $user_id );
+	 * Usage: \UBC\Press\Utils::get_user_notes( $user_id );
 	 *
 	 * @since 1.0.0
 	 *
@@ -1459,6 +1459,48 @@ class Utils {
 		return get_user_meta( $user_id, 'ubc_press_user_notes', true );
 
 	}/* get_user_notes() */
+
+
+	/**
+	 * Get all notes for a specific user for a specific site. Default to
+	 * current user on current site.
+	 *
+	 * Usage: \UBC\Press\Utils::get_user_notes_for_site()
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int $user_id The ID of the user for whom we wish to get the notes
+	 * @param int $site_id The ID of the site for which we want the notes for $user_id
+	 * @return null
+	 */
+
+	public static function get_user_notes_for_site( $user_id = false, $site_id = false ) {
+
+		if ( false === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		$user_id = absint( $user_id );
+
+		if ( false === $site_id ) {
+			$site_id = get_current_blog_id();
+		}
+
+		$site_id = absint( $site_id );
+
+		if ( ! $user_id || ! $site_id ) {
+			return array();
+		}
+
+		$all_notes = \UBC\Press\Utils::get_user_notes( $user_id );
+
+		if ( ! isset( $all_notes ) || ! isset( $all_notes[ $site_id ] ) ) {
+			return array();
+		}
+
+		return $all_notes[ $site_id ];
+
+	}
 
 
 	/**
@@ -1658,5 +1700,42 @@ class Utils {
 		return (bool) update_user_meta( $user_id, 'ubc_press_saved_for_later', $current_saved );
 
 	}/* set_component_as_not_saved_for_later() */
+
+
+	/**
+	 * Get just the top-level sections list
+	 *
+	 * Usage: \UBC\Press\Utils::get_section_list()
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function get_section_list() {
+
+		$args = array(
+			'post_type' => 'section',
+			'post_parent' => 0,
+			'posts_per_page' => '-1',
+			'fields' => 'ids',
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+		);
+
+		$the_query = new \WP_Query( $args );
+
+		if ( ! $the_query->have_posts() ) {
+			return array();
+		}
+
+		$sections = $the_query->posts;
+
+		wp_reset_postdata();
+
+		return $sections;
+
+	}/* get_section_list() */
 
 }/* Utils */
