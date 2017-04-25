@@ -1,60 +1,20 @@
+<?php
+
+	$saved = \UBC\Press\Utils::get_saved_components_for_user_for_site();
+
+?>
+
 <div class="tabs-panel column saved" id="panel3v">
-<h2>Saved</h2>
-    <div class="row">
-        <section class="small-12 medium-6 large-4 column">
-            <div class="callout">
-            <h4>Saved Component</h4>
-            <h5>Saved from <a href="">Section title</a></h5>
-                <div class="button-group tiny">
-                    <a href="#" class="button success tiny">View component</a> <a href="#" class="button tiny">Delete</a>
-                </div>
-                <!-- .button-group -->
-            </div>
-            <!-- .callout -->
-        </section>
-        <section class="small-12 medium-6 large-4 column">
-            <div class="callout">
-            <h4>Saved Component</h4>
-            <h5>Saved from <a href="">Section title</a></h5>
-                <div class="button-group tiny">
-                    <a href="#" class="button success tiny">View component</a> <a href="#" class="button tiny">Delete</a>
-                </div>
-                <!-- .button-group -->
-            </div>
-            <!-- .callout -->
-        </section>
-        <section class="small-12 medium-6 large-4 column">
-            <div class="callout">
-            <h4>Saved Component</h4>
-            <h5>Saved from <a href="">Section title</a></h5>
-                <div class="button-group tiny">
-                    <a href="#" class="button success tiny">View component</a> <a href="#" class="button tiny">Delete</a>
-                </div>
-                <!-- .button-group -->
-            </div>
-            <!-- .callout -->
-        </section>
-        <section class="small-12 medium-6 large-4 column">
-            <div class="callout">
-            <h4>Saved Component</h4>
-            <h5>Saved from <a href="">Section title</a></h5>
-                <div class="button-group tiny">
-                    <a href="#" class="button success tiny">View component</a> <a href="#" class="button tiny">Delete</a>
-                </div>
-                <!-- .button-group -->
-            </div>
-            <!-- .callout -->
-        </section>
-        <section class="small-12 medium-6 large-4 column">
-            <div class="callout">
-            <h4>Saved Component</h4>
-            <h5>Saved from <a href="">Section title</a></h5>
-                <div class="button-group tiny">
-                    <a href="#" class="button success tiny">View component</a> <a href="#" class="button tiny">Delete</a>
-                </div>
-                <!-- .button-group -->
-            </div>
-            <!-- .callout -->
-        </section>
-    </div>
+
+	<h2>Saved</h2>
+
+	<div class="row">
+
+		<?php
+			foreach ( $saved as $post_id => $saved_content ) {
+				\UBC\Helpers::locate_template_part_in_plugin( trailingslashit( dirname( __FILE__ ) ), 'me-saved-single.php', true, false, array( 'post_id' => $post_id, 'saved_data' => $saved_content ) );
+			}
+		?>
+
+	</div>
 </div>

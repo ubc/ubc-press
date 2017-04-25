@@ -1600,7 +1600,7 @@ class Utils {
 	}/* component_is_saved_for_later() */
 
 
-	public static function get_saved_components_for_user( $user_id ) {
+	public static function get_saved_components_for_user( $user_id = false ) {
 
 		// Bail if user isn't logged in
 		if ( ! is_user_logged_in() ) {
@@ -1621,6 +1621,89 @@ class Utils {
 		return $saved_for_later;
 
 	}/* get_saved_components_for_user() */
+
+
+	public static function get_saved_components_for_user_for_site( $user_id = false, $site_id = false ) {
+
+		// Bail if user isn't logged in
+		if ( ! is_user_logged_in() ) {
+			return false;
+		}
+
+		// If no user ID is passed, default to the current user
+		if ( false === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		// Sanitize
+		$user_id = absint( $user_id );
+
+		// If no site ID is passed, default to the current site
+		if ( false === $site_id ) {
+			$site_id = get_current_blog_id();
+		}
+
+		// Sanitize
+		$site_id = absint( $site_id );
+
+		if ( ! $user_id || ! $site_id ) {
+			return array();
+		}
+
+		$all_saved = \UBC\Press\Utils::get_saved_components_for_user( $user_id );
+
+		if ( ! isset( $all_saved[ $site_id ] ) ) {
+			return array();
+		}
+
+		return $all_saved[ $site_id ];
+
+	}
+
+
+	public static function get_post_parent_title( $post_id = false ) {
+
+		$post = static::get_post_from_post_id_or_false( $post_id );
+
+		return get_the_title( $post->post_parent );
+
+	}
+
+	public static function get_post_parent_permalink( $post_id = false ) {
+
+		$post = static::get_post_from_post_id_or_false( $post_id );
+
+		return get_permalink( $post->post_parent );
+
+	}
+
+	public static function get_post_from_post_id_or_false( $post_id = false ) {
+
+		if ( ! $post_id ) {
+			$post_id = get_the_ID();
+		}
+
+		$post_id = absint( $post_id );
+
+		if ( ! $post_id ) {
+			return false;
+		}
+
+		$post_args = array( 'post_type' => 'any', 'p' => $post_id );
+		$query = new \WP_Query( $post_args );
+
+		if ( ! $query->have_posts() ) {
+			return false;
+		}
+
+		$this_post = $query->post;
+		if ( ! is_a( $this_post, 'WP_Post' ) ) {
+			return false;
+		}
+
+		return $this_post;
+
+	}
 
 
 	public static function set_component_as_saved_for_later( $post_id, $user_id ) {
@@ -1653,7 +1736,8 @@ class Utils {
 		}
 
 		// Add our completion
-		$current_saved[ $site_id ][ $post_id ] = array( 'when' => time() );
+		global $post;
+		$current_saved[ $site_id ][ $post_id ] = array( 'when' => time(), 'saved_from' => esc_url( $_SERVER['HTTP_REFERER'] ) );
 
 		do_action( 'ubc_press_set_component_as_saved', $post_id, $user_id );
 
@@ -1701,6 +1785,20 @@ class Utils {
 
 	}/* set_component_as_not_saved_for_later() */
 
+
+	public static function get_groups_for_user( $user_id = false ) {
+
+		if ( false === $user_id ) {
+			$user_id = get_current_user_id();
+		}
+
+		return wp_get_terms_for_user( $user_id, 'user-group' );
+
+	}
+
+	public static function get_users_in_group( $group_id ) {
+		return wp_get_users_of_group( array( 'term' => absint( $group_id ), 'term_by' => 'ID' ) );
+	}
 
 	/**
 	 * Get just the top-level sections list
