@@ -1442,6 +1442,13 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 				'label' => 'Associated Assignment ID',
 				'defaultValue' => esc_html( $post_id ),
 			),
+			array(
+				'id' => '1001',
+				'type' => 'text',
+				'label' => 'Grade',
+				'size' => 'small',
+				'visibility' => 'administrative',
+			),
 		);
 
 		$file_upload_args = array(
