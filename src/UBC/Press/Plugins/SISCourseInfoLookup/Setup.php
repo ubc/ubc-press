@@ -61,6 +61,9 @@ class Setup {
 		// Once the gForms installer has run, we need to create the feedback form
 		add_action( 'ubc_press_after_publish_course_and_associate_meta', array( $this, 'ubc_press_after_publish_course_and_associate_meta__create_feedback_form' ), 20, 3 );
 
+		// When a new blog is created, we need to flush the rewrite rules
+		add_action( 'wpmu_new_blog', array( $this, 'wpmu_new_blog__flush_rewrites' ), 999, 6 );
+
 	}/* setup_actions() */
 
 
@@ -460,6 +463,30 @@ It is shown when a student completes all components for a section.';
 		restore_current_blog();
 
 	}/* wpmu_new_blog__setup_roles() */
+
+
+	/**
+	 * As we have some custom rewrites, we need to flush them when a new site is created.
+	 * This helps with the /me/ control
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int	$blog_id Blog ID.
+	 * @param int	$user_id User ID.
+	 * @param string $domain  Site domain.
+	 * @param string $path	Site path.
+	 * @param int	$site_id Site ID. Only relevant on multi-network installs.
+	 * @param array  $meta	Meta data. Used to set initial site options.
+	 * @return null
+	 */
+
+	public function wpmu_new_blog__flush_rewrites( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
+
+		switch_to_blog( $blog_id );
+		flush_rewrite_rules();
+		restore_current_blog();
+
+	}/* wpmu_new_blog__flush_rewrites() */
 
 
 	/**
