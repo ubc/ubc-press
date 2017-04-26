@@ -1282,9 +1282,15 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		foreach ( $associated_submissions as $id => $submission_post_id ) {
 			$title	= get_the_title( $submission_post_id );
-			$url	= get_permalink( $submission_post_id );
+
+			// URL needs to look like admin.php?page=gf_entries&view=entry&lid=3&id=2
+			// Where id = form ID and lid is entry ID.
+			$entry_id	= get_post_meta( $submission_post_id, 'ubc_press_associated_entry_id', true );
+			$entry = \GFAPI::get_entry( $entry_id );
+			$form_id = $entry['form_id'];
+			$url 	= admin_url( "admin.php?page=gf_entries&view=entry&lid=$entry_id&id=$form_id" );
 			$graded	= get_post_meta( $submission_post_id, 'submission_grade', true );
-			$post = get_post( $submission_post_id );
+			$post 	= get_post( $submission_post_id );
 			$author_name = get_the_author_meta( $post->post_author );
 			$data['submissions'][] = array( 'title' => $title, 'url' => $url, 'graded' => $graded, 'author' => $author_name );
 		}

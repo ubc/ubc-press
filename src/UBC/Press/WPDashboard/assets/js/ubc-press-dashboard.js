@@ -258,7 +258,7 @@
 
 		newRowMarkup: function() {
 
-			var markup = '<tr class="ubc-press-injected-tr" style="background: white;"><td colspan="4" style="padding: 0;"><div class="ubc-press-assignment-submissions-wrap"><table style="width: 100%; border-color: #0072AC; border-spacing: 0; border-bottom: 1px solid #0072AC;"><thead style="background: #0072AC;"><th style="color: white;">Title</th><th style="color: white;">Link</th><th style="color: white;">Author</th><th style="color: white;">Grade</th></thead><tbody class="ubc-submissions-for-assignment"></tbody></table></div></td></tr>';
+			var markup = '<tr class="ubc-press-injected-tr" style="background: white;"><td colspan="5" style="padding: 0;"><div class="ubc-press-assignment-submissions-wrap"><table style="width: 100%; border-color: #0072AC; border-spacing: 0; border-bottom: 1px solid #0072AC;"><thead style="background: #0072AC;"><th style="color: white;">Title</th><th style="color: white;">Link</th><th style="color: white;">Author</th><th style="color: white;">Grade</th></thead><tbody class="ubc-submissions-for-assignment"></tbody></table></div></td></tr>';
 
 			return markup;
 
@@ -276,7 +276,7 @@
 			var author = assignmentObject.author;
 			var graded = assignmentObject.graded;
 
-			var markup = '<tr><td class="tg-baqh" style="border: 1px solid #0071AE;border-top: 0;">' + title + '</td><td class="tg-baqh" style="border: 1px solid #0071AE;border-top: 0;border-left: 0;">' + url + '</td><td class="tg-baqh" style="border: 1px solid #0071AE;border-left: 0;border-top: 0;">' + author + '</td><td class="tg-baqh" style="border: 1px solid #0071AE;border-left: 0;border-top: 0;">' + graded + '</td></tr>';
+			var markup = '<tr><td class="tg-baqh" style="border: 1px solid #0071AE;border-top: 0;">' + title + '</td><td class="tg-baqh" style="border: 1px solid #0071AE;border-top: 0;border-left: 0;"><a href="'+ url +'" title="">' + url + '</a></td><td class="tg-baqh" style="border: 1px solid #0071AE;border-left: 0;border-top: 0;">' + author + '</td><td class="tg-baqh" style="border: 1px solid #0071AE;border-left: 0;border-top: 0;">' + graded + '</td></tr>';
 
 			return markup;
 
