@@ -1291,7 +1291,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			$url 	= admin_url( "admin.php?page=gf_entries&view=entry&lid=$entry_id&id=$form_id" );
 			$graded	= get_post_meta( $submission_post_id, 'submission_grade', true );
 			$post 	= get_post( $submission_post_id );
-			$author_name = get_the_author_meta( $post->post_author );
+			$author_name = get_the_author_meta( 'display_name', $post->post_author );
 			$data['submissions'][] = array( 'title' => $title, 'url' => $url, 'graded' => $graded, 'author' => $author_name );
 		}
 
