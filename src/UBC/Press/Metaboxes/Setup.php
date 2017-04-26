@@ -1462,6 +1462,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			'type' => 'post_content',
 			'size' => 'medium',
 			'isRequired' => true,
+			'useRichTextEditor' => true,
 		);
 
 		// Now conditionally add the fields selected via the form input
@@ -1545,6 +1546,8 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		}
 
 		$new_submission_post_id = $this->make_submission_post( $entry, $form );
+
+		add_post_meta( $new_submission_post_id, 'ubc_press_associated_entry_id', $entry['id'] );
 
 		$this->associate_submission_with_assignment( $new_submission_post_id, $associated_assignment_post_id );
 
