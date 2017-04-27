@@ -9,6 +9,8 @@ if ( ! is_user_logged_in() ) {
 	return wp_redirect( wp_login_url( home_url( '/me' ) ) );
 }
 
+do_action( 'ubc_press_student_dashboard_pre_header' );
+
 get_header();
 
 $current_user   = wp_get_current_user();
@@ -74,5 +76,7 @@ $start_path 		= trailingslashit( dirname( __FILE__ ) );
 	</main><!-- #main -->
 
 </div><!-- #primary -->
+
+<?php do_action( 'ubc_press_student_dashboard_pre_footer' ); ?>
 
 <?php get_footer(); ?>
