@@ -5,9 +5,9 @@ $completed_data = \UBC\Press\StudentDashboard\Utils::get_course_completion_data_
 
 ?>
 
-<section class="small-12 medium-7 column course-progress">
+<section class="course-progress">
 
-	<h3>Course progress</h3>
+	<h2>Course progress <small>(Completed: <?php echo absint( $completed_data['num_completed_components'] ); ?>/<?php echo absint( $completed_data['num_components'] ) ?>)*</small></h2>
 
 	<div class="progress" role="progressbar" tabindex="0" aria-valuenow="<?php echo absint( $completed_percentage ); ?>" aria-valuemin="0" aria-valuetext="<?php echo absint( $completed_percentage ); ?> percent" aria-valuemax="100">
 
@@ -15,10 +15,8 @@ $completed_data = \UBC\Press\StudentDashboard\Utils::get_course_completion_data_
 			<p class="progress-meter-text"><?php echo absint( $completed_percentage ); ?>%</p>
 		</span><!-- .progress-meter -->
 
-		<p>
-			<small>[Completed: <?php echo absint( $completed_data['num_completed_components'] ); ?>/<?php echo absint( $completed_data['num_components'] ) ?>]</small>
-		</p>
-
 	</div><!-- .progress -->
-
+	<p>
+		<small>*Completed indicates the number of elements that have been marked as complete throughout the course material.</small>
+	</p>
 </section><!-- .course-progress -->

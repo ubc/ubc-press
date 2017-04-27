@@ -4,11 +4,16 @@
 
 ?>
 
-<div class="tabs-panel column saved" id="panel3v">
+<div class="tabs-panel saved" id="panel3v">
 
-	<h2>Saved</h2>
+	<header>
+		<h3>Saved</h3>
+		<p class="lead">
+			These are the saved components you have made across all of the content in this course.
+		</p>
+	</header>
 
-	<div class="row">
+	<div class="row small-collapse medium-uncollapse">
 
 		<?php
 			foreach ( $saved as $post_id => $saved_content ) {
@@ -17,4 +22,7 @@
 		?>
 
 	</div>
+	<!-- .row -->
+
 </div>
+<!-- .saved -->

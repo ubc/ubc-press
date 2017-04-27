@@ -3,7 +3,9 @@
 	<?php do_action( 'bbp_template_before_user_topics_created' ); ?>
 
 	<div id="bbp-user-topics-started" class="bbp-user-topics-started">
-		<h2 class="entry-title"><?php esc_html_e( 'Forum Topics Started', 'bbpress' ); ?></h2>
+		<header>
+			<h3><?php esc_html_e( 'Forum Topics Started', 'bbpress' ); ?></h3>
+		</header>
 		<div class="bbp-user-section">
 
 			<?php if ( bbp_get_user_topics_started( get_current_user_id() ) ) : ?>

@@ -6,20 +6,21 @@ $lead = ( empty( $notes ) ) ? 'You have made no notes for this course.' : 'These
 
 ?>
 
-<div class="tabs-panel column notes is-active" id="panel2v">
-
+<div class="tabs-panel notes is-active" id="panel2v">
 
 	<header>
-		<h2>Notes</h2>
+		<h3>Notes</h3>
 		<p class="lead"><?php echo wp_kses_post( $lead ); ?></p>
 	</header>
 
-	<div class="row">
+	<div class="row small-collapse medium-uncollapse">
 		<?php
-			foreach ( $notes as $post_id => $note_content ) {
-				\UBC\Helpers::locate_template_part_in_plugin( trailingslashit( dirname( __FILE__ ) ), 'me-notes-single.php', true, false, array( 'post_id' => $post_id, 'note_data' => $note_content ) );
-			}
+		foreach ( $notes as $post_id => $note_content ) {
+			\UBC\Helpers::locate_template_part_in_plugin( trailingslashit( dirname( __FILE__ ) ), 'me-notes-single.php', true, false, array( 'post_id' => $post_id, 'note_data' => $note_content ) );
+		}
 		?>
 	</div>
+	<!-- .row -->
 
 </div>
+<!-- .notes -->

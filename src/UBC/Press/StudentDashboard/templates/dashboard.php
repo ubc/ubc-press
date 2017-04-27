@@ -11,11 +11,11 @@ if ( ! is_user_logged_in() ) {
 
 get_header();
 
-$current_user           = wp_get_current_user();
-$course_title			= ( empty( get_theme_mod( 'course_title' ) ) ? 'Please Enter Course Tilte' : get_theme_mod( 'course_title' ) );
+$current_user   = wp_get_current_user();
+$course_title		= ( empty( get_theme_mod( 'course_title' ) ) ? 'Please Enter Course Tilte' : get_theme_mod( 'course_title' ) );
 $home_url				= home_url( '/' );
 
-$start_path = trailingslashit( dirname( __FILE__ ) );
+$start_path 		= trailingslashit( dirname( __FILE__ ) );
 
 ?>
 
@@ -28,30 +28,26 @@ $start_path = trailingslashit( dirname( __FILE__ ) );
 
 			<?php tha_entry_top(); ?>
 
-			<div class="dashboard-header">
-				<div class="row expanded">
-					<header class="entry-header column small-12">
-						<h1 class="course-title"><a href="<?php echo esc_url( $home_url );?>" title="Course home"><?php echo esc_html( $course_title ); ?></a></h1>
-					</header>
-					<!-- .entry-header -->
-				</div>
+				<header class="entry-header">
+					<h1>Personal Dashboard <small>for <?php echo esc_html( $course_title ); ?></small></h1>
+				</header>
 
-				<div class="row expanded meta">
 
-					<?php \UBC\Helpers::locate_template_part_in_plugin( $start_path, 'course-progress.php', true, false, array() ); ?>
+			<?php \UBC\Helpers::locate_template_part_in_plugin( $start_path, 'course-progress.php', true, false, array() ); ?>
 
-					<?php \UBC\Helpers::locate_template_part_in_plugin( $start_path, 'course-instructor.php', true, false, array() ); ?>
+			<?php //\UBC\Helpers::locate_template_part_in_plugin( $start_path, 'course-instructor.php', true, false, array() ); ?>
 
-				</div>
-				<!-- .row.expanded -->
-			</div>
-			<!-- .dashboard-header -->
 
-			<section class="entry-content">
+
+			<section id="tabbed-content" class="entry-content">
+
+				<header>
+					<h2>Course activities</h2>
+				</header>
 
 				<?php \UBC\Helpers::locate_template_part_in_plugin( $start_path, 'me-tabs.php', true, false, array() ); ?>
 
-				<div class="tabs-content row expanded" data-tabs-content="course-dashbord-tabs">
+				<div class="tabs-content" data-tabs-content="course-dashbord-tabs">
 
 					<?php \UBC\Helpers::locate_template_part_in_plugin( $start_path, 'me-notes.php', true, false, array() ); ?>
 

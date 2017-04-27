@@ -5,7 +5,7 @@
 
 ?>
 
-<section class="small-12 medium-6 large-4 column">
+<div class="small-12 medium-6 large-4 column">
 
 	<div class="callout">
 
@@ -19,4 +19,4 @@
 
 	</div>
 	<!-- .callout -->
-</section>
+</div>
