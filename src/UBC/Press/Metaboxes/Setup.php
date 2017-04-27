@@ -121,8 +121,8 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init__save_onboarding_options' ) );
 
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes__subsection_icon' ) );
-		add_action( 'save_post', array( $this, 'save_post__save_icon_metabox' ) );
+		// add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes__subsection_icon' ) );
+		// add_action( 'save_post', array( $this, 'save_post__save_icon_metabox' ) );
 
 		// Assignment's "create new assignment form" metabox
 		add_action( 'cmb2_admin_init', array( $this, 'cmb2_admin_init__show_assignment_form_create_form_markup' ) );
