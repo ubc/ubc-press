@@ -10,7 +10,7 @@
 
 	<div class="callout">
 	<h4><?php echo esc_html( get_the_title( $data['post_id'] ) ); ?> <small><br />Saved on <?php echo esc_html( date( 'l M j, Y', $data['saved_data']['when'] ) ); ?></small></h4>
-	<a href="<?php echo esc_url( $saved_url ); ?>" class="button small">View saved</a>
+	<a href="<?php echo esc_url( $saved_url ); ?>" class="button small" target="_blank">View saved</a>
 		<!-- .button-group -->
 	</div>
 	<!-- .callout -->
