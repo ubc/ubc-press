@@ -1408,7 +1408,7 @@ class Utils {
 
 		// Check that the current user is able to update this user's notes
 		// Either a network admin, or the user themselves
-		if ( ! is_super_admin() || ( get_current_user_id() !== $user_id ) ) {
+		if ( ! is_super_admin() && ( get_current_user_id() !== $user_id ) ) {
 			return false;
 		}
 
