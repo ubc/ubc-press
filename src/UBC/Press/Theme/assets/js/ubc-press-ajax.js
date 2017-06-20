@@ -521,7 +521,7 @@ console.log( response );
 			}
 
 			// Update the value
-			var updateSpan = jQuery( '.current_page_item .completed-components-details .completed-components' );
+			var updateSpan = jQuery( '.current-page-item .completed-components-details .completed-components' );
 			updateSpan.text( newValue );
 
 			// If this is now 100% we fire a custom action so we can ask for feedback
@@ -619,7 +619,7 @@ console.log( response );
 		get_previous_value: function() {
 
 			// Find the completed class and the number of already completed
-			var updateSpan = jQuery( '.current_page_item .completed-components-details .completed-components' );
+			var updateSpan = jQuery( '.current-page-item .completed-components-details .completed-components' );
 			var prevValue = parseInt( updateSpan.text() );
 
 			return prevValue;
@@ -638,7 +638,7 @@ console.log( response );
 
 		get_total_num_of_components: function() {
 
-			var totalSpan = jQuery( '.current_page_item .completed-components-details .total-components' );
+			var totalSpan = jQuery( '.current-page-item .completed-components-details .total-components' );
 			var totalValue = parseInt( totalSpan.text() );
 
 			return totalValue;
@@ -664,11 +664,11 @@ console.log( response );
 			var newValue 			= this.get_new_value( prevValue, completed );
 			var totalNumComponents	= this.get_total_num_of_components();
 
-			var new_percentage 		= this.get_percentage( newValue, totalNumComponents );
+			var new_percentage 			= this.get_percentage( newValue, totalNumComponents );
 
-			var progress_div 		= jQuery( '.current_page_item .progress' );
+			var progress_div 			= jQuery( '.current-page-item .progress' );
 			var progress_span 		= jQuery( progress_div ).find( '.progress-meter' );
-			var text_span 			= jQuery( progress_div ).find( '.progress-meter-text' );
+			var text_span 				= jQuery( progress_div ).find( '.progress-meter-text' );
 
 			// Animate the progress bar
 			progress_span.animate( {

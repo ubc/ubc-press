@@ -6,7 +6,7 @@
 	$saved_url		 = $url_part . $url_component;
 ?>
 
-<div class="small-collapse small-12 medium-6 large-4 column">
+<div class="dash-item">
 
 	<div class="callout">
 	<h4><?php echo esc_html( get_the_title( $data['post_id'] ) ); ?> <small><br />Saved on <?php echo esc_html( date( 'l M j, Y', $data['saved_data']['when'] ) ); ?></small></h4>

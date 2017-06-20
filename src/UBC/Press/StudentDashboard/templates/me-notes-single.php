@@ -4,7 +4,7 @@
 
 ?>
 
-<div id="note-toggle" class="small-12 medium-12 large-6 column">
+<div id="note-toggle" class="dash-item">
 
 	<div id="note-toggle" class="callout">
 

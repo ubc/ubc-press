@@ -35,14 +35,14 @@ $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_se
 
 ?>
 <div class="mark-as-complete-wrapper" data-sticky-container>
-	<div id="component-<?php echo esc_attr( $get_the_id ); ?>" class="mark-as-complete-wrapper-inside row expanded clearfix">
-		<div class="title small-10 medium-7 columns">
+	<div id="component-<?php echo esc_attr( $get_the_id ); ?>" class="mark-as-complete-wrapper-inside clearfix">
+		<div class="title">
 			<header>
 				<h2><?php echo esc_html( $get_the_title ); ?> </h2>
 			</header>
 		</div>
 		<?php if ( is_user_logged_in() ) : ?>
-		<div class="buttons columns">
+		<div class="buttons">
 			<div class="text-right" data-responsive-toggle="mark-as-complete-<?php echo esc_attr( $get_the_id ); ?>">
 				<button id="actionbar-<?php echo esc_attr( $get_the_id ); ?>" class="mobile-button button <?php echo esc_attr( $mark_as_complete_classes ); ?> tiny" type="button" data-toggle=" actionbar-<?php echo esc_attr( $get_the_id ); ?> hamburger-<?php echo esc_attr( $get_the_id ); ?>" data-toggler=".active">
 					<svg id="hamburger-<?php echo esc_attr( $get_the_id ); ?>" class="ui-icon menu-icon"><use xlink:href="#dots-horizontal"></use></svg>
