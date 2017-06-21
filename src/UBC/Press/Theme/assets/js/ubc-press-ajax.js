@@ -186,7 +186,8 @@
 					console.log( 'Before get form' );
 				},
 				success: function( response ) {
-console.log( response );
+					console.log( response );
+
 					if ( response.success ) {
 
 						// Grab form and inject it into html
@@ -195,10 +196,17 @@ console.log( response );
 						if( window['gformInitDatepicker'] ) {
 							gformInitDatepicker();
 						}
-
+						jQuery( '.feedback-sec-button' ).removeClass( 'hide' );
 						jQuery( '#feedback-canvas' ).foundation( 'open', false, false );
 
 					}
+
+					else {
+
+						console.log( 'No feedback for you good person. Or there was no gravity form created so... no action.' );
+
+					}
+
 				},
 				complete: function( jqXHR, textStatus ) {
 					console.log( 'completed get form' );
