@@ -12,7 +12,7 @@
 		<p class="lead"><?php echo wp_kses_post( $lead ); ?></p>
 	</header>
 
-	<div class="row small-collapse medium-uncollapse">
+	<div class="row-expand">
 		<?php
 			foreach ( $groups as $id => $group ) {
 				\UBC\Helpers::locate_template_part_in_plugin( trailingslashit( dirname( __FILE__ ) ), 'me-groups-single.php', true, false, array( 'group_id' => $group->term_id, 'group_name' => $group->name ) );

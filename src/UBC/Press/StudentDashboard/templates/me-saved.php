@@ -13,7 +13,7 @@
 		</p>
 	</header>
 
-	<div class="tabs-content-container">
+	<div class="row-expand tabs-content-container">
 
 		<?php
 			foreach ( $saved as $post_id => $saved_content ) {

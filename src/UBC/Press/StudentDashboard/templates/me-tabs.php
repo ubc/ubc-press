@@ -1,4 +1,4 @@
-<ul class="tabs text-center" id="course-dashbord-tabs" data-tabs>
+<ul class="tabs text-center row-smll-collapse align-items-center" id="course-dashbord-tabs" data-tabs>
 		<li class="tabs-title is-active"><a href="#panel2v"><svg class="ui-icon pencil" aria-hidden="true"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#pencil"></use></svg> <span class="hide-for-small-only">Notes</span></a></li>
 		<li class="tabs-title"><a href="#panel3v"><svg class="ui-icon heart"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#heart" aria-hidden="true"></use></svg> <span class="hide-for-small-only">Saved</span></a></li>
 		<li class="tabs-title"><a href="#panel4v"><svg class="ui-icon users"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#users" aria-hidden="true"></use> <span class="hide-for-small-only">Groups</span></a></li>

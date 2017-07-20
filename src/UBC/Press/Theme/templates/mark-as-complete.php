@@ -34,8 +34,8 @@ $mark_as_complete_url 	= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( '
 $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_section', true, $fav_nonce, array( 'post_id' => $data['post_id'], 'post_type' => $data['post_type'] ) );
 
 ?>
-<div class="mark-as-complete-wrapper" data-sticky-container>
-	<div id="component-<?php echo esc_attr( $get_the_id ); ?>" class="mark-as-complete-wrapper-inside clearfix">
+<div class="mark-as-complete-wrapper row" data-sticky-container>
+	<div id="component-<?php echo esc_attr( $get_the_id ); ?>" class="row-expand mark-as-complete-wrapper-inside clearfix">
 		<div class="title">
 			<header>
 				<h2><?php echo esc_html( $get_the_title ); ?> </h2>

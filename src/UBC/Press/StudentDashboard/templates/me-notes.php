@@ -13,7 +13,7 @@ $lead = ( empty( $notes ) ) ? 'You have made no notes for this course.' : 'These
 		<p class="lead"><?php echo wp_kses_post( $lead ); ?></p>
 	</header>
 
-	<div class="tabs-content-container">
+	<div class="row-expand tabs-content-container">
 		<?php
 		foreach ( $notes as $post_id => $note_content ) {
 			\UBC\Helpers::locate_template_part_in_plugin( trailingslashit( dirname( __FILE__ ) ), 'me-notes-single.php', true, false, array( 'post_id' => $post_id, 'note_data' => $note_content ) );
