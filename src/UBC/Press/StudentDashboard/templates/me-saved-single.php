@@ -9,8 +9,8 @@
 <div class="dash-item column-12">
 
 	<div class="callout">
-	<h4><?php echo esc_html( get_the_title( $data['post_id'] ) ); ?> <small><br />Saved on <?php echo esc_html( date( 'l M j, Y', $data['saved_data']['when'] ) ); ?></small></h4>
-	<a href="<?php echo esc_url( $saved_url ); ?>" class="button small" target="_blank">View saved</a>
+	<h4><?php echo esc_html( get_the_title( $data['post_id'] ) ); ?> <small><br />Bookedmarked on <?php echo esc_html( date( 'l M j, Y', $data['saved_data']['when'] ) ); ?></small></h4>
+	<a href="<?php echo esc_url( $saved_url ); ?>" class="button small" target="_blank">View bookmark</a>
 		<!-- .button-group -->
 	</div>
 	<!-- .callout -->

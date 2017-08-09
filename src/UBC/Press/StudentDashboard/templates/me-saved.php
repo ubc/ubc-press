@@ -7,9 +7,9 @@
 <div class="tabs-panel saved" id="panel3v">
 
 	<header>
-		<h3>Saved</h3>
+		<h3>Bookmarks</h3>
 		<p class="lead">
-			These are the saved components you have made across all of the content in this course.
+			These are the bookmarks you have made across all of the content in this course.
 		</p>
 	</header>
 
