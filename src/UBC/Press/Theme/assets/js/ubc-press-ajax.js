@@ -192,7 +192,7 @@
 
 						// Grab form and inject it into html
 						var formMarkup = response.data.data.form;
-						jQuery( '#feedback-canvas' ).html( formMarkup );
+						jQuery( '#gravity-form-feedback' ).html( formMarkup );
 						if( window['gformInitDatepicker'] ) {
 							gformInitDatepicker();
 						}
