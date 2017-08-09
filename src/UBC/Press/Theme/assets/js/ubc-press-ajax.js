@@ -561,8 +561,13 @@
 		 */
 		checkIfAllSubSectionsInThisSectionAreComplete: function() {
 
+			// find the section that is the current one
+			var currentSectionItem = document.getElementById( 'section1' ).getElementsByClassName( 'current-page-item' );
+
+			var parentElement = currentSectionItem[0].parentElement;
+
 			// Grab all of the progress meters
-			var allProgressMeters = document.getElementsByClassName( 'progress-meter-text' );
+			var allProgressMeters = parentElement.getElementsByClassName( 'progress-meter-text' );
 
 			// Default is all complete, made false if any are not 100%
 			var allComplete = true;
