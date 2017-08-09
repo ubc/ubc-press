@@ -293,15 +293,15 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 	public function init__load_temp_stylesheet() {
 
-		wp_enqueue_style( 'ubc-press-temp' );
-		wp_register_style( 'ubc-press-temp-admin', \UBC\Press::get_plugin_url() . 'src/UBC/Press/Theme/assets/css/temp-admin.css' );
-		wp_enqueue_style( 'ubc-press-temp-admin' );
-
 		if ( is_admin() ) {
 			wp_register_script( 'ubc-press-temp', \UBC\Press::get_plugin_url() . 'src/UBC/Press/Theme/assets/js/ubc-press-temp.js', array( 'jquery' ), null, true );
 			wp_enqueue_script( 'ubc-press-temp' );
+			wp_register_style( 'ubc-press-temp-admin', \UBC\Press::get_plugin_url() . 'src/UBC/Press/Theme/assets/css/temp-admin.css' );
+			wp_enqueue_style( 'ubc-press-temp-admin' );
+		} else {
+			wp_register_style( 'ubc-press-temp', \UBC\Press::get_plugin_url() . 'src/UBC/Press/Theme/assets/css/temp.css' );
+			wp_enqueue_style( 'ubc-press-temp' );
 		}
-
 
 	}/* init__load_temp_stylesheet() */
 

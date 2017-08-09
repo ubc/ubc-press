@@ -61,7 +61,40 @@ class Setup {
 		add_filter( 'bbp_new_topic_redirect_to', array( $this, 'bbp_new_topicreply_redirect_to__do_not_redirect_to_bbpress_urls' ), 99, 3 );
 		add_filter( 'bbp_new_reply_redirect_to', array( $this, 'bbp_new_topicreply_redirect_to__do_not_redirect_to_bbpress_urls' ), 99, 3 );
 
+		add_filter( 'bbp_topic_admin_links', array( $this, 'bbp_topic_admin_links__edit_admin_links' ), 20, 2 );
+		add_filter( 'bbp_reply_admin_links', array( $this, 'bbp_reply_admin_links__edit_admin_links' ), 20, 2 );		
+
 	}/* setup_filters() */
+
+
+	public function bbp_topic_admin_links__edit_admin_links( $links, $id ) {
+	
+		unset( $links['edit'] );
+		unset( $links['merge'] );
+		unset( $links['close'] );
+		unset( $links['stick'] );
+		unset( $links['trash'] );
+		unset( $links['spam'] );
+		unset( $links['approve'] );
+
+		return $links;
+
+	}
+
+	public function bbp_reply_admin_links__edit_admin_links( $links, $id ) {
+
+		unset( $links['edit'] );
+		unset( $links['move'] );
+		unset( $links['split'] );
+		unset( $links['trash'] );
+		unset( $links['spam'] );
+		unset( $links['approve'] );
+		unset( $links['unapprove'] );
+
+		return $links;
+
+	}
+
 
 	/**
 	 * When a new topic or reply is made from the forum or topic components, bbPress
