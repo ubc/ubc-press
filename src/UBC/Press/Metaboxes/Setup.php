@@ -579,6 +579,28 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 	}/* save_post__save_hidden_timestamp() */
 
+	/**
+	 * Add save button and view all user notes button
+	 * that they are currently viewing.
+	 *
+	 * @since 0.6.10.
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public function display_user_notes_button_group() {
+
+		$site_url = site_url();
+
+		$form_buttons = '<div class="button-group">
+		<input type="submit" name="submit-cmb" value="Save" class="button success">
+		<a href="' . esc_url( $site_url ) . '/me" target="_blank" class="button secondary">See all my <strong><i>Notes ></i></strong></a>
+		</div>';
+
+			return $form_buttons;
+
+	}
 
 	/**
 	 * On the front-end we allow users to create notes about the page/post
@@ -608,6 +630,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			'id'   => $prefix . 'content',
 			'desc' => __( '', 'ubc-press' ),
 			'type' => 'wysiwyg',
+			'after_row'    => $this->display_user_notes_button_group(),
 			'options' => array(
 				'media_buttons' => false,
 				'teeny' => true,
