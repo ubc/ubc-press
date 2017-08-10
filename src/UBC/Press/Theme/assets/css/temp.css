@@ -39,6 +39,19 @@ footer .edit-link {
 }
 
 /* Feedback canvas */
-#feedback-canvas {
+#gravity-form-feedback {
 	overflow: scroll;
+	height: 100%;
 }
+
+/* Global Menu Hide stuff  */
+.user-login-menu a[href="https://demo.coursestg.ctlt.ubc.ca/demo101/wp-admin/"],
+.user-login-menu a[href="https://demo.coursestg.ctlt.ubc.ca/demo101/forums/users/mbcx9rvt/edit/"] {
+	display: none;
+}
+
+/* "Hide Site Menu */
+#offCanvasRight1 .menus section:nth-of-type(2) {
+	display: none;
+}
+
