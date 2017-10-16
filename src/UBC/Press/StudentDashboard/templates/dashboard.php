@@ -31,25 +31,20 @@ $start_path 		= trailingslashit( dirname( __FILE__ ) );
 			<?php tha_entry_top(); ?>
 
 				<header class="entry-header">
-					<h1>Personal Dashboard <small>for <?php echo esc_html( $course_title ); ?></small></h1>
+					<h1>Course Dashboard <small>for <?php echo esc_html( $course_title ); ?></small></h1>
 				</header>
-
-
-			<?php \UBC\Helpers::locate_template_part_in_plugin( $start_path, 'course-progress.php', true, false, array() ); ?>
-
-			<?php //\UBC\Helpers::locate_template_part_in_plugin( $start_path, 'course-instructor.php', true, false, array() ); ?>
-
-
 
 			<section id="tabbed-content" class="entry-content">
 
-				<header>
+				<header class="show-for-sr">
 					<h2>Course activities</h2>
 				</header>
 
 				<?php \UBC\Helpers::locate_template_part_in_plugin( $start_path, 'me-tabs.php', true, false, array() ); ?>
 
 				<div class="tabs-content" data-tabs-content="course-dashbord-tabs">
+
+					<?php \UBC\Helpers::locate_template_part_in_plugin( $start_path, 'me-progress.php', true, false, array() ); ?>
 
 					<?php \UBC\Helpers::locate_template_part_in_plugin( $start_path, 'me-notes.php', true, false, array() ); ?>
 
