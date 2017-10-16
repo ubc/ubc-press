@@ -70,7 +70,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		add_action( 'pre_get_posts', array( $this, 'pre_get_posts__section_archive_order' ) );
 
 		// Load our custom AJAX js
-		add_action( 'init', array( $this, 'init__load_ubc_press_ajax' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'init__load_ubc_press_ajax' ), 10, 2 );
 
 		// Load custom CSS. @TODO: Place this into the main theme stylesheet
 		add_action( 'init', array( $this, 'init__load_temp_stylesheet' ) );
@@ -253,10 +253,10 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 	public function init__load_ubc_press_ajax() {
 
-		// Front-end only
-		if ( is_admin() ) {
-			return;
-		}
+		// // Front-end only
+		// if ( is_admin() ) {
+		// 	return;
+		// }
 
 		wp_register_script( 'ubc_press_ajax', \UBC\Press::get_plugin_url() . 'src/UBC/Press/Theme/assets/js/ubc-press-ajax.js', array( 'jquery' ), null, true );
 

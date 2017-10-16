@@ -14,6 +14,14 @@
 	var saveForLaterButtons;
 	var localized_data = ubc_press_ajax;
 
+	//Notification messages using Notyf - Use google to find more, ok?
+	var notyf 																= new Notyf({delay:4000});
+	var notesNotyfReponseMessage 							= '<strong>Note</strong> saved.';
+	var markAsCompleteNotyfMessage 						= 'Marked as <strong>Completed</strong>.';
+	var markAsInCompleteNotyfMessage 					= 'Marked as <strong>incompleted</strong>.';
+	var bookmarkComponentNotyfMessage 				= '<strong>Bookmarked</strong>.';
+	var bookmarkComponentRemovedNotyfMessage 	= 'Bookmark <strong>removed</strong>.';
+
 	ubc_press.prototype = {
 
 		vimeoPlayer: jQuery('.vimeo-embed'),
@@ -105,6 +113,30 @@
 
 		},
 
+		/**
+		 * Setup a function to call notifications for completed or saved actions or whatever works.
+		 *
+		 * @since 0.6.11
+		 *
+		 * @param (object) message - The message to use
+		 * @param (object) type - The message to use
+		 * @return null
+		 */
+
+		ubcCoursesNotfyResponse: function( type, message ) {
+
+
+			if ( 'confirm' === type ) {
+
+				notyf.confirm( message );
+
+			} else {
+
+				notyf.alert( message );
+
+			}
+
+		},
 
 		/**
 		 * When a .mark-as-complete button is clicked, we do the appropriate action.
@@ -137,6 +169,7 @@
 			var ajax_data = ubc$.prototype.build_data_for_ajax_complete_item( componentID );
 
 			ubc$.prototype.ajax_complete_item( ajax_data.data, thisButton, ajax_data.originalHref );
+
 
 		},/* click_mark_as_complete__process_completion() */
 
@@ -336,6 +369,8 @@
 
 		switch_completed_state: function( element, completed ) {
 
+
+
 			element.toggleClass( 'success hollow' );
 			element.toggleClass( 'secondary' );
 
@@ -384,6 +419,17 @@
 			// Urgh. Refactor! Do different things dependeing on what type of interaction
 			if ( element.hasClass( 'save-for-later' ) ) {
 				this.change_all_save_for_later_buttons( 'enable' );
+
+				if ( element.hasClass( 'hollow' ) ) {
+
+					ubc$.prototype.ubcCoursesNotfyResponse( type = 'alert', message = bookmarkComponentRemovedNotyfMessage );
+
+				} else {
+
+					ubc$.prototype.ubcCoursesNotfyResponse( type = 'confirm', message = bookmarkComponentNotyfMessage );
+
+				}
+
 			} else {
 
 				this.change_all_mark_as_complete_buttons( 'enable' );
@@ -396,11 +442,14 @@
 
 					element.attr( 'title', localized_data.text.mark_as_complete ).html( '<span class="button-text">' + localized_data.text.mark_as_complete + '</span><svg class="ui-icon menu-icon"><use xlink:href="#checkmark-circle"></use></svg>' );
 					findToolTip.html( localized_data.text.mark_as_complete );
+					ubc$.prototype.ubcCoursesNotfyResponse( type = 'alert', message = markAsInCompleteNotyfMessage );
+
 
 				} else {
 
 					element.attr( 'title', localized_data.text.completed_just_now ).html( '<span class="button-text">' + localized_data.text.completed_just_now + '</span><svg class="ui-icon menu-icon"><use xlink:href="#checkmark-circle"></use></svg>' );
 					findToolTip.html( localized_data.text.completed_just_now );
+					ubc$.prototype.ubcCoursesNotfyResponse( type = 'confirm', message = markAsCompleteNotyfMessage );
 				}
 
 			}
@@ -428,7 +477,6 @@
 			switch (status) {
 
 				case 'disable':
-
 					jQuery.each( allButtons, function( i, val ) {
 						jQuery( val ).attr( 'disabled', 'disabled' );
 						jQuery( val ).addClass( 'disabled' );
@@ -462,6 +510,7 @@
 					jQuery.each( allButtons, function( i, val ) {
 						jQuery( val ).attr( 'disabled', 'disabled' );
 						jQuery( val ).addClass( 'disabled' );
+
 					} );
 
 				break;
@@ -885,6 +934,7 @@
 				},
 				complete: function( jqXHR, textStatus ) {
 					ubc_press.prototype.stop_loading( thisButton );
+					ubc$.prototype.ubcCoursesNotfyResponse( type = 'confirm', message = notesNotyfReponseMessage );
 				},
 				error: function( jqXHR, textStatus, errorThrown ) {
 					return;
