@@ -594,7 +594,7 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		$site_url = site_url();
 
 		$form_buttons = '<div class="button-group">
-		<input type="submit" name="submit-cmb" value="Save" class="button success">
+		<input id="save-notes-button" type="submit" name="submit-cmb" value="Save" class="button success">
 		<a href="' . esc_url( $site_url ) . '/me" target="_blank" class="button secondary">See all my <strong><i>Notes ></i></strong></a>
 		</div>';
 
@@ -626,19 +626,18 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		) );
 
 		$notes = $user_notes->add_field( array(
-			'name' => __( '', 'ubc-press' ),
-			'id'   => $prefix . 'content',
-			'desc' => __( '', 'ubc-press' ),
-			'type' => 'wysiwyg',
-			'after_row'    => $this->display_user_notes_button_group(),
-			'options' => array(
+			'name' 					=> __( '', 'ubc-press' ),
+			'id'   					=> $prefix . 'content',
+			'desc' 					=> __( '', 'ubc-press' ),
+			'type' 					=> 'wysiwyg',
+			'after_row'    	=> $this->display_user_notes_button_group(),
+			'options' 			=> array(
 				'media_buttons' => false,
-				'teeny' => true,
-				'quicktags' => false,
+				'teeny' 				=> true,
+				'quicktags' 		=> false,
 				'editor_height' => 170,
 			),
-			// 'default' => array( $this, 'user_notes_default_content' ),
-			'escape_cb' => array( $this, 'user_notes_default_content' ),
+			'escape_cb' 			=> array( $this, 'user_notes_default_content' ),
 		) );
 
 		// Hidden field for the AJAX endpoint URL
