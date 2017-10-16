@@ -6,11 +6,12 @@
  *
  */
 
-$widget_title 			= ! empty( $instance['widget_title'] ) ? $instance['widget_title'] : '';
-$handout_id 			= ! empty( $instance['handouts_id'] ) ? $instance['handouts_id'] : '';
-$handout_desc_check		= $instance['description'];
-$handout_file_lists 	= get_post_meta( $handout_id, '_handout_details_file_list', true );
-$handout_description 	= get_post_meta( $handout_id, '_handout_details_description', true );
+
+$widget_title 					= ! empty( $instance['widget_title'] ) ? $instance['widget_title'] : '';
+$handout_id 						= ! empty( $instance['handouts_id'] ) ? $instance['handouts_id'] : '';
+$handout_desc_check			= ! empty( $instance['description'] ) ? $instance['description'] : '';
+$handout_file_lists 		= get_post_meta( $handout_id, '_handout_details_file_list', true );
+$handout_description 		= get_post_meta( $handout_id, '_handout_details_description', true );
 
 ?>
 
