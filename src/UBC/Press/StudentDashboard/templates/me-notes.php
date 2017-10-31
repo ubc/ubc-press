@@ -6,10 +6,10 @@ $lead = ( empty( $notes ) ) ? 'You have made no notes for this course.' : 'These
 
 ?>
 
-<div class="tabs-panel notes is-active" id="panel2v">
+<section class="tabs-panel notes is-active" id="panel2v">
 
 	<header>
-		<h3>Notes</h3>
+		<h2>Notes</h2>
 		<p class="lead"><?php echo wp_kses_post( $lead ); ?></p>
 	</header>
 
@@ -22,5 +22,5 @@ $lead = ( empty( $notes ) ) ? 'You have made no notes for this course.' : 'These
 	</div>
 	<!-- .row -->
 
-</div>
+</section>
 <!-- .notes -->

@@ -1,12 +1,17 @@
-<div class="tabs-panel column" id="panel5v">
+<section class="tabs-panel column" id="panel5v">
+
+	<header>
+		<h2>Discussions</h2>
+	</header>
 
 	<?php do_action( 'bbp_template_before_user_topics_created' ); ?>
 
-	<div id="bbp-user-topics-started" class="bbp-user-topics-started">
+	<section id="bbp-user-topics-started" class="bbp-user-topics-started">
+
 		<header>
 			<h3><?php esc_html_e( 'Forum Topics Started', 'bbpress' ); ?></h3>
 		</header>
-		<div class="bbp-user-section">
+
 
 			<?php if ( bbp_get_user_topics_started( get_current_user_id() ) ) : ?>
 
@@ -25,16 +30,17 @@
 
 			<?php endif; ?>
 
-		</div>
-	</div><!-- #bbp-user-topics-started -->
+	</section><!-- #bbp-user-topics-started -->
 
 	<?php do_action( 'bbp_template_after_user_topics_created' ); ?>
 
 	<?php do_action( 'bbp_template_before_user_replies' ); ?>
 
-	<div id="bbp-user-replies-created" class="bbp-user-replies-created">
-		<h2 class="entry-title"><?php esc_html_e( 'Forum Replies Created', 'bbpress' ); ?></h2>
-		<div class="bbp-user-section">
+	<section id="bbp-user-replies-created" class="bbp-user-replies-created">
+
+		<header>
+			<h3 class="entry-title"><?php esc_html_e( 'Forum Replies Created', 'bbpress' ); ?></h3>
+		</header>
 
 			<?php if ( bbp_get_user_replies_created( get_current_user_id() ) ) : ?>
 
@@ -53,9 +59,8 @@
 
 			<?php endif; ?>
 
-		</div>
-	</div><!-- #bbp-user-replies-created -->
+	</section><!-- #bbp-user-replies-created -->
 
 	<?php do_action( 'bbp_template_after_user_replies' ); ?>
 
-</div>
+</section>

@@ -5,10 +5,10 @@
 	$lead = ( empty( $groups ) ) ? 'You are a member of no groups in this course.' : 'You are a member of the following groups:';
 ?>
 
-<div class="tabs-panel" id="panel4v">
+<section class="tabs-panel" id="panel4v">
 
 	<header>
-		<h3>Groups</h3>
+		<h2>Groups</h2>
 		<p class="lead"><?php echo wp_kses_post( $lead ); ?></p>
 	</header>
 
@@ -20,4 +20,4 @@
 		?>
 	</div>
 
-</div>
+</section>

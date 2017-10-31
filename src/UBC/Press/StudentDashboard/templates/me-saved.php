@@ -4,10 +4,10 @@
 
 ?>
 
-<div class="tabs-panel saved" id="panel3v">
+<section class="tabs-panel saved" id="panel3v">
 
 	<header>
-		<h3>Bookmarks</h3>
+		<h2>Bookmarks</h2>
 		<p class="lead">
 			These are the bookmarks you have made across all of the content in this course.
 		</p>
@@ -24,5 +24,5 @@
 	</div>
 	<!-- .row -->
 
-</div>
+</section>
 <!-- .saved -->
