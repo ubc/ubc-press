@@ -80,7 +80,7 @@ $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_se
 					<!-- <p class="show-for-small-only"><small>Save for Later</small></p> -->
 				</li>
 				<li>
-					<a id="open-notes-button" role="button" href="#section3" class="button secondary hollow" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Open notes tab"><svg class="ui-icon pencil" aria-hidden="false"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#pencil"></use></svg><span class="show-for-sr">Open sections user notes</span></a>
+					<a role="button" href="#section3" class="open-notes-buttons button secondary hollow" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Open notes tab"><svg class="ui-icon pencil" aria-hidden="false"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#pencil"></use></svg><span class="show-for-sr">Open sections user notes</span></a>
 				</li>
 			</ul>
 		</div>
