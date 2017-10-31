@@ -46,6 +46,7 @@ $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_se
 			<div class="text-right" data-responsive-toggle="mark-as-complete-<?php echo esc_attr( $get_the_id ); ?>">
 				<button id="actionbar-<?php echo esc_attr( $get_the_id ); ?>" class="mobile-button button <?php echo esc_attr( $mark_as_complete_classes ); ?> tiny" type="button" data-toggle=" actionbar-<?php echo esc_attr( $get_the_id ); ?> hamburger-<?php echo esc_attr( $get_the_id ); ?>" data-toggler=".active">
 					<svg id="hamburger-<?php echo esc_attr( $get_the_id ); ?>" class="ui-icon menu-icon"><use xlink:href="#dots-horizontal"></use></svg>
+					<span class="show-for-sr">Open components button drawer</span>
 				</button>
 			</div>
 			<ul id="mark-as-complete-<?php echo esc_attr( $get_the_id ); ?>" class="button-group section-button-group small-horizontal menu float-right">
@@ -66,18 +67,20 @@ $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_se
 					title="<?php echo esc_html( $tooltip_when_completed ); ?>"
 					>
 
-						<span class="button-text"><?php echo esc_html( $button_text ); ?></span>
+						<span class="show-for-sr"><?php echo esc_html( $button_text ); ?></span>
 						<svg class="ui-icon menu-icon"><use xlink:href="#checkmark-circle"></use></svg>
+						<span class="show-for-sr">Mark component as completed</span>
 					</a><!-- .mark as-complete -->
 				</li>
 				<li>
 					<a role="button" href="<?php echo esc_url( $fav_url ); ?>" class="button alert <?php echo esc_html( $button_size ); ?> <?php echo esc_attr( $saved_for_later_classes ); ?> heart save-for-later" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Bookmark for later" data-nonce="<?php echo esc_html( $fav_nonce ); ?>" data-post_id="<?php echo absint( $data['post_id'] ); ?>">
 						<svg class="ui-icon heart"><use xlink:href="#bookmark"></use></svg>
+						<span class="show-for-sr">Save component for later</span>
 					</a><!-- save for later -->
 					<!-- <p class="show-for-small-only"><small>Save for Later</small></p> -->
 				</li>
 				<li>
-					<a id="open-notes-button" role="button" href="#section3" class="button secondary hollow" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Open notes tab"><svg class="ui-icon pencil" aria-hidden="false"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#pencil"></use></svg></a>
+					<a id="open-notes-button" role="button" href="#section3" class="button secondary hollow" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Open notes tab"><svg class="ui-icon pencil" aria-hidden="false"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#pencil"></use></svg><span class="show-for-sr">Open sections user notes</span></a>
 				</li>
 			</ul>
 		</div>
