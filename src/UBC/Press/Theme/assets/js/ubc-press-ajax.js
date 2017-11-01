@@ -611,7 +611,7 @@
 		checkIfAllSubSectionsInThisSectionAreComplete: function() {
 
 			// find the section that is the current one
-			var currentSectionItem = document.getElementById( 'section1' ).getElementsByClassName( 'current-page-item' );
+			var currentSectionItem = document.getElementById( 'courses-tab' ).getElementsByClassName( 'current-page-item' );
 
 			var parentElement = currentSectionItem[0].parentElement;
 
