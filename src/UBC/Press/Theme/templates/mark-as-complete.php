@@ -74,13 +74,13 @@ $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_se
 				</li>
 				<li>
 					<a role="button" href="<?php echo esc_url( $fav_url ); ?>" class="button alert <?php echo esc_html( $button_size ); ?> <?php echo esc_attr( $saved_for_later_classes ); ?> heart save-for-later" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Bookmark for later" data-nonce="<?php echo esc_html( $fav_nonce ); ?>" data-post_id="<?php echo absint( $data['post_id'] ); ?>">
-						<svg class="ui-icon heart"><use xlink:href="#bookmark"></use></svg>
+						<svg class="ui-icon heart"><use xlink:href="#saved"></use></svg>
 						<span class="show-for-sr">Save component for later</span>
 					</a><!-- save for later -->
 					<!-- <p class="show-for-small-only"><small>Save for Later</small></p> -->
 				</li>
 				<li>
-					<a role="button" href="#section3" class="open-notes-buttons button secondary hollow" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Open notes tab"><svg class="ui-icon pencil" aria-hidden="false"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#pencil"></use></svg><span class="show-for-sr">Open sections user notes</span></a>
+					<a role="button" href="#section3" class="open-notes-buttons button secondary hollow" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Open notes tab"><svg class="ui-icon pencil" aria-hidden="false"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#notes"></use></svg><span class="show-for-sr">Open sections user notes</span></a>
 				</li>
 			</ul>
 		</div>
