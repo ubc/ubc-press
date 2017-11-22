@@ -36,7 +36,7 @@ $start_path 		= trailingslashit( dirname( __FILE__ ) );
 
 				<?php \UBC\Helpers::locate_template_part_in_plugin( $start_path, 'me-tabs.php', true, false, array() ); ?>
 
-				<section class="tabs-content entry-content" data-tabs-content="course-dashbord-tabs">
+				<section class="tabs-content" data-tabs-content="course-dashbord-tabs">
 
 					<header class="show-for-sr">
 						<h2>Course activities</h2>
