@@ -5,7 +5,7 @@
 	$lead = ( empty( $groups ) ) ? 'You are a member of no groups in this course.' : 'You are a member of the following groups:';
 ?>
 
-<section class="tabs-panel" id="panel4v">
+<section class="tabs-panel" id="dashboard-groups">
 
 	<header>
 		<h2>Groups</h2>

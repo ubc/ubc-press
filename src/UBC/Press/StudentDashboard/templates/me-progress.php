@@ -4,7 +4,7 @@ $start_path 		= trailingslashit( dirname( __FILE__ ) );
 
 ?>
 
-<section class="tabs-panel user-progress is-active" id="panel1v">
+<section class="tabs-panel user-progress is-active" id="dashboard-progress">
 
 	<header>
 		<h2>Your progress</h2>

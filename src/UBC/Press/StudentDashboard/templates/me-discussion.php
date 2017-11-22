@@ -1,4 +1,4 @@
-<section class="tabs-panel column" id="panel5v">
+<section class="tabs-panel column" id="dashboard-discussions">
 
 	<header>
 		<h2>Discussions</h2>

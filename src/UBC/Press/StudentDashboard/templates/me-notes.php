@@ -6,7 +6,7 @@ $lead = ( empty( $notes ) ) ? 'You have made no notes for this course.' : 'These
 
 ?>
 
-<section class="tabs-panel notes is-active" id="panel2v">
+<section class="tabs-panel notes is-active" id="dashboard-notes">
 
 	<header>
 		<h2>Notes</h2>

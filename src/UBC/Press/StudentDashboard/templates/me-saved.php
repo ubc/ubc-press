@@ -4,7 +4,7 @@
 
 ?>
 
-<section class="tabs-panel saved" id="panel3v">
+<section class="tabs-panel saved" id="dashboard-saved">
 
 	<header>
 		<h2>Bookmarks</h2>

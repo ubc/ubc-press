@@ -1,9 +1,17 @@
+<?php
+$tab_names = \UBC\Press\StudentDashboard\Utils::ubc_press_tab_names();
+$i = 0;
+?>
+
 <nav>
 	<ul class="tabs text-center row-smll-collapse align-items-center" data-deep-link="true" data-update-history="true" data-deep-link-smudge="500" id="course-dashbord-tabs" data-tabs>
-		<li class="tabs-title is-active"><a href="#panel1v"><svg class="ui-icon pencil" aria-hidden="true"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#checkmark-circle"></use></svg> <span class="hide-for-small-only">Progress</span></a></li>
-		<li class="tabs-title"><a href="#panel2v"><svg class="ui-icon pencil" aria-hidden="true"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#pencil"></use></svg> <span class="hide-for-small-only">Notes</span></a></li>
-		<li class="tabs-title"><a href="#panel3v"><svg class="ui-icon heart" aria-hidden="true"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#bookmark"></use></svg> <span class="hide-for-small-only">Bookmarks</span></a></li>
-		<li class="tabs-title"><a href="#panel4v"><svg class="ui-icon users" aria-hidden="true"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#users"></use></svg> <span class="hide-for-small-only">Groups</span></a></li>
-		<li class="tabs-title"><a href="#panel5v"><svg class="ui-icon chat" aria-hidden="true"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#chat"></use></svg> <span class="hide-for-small-only">Discussions</span></a></li>
+		<?php foreach ( $tab_names as $tab_name ) :
+			$is_active = ( 0 === $i++ ? 'is-active' : '' );
+			$icon  = ( 'progress' === $tab_name ? 'checkmark-circle' : $tab_name );
+			?>
+			<li class="tabs-title <?php echo esc_attr( $is_active )?>">
+				<a href="#dashboard-<?php echo esc_attr( $tab_name ); ?>"><svg class="ui-icon <?php echo esc_attr( $icon ); ?>" aria-hidden="true"><use xlink:href="#<?php echo esc_attr( $icon ); ?>"></use></svg> <span class="hide-for-small-only"><?php echo esc_html( $tab_name ); ?></span></a>
+			</li>
+		<?php endforeach; ?>
 	</ul>
 </nav>
