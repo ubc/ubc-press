@@ -114,4 +114,59 @@ class Utils {
 
 	}/* get_total_course_completion_percentage_for_student() */
 
+	/**
+	 * Returns the dashboard url if logged in or it redirects to login
+	 *
+	 * @since 1.0.0
+	 * @return string
+	 */
+
+	public static function ubc_press_get_dashboard_url() {
+
+		$dashboard_url	= 'me';
+		$get_dashboard_link = ( is_user_logged_in() ? site_url( esc_html( $dashboard_url ) ) : wp_login_url( get_permalink() ) );
+
+			return $get_dashboard_link;
+
+	}
+
+	/**
+	 * gets the dashboard url if logged in or it redirects to login with a tag and svg call
+	 *
+	 * @since 1.0.0
+	 * @return string
+	 */
+
+	public static function ubc_press_dashboard_url() {
+
+		$dashboard_url 				= \UBC\Press\StudentDashboard\Utils::ubc_press_get_dashboard_url();
+		$dashboard_text 			= is_user_logged_in() ? 'User dashboard' : 'User login';
+		$dashboard_svg 				= is_user_logged_in() ? 'dashboard' : 'user';
+
+		$dashboard_link 	= '<a href="'. $dashboard_url .'" title="Go to '. esc_attr( $dashboard_text ) .'"><svg class="ui-icon" aria-hidden="true"><use xlink:href="#'. esc_attr( $dashboard_svg ) .'"></use></svg> '. esc_html( $dashboard_text ). '</a>';
+
+			return $dashboard_link;
+
+	}
+
+	/**
+	 * get array of tab name, icon, id
+	 *
+	 * @since 1.0.0
+	 * @return array
+	 */
+
+	public static function ubc_press_tab_names() {
+
+		$tab_names = array(
+
+			'progress', 'notes', 'saved', 'groups', 'discussions',
+
+		);
+
+		return $tab_names;
+
+	}
+
+
 }/* Utils */
