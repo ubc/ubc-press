@@ -1818,6 +1818,8 @@ class Utils {
 			'post_parent' => 0,
 			'posts_per_page' => '-1',
 			'fields' => 'ids',
+			'orderby' => 'menu_order parent date',
+			'order' => 'ASC',
 			'update_post_meta_cache' => false,
 			'update_post_term_cache' => false,
 		);
@@ -1835,5 +1837,233 @@ class Utils {
 		return $sections;
 
 	}/* get_section_list() */
+
+	/**
+	 * Get just the full sections list
+	 *
+	 * Usage: \UBC\Press\Utils::get_section_list()
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function get_full_section_list() {
+
+		$args = array(
+			'post_type' => 'section',
+			'posts_per_page' => '-1',
+			'fields' => 'ids',
+			'orderby' => 'menu_order parent date',
+			'order' => 'ASC',
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
+		);
+
+		$the_query = new \WP_Query( $args );
+
+		if ( ! $the_query->have_posts() ) {
+			return array();
+		}
+
+		$sections = $the_query->posts;
+
+		wp_reset_postdata();
+
+		return $sections;
+
+	}/* get_section_list() */
+
+	/**
+	 * Get section ids with specified comonent type
+	 *
+	 * Usage: \UBC\Press\Utils::get_section_list()
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function get_section_ids_with_component_type() {
+
+		$section_ids 		= \UBC\Press\Utils::get_full_section_list();
+		$sections_id_with_components_type = array();
+
+		foreach ( $section_ids as $section_id  ) {
+
+			$section_component_ids = get_post_meta( $section_id, 'component_associations', true );
+			$post_type 			= array();
+
+			if ( ! empty( $section_component_ids ) ) :
+
+				foreach ( $section_component_ids as $section_component_id ) {
+
+					$post_type[] = get_post_type( $section_component_id );
+
+				}
+
+				$args = array();
+				$args['id'] = $section_id;
+				$args['type'] = $post_type;
+
+				$sections_id_with_components_type[] = $args;
+
+			endif;
+
+		}
+
+		$ubc_press_sections_with_post_type = apply_filters( 'ubc_press_sections_with_post_type', $sections_id_with_components_type );
+
+		return $sections_id_with_components_type;
+
+	}
+
+	/**
+	 * Get section ids with specified comonent type
+	 *
+	 * Usage: \UBC\Press\Utils::get_section_list()
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function ubc_press_get_sections_by_component( $post_type = '' ) {
+
+		$ids = array();
+
+		if ( empty( $post_type ) ) {
+
+			return;
+
+		}
+
+		$components 	 = \UBC\Press\Utils::get_section_ids_with_component_type();
+
+		foreach ( $components as $component ) {
+
+			if ( in_array( $post_type, $component['type'] ) ) :
+
+				$ids[] = $component['id'];
+
+			endif;
+
+		}
+
+		if ( empty( $ids ) ) {
+
+			return;
+		}
+
+		$ids = ! empty( $ids ) ? implode( ', ', $ids ) : '';
+
+		$agrs = array(
+
+			'title_li'  => '',
+			'include'   => $ids,
+			'post_type' => 'section',
+		);
+
+		$get_sections = get_pages( $agrs );
+
+		return $get_sections;
+
+	}
+
+	/* determine if we are on the user dashboard
+	*
+	* Usage: \UBC\Press\Utils::get_section_list()
+	*
+	* @since 1.0.0
+	*
+	* @param null
+	* @return null
+	*/
+
+	public static function ubc_press_is_user_dashboard_page() {
+
+		$dashboard_page 							= get_query_var( 'studentdashboard' );
+
+		if ( 'yes' === $dashboard_page ) {
+
+			return true;
+
+		}
+
+	}
+
+	/* determine if we are on the user dashboard
+	*
+	* Usage: \UBC\Press\Utils::get_section_list()
+	*
+	* @since 1.0.0
+	*
+	* @param null
+	* @return null
+	*/
+
+	public static function ubc_press_is_section_component_page() {
+
+		$get_coursecontent 	= get_query_var( 'get_coursecontent' );
+
+		if ( 'yes' === $get_coursecontent ) {
+
+			return true;
+
+		}
+
+	}
+
+	/* determine if we are on the section with component type or dashboard
+	*
+	* Usage: \UBC\Press\Utils::ubc_press_special_pages()
+	*
+	* @since 1.0.0
+	*
+	* @param null
+	* @return null
+	*/
+
+	public static function ubc_press_is_special_pages() {
+
+		$dashboard_page 	 = \UBC\Press\Utils::ubc_press_is_user_dashboard_page();
+		$get_coursecontent = \UBC\Press\Utils::ubc_press_is_section_component_page();
+
+		if ( true !== $dashboard_page && true !== $get_coursecontent ) {
+
+			return;
+
+		}
+
+		return true;
+
+	}
+
+	/* determine if we are on a section page
+	*
+	* Usage: \UBC\Press\Utils::ubc_press_is_section()
+	*
+	* @since 1.0.0
+	*
+	* @param null
+	* @return null
+	*/
+
+	public static function ubc_press_is_section() {
+
+		$get_post_type 		= is_singular( 'section' );
+
+		if ( 'section' !== $get_post_type ) {
+
+			return;
+
+		}
+
+		return true;
+
+	}
 
 }/* Utils */
