@@ -50,6 +50,9 @@ class Setup {
 		// Set up the student front-end dashboard
 		self::setup_student_dashboard();
 
+		// Set up the page with sections by component type
+		self::setup_student_page_setion_components();
+
 		// Setup our custom taxonomies
 		self::setup_cts();
 
@@ -132,6 +135,27 @@ class Setup {
 
 		$student_dashboard = new \UBC\Press\StudentDashboard\Setup;
 		$student_dashboard->init();
+
+	}/* setup_student_dashboard() */
+
+
+	/**
+	 * A page template to filter sections with specific post type
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function setup_student_page_setion_components() {
+
+		if ( is_admin() ) {
+			return;
+		}
+
+		$stubb = new \UBC\Press\SectionComponentPage\Setup;
+		$stubb->init();
 
 	}/* setup_student_dashboard() */
 
