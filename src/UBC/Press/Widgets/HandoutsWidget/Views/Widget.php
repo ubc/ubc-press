@@ -18,7 +18,7 @@ $handout_description 		= get_post_meta( $handout_id, '_handout_details_descripti
 <?php if ( $handout_id > 0  ) : ?>
 
 <header>
-	<h3 class="widget-title"><svg class="ui-icon file" aria-hidden="true"><use xlink:href="#download"></use></svg> <?php echo esc_html( $widget_title ); ?></h3>
+	<h3 class="widget-title"><?php echo esc_html( $widget_title ); ?></h3>
 </header>
 
 
