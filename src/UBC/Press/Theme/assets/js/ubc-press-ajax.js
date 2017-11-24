@@ -726,33 +726,35 @@
 			var newValue 			= this.get_new_value( prevValue, completed );
 			var totalNumComponents	= this.get_total_num_of_components();
 
-			var new_percentage 			= this.get_percentage( newValue, totalNumComponents );
+			var new_percentage 				= this.get_percentage( newValue, totalNumComponents );
+			var new_percentage_rounded	= Math.round( new_percentage );
 
 			var progress_div 			= jQuery( '.current-page-item .progress' );
 			var progress_span 		= jQuery( progress_div ).find( '.progress-meter' );
-			var text_span 				= jQuery( progress_div ).find( '.progress-meter-text' );
+			var text_span 				= jQuery( progress_div ).find( '.progress-meter-text span' );
+			var checkmark					= ' <svg class="ui-icon" aria-hidden="true"><use xlink:href="#checkmark-circle"></use></svg>';
 
 			// Animate the progress bar
 			progress_span.animate( {
-				width: new_percentage + '%'
+				width: new_percentage_rounded + '%'
 			}, 150 );
 
 			// Update the text
-			text_span.text( new_percentage + '%' );
+			text_span.text( new_percentage_rounded + '%' ).append( checkmark );
 
 			//If percent is 0 add no-complete class else if above 0 remove class
-			if ( new_percentage === 0 ) {
+			if ( new_percentage_rounded === 0 ) {
 				progress_div.addClass( 'no-complete' );
 			}
-			else if ( new_percentage > 0 ) {
+			else if ( new_percentage_rounded > 0 ) {
 				progress_div.removeClass( 'no-complete' );
 			}
 
 			//If percent is 100 add completed class else if below 100 remove class
-			if ( new_percentage === 100 ) {
+			if ( new_percentage_rounded === 100 ) {
 				progress_div.addClass( 'completed' ).removeClass( 'start-progress' );
 			}
-			else if ( new_percentage < 100 ) {
+			else if ( new_percentage_rounded < 100 ) {
 				progress_div.removeClass( 'completed' );
 			}
 
