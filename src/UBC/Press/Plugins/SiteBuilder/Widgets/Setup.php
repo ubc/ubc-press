@@ -59,6 +59,9 @@ class Setup {
 		// Add WP Pro Quiz Widget
 		$this->add_wp_pro_quiz_widget();
 
+		// Add h5p Widget
+		$this->add_h5p_widget();
+
 	}/* init() */
 
 
@@ -246,6 +249,26 @@ class Setup {
 		static::$registered_ubc_press_widgets[] = 'AddLectureWidget';
 
 	}/* add_link_widget() */
+
+	/**
+	 * Register H5P widget
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+	public function add_h5p_widget() {
+
+		if ( ! $this->check_dependencies() ) {
+			return;
+		}
+
+		$widget = new \UBC\Press\Plugins\SiteBuilder\Widgets\AddH5pContent\AddH5pContentWidget;
+
+		static::$registered_ubc_press_widgets[] = 'AddH5pContentWidget';
+
+	}/* add_h5p_widget() */
 
 
 	/**

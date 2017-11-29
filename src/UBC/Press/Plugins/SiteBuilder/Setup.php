@@ -638,10 +638,25 @@ class Setup {
 		// Always prepend with the type
 		$content .= $widget_nicename;
 
-		if ( $component_post_id && isset( $widget_data['text'] ) ) {
-			$component_permalink = get_permalink( $component_post_id );
-			$content .= ': <a href="' . esc_url( $component_permalink ) . '" title="' . esc_html( $widget_data['text'] ) . '">' . esc_html( $widget_data['text'] ) . '</a>';
-		}
+		switch ( $widget_type ) :
+
+			case 'AddH5pContentWidget':
+
+				if ( isset( $widget_data['text'] ) && isset( $widget_data['h5p_content_id'] ) ) {
+					$component_permalink = admin_url( 'admin.php?page=h5p_new&id='. $widget_data['h5p_content_id'] );
+					$content .= ': <a href="' . esc_url( $component_permalink ) . '" title="' . esc_html( $widget_data['text'] ) . '">' . esc_html( $widget_data['text'] ) . '</a>';
+				}
+
+			break;
+
+			default:
+
+				if ( $component_post_id && isset( $widget_data['text'] ) ) {
+					$component_permalink = get_permalink( $component_post_id );
+					$content .= ': <a href="' . esc_url( $component_permalink ) . '" title="' . esc_html( $widget_data['text'] ) . '">' . esc_html( $widget_data['text'] ) . '</a>';
+				}
+
+		endswitch;
 
 		return $content;
 
@@ -715,6 +730,10 @@ class Setup {
 
 			case 'SiteOrigin_Widget_Slider_Widget':
 				$nice_name = __( 'Slider', 'ubc-press' );
+				break;
+
+			case 'AddH5pContentWidget':
+				$nice_name = __( 'H5P', 'ubc-press' );
 				break;
 
 			default:

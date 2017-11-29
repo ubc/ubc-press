@@ -46,6 +46,9 @@ class Setup {
 		// bbPress
 		$this->setup_bbpress();
 
+		// bbPress
+		$this->setup_h5p();
+
 		// Dequeue plugins' scripts and styles as we do it ourselves. @TODO This is lazy. Move into own method.
 		add_action( 'wp_enqueue_scripts', array( $this, 'dequeue_plugin_assets' ), 999 );
 
@@ -186,6 +189,22 @@ class Setup {
 		$bbpress->init();
 
 	}/* setup_bbpress() */
+
+	/**
+	 * H5p mods
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 *
+	 * @return null
+	 */
+	public function setup_h5p() {
+
+		$bbpress = new \UBC\Press\Plugins\H5p\Setup;
+		$bbpress->init();
+
+	}/* setup_h5p() */
 
 	/**
 	 * Dequeue plugin assets from the mu-plugins we use. This allows us to include the styles ourselves in

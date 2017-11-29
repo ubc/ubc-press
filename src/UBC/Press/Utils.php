@@ -1173,6 +1173,7 @@ class Utils {
 			'page',
 			'quiz',
 			'hiddenquiz',
+			'h5p',
 		);
 
 		return apply_filters( 'ubc_press_completable_component_types', $completables );
