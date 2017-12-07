@@ -90,6 +90,9 @@ class Setup {
 		// For the 'save for later/fav' feature
 		add_action( 'ubcpressajax_fav_sub_section', array( $this, 'ubcpressajax_fav_sub_section__process' ) );
 
+		// Doesn't pass __FILE__ to plugins_url in siteorigin_panels_url()
+		add_filter( 'plugins_url', array( $this, 'plugins_url__fix_sitebuilder_muplugins' ), 99, 3 );
+
 	}/* setup_actions() */
 
 
@@ -1028,5 +1031,40 @@ class Setup {
 		return $widgets;
 
 	}/* siteorigin_panels_widgets__remove_unused_widgets() */
+
+	/**
+	 * Sitebuilder doesn't pass __FILE__ to plugins_url in siteorigin_panels_url()
+	 * and as such it makes a bit of a mess for us as we use sitebuilder as a MU-
+	 * plugin
+	 *
+	 * @param  [type] $url    [description]
+	 * @param  [type] $path   [description]
+	 * @param  [type] $plugin [description]
+	 * @return [type]         [description]
+	 */
+	public function plugins_url__fix_sitebuilder_muplugins( $url, $path, $plugin ) {
+
+		if ( false === strpos( $url, 'siteorigin-panels/' ) ) {
+			return $url;
+		}
+
+		$url = WPMU_PLUGIN_URL;
+
+		$url = set_url_scheme( $url );
+
+		if ( ! empty( $plugin ) && is_string( $plugin ) ) {
+			$folder = dirname( plugin_basename( $plugin ) );
+			if ( '.' !== $folder ) {
+				$url .= '/' . ltrim( $folder, '/' );
+			}
+		}
+
+		if ( $path && is_string( $path ) ) {
+			$url .= '/' . ltrim( $path, '/' );
+		}
+
+		return $url;
+
+	}
 
 }/* class Setup */
