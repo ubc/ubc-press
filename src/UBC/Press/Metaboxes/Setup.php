@@ -531,7 +531,8 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 			return;
 		}
 
-		// Check nonces and required fields
+		// Check nonces and required fields. This is all horrible, what even is this.
+		// @TODO Make this less horrible.
 		if ( 'assignment' === $post_type ) {
 
 			if ( ! isset( $_POST['nonce_CMB2phpubc_assignment_item_date_metabox'] ) ) {

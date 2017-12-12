@@ -189,7 +189,7 @@ class Setup {
 
 	protected function create_calendar_post( $associated_post_id, $date, $time_start, $time_end, $type_term ) {
 
-		if ( false === $data || false === $time_start || false === $time_end  ) {
+		if ( false === $date || false === $time_start || false === $time_end  ) {
 			return;
 		}
 
@@ -325,6 +325,10 @@ class Setup {
 
 		// Date comes in as MM/DD/YYYY or Unix Timestamp
 		// Time comes in as HH:MM (A|P)M
+		if ( empty( $time ) || ! $time || empty( $date ) || ! $date ) {
+			return;
+		}
+
 		$converted_time = \DateTime::createFromFormat( 'g:i A', $time )->format( 'H:i:s' );
 		// $converted_date = \DateTime::createFromFormat( 'm/d/Y', $date )->format( 'Y-m-d' );
 
