@@ -11,6 +11,9 @@ if ( ! is_user_logged_in() ) {
 
 do_action( 'ubc_press_student_dashboard_pre_header' );
 
+// Checking to see if mark as completed is set to be used
+$show_mark_complete_btn = \UBC\Press\Utils::do_components_show_mark_as_complete();
+
 get_header();
 
 $current_user   = wp_get_current_user();
@@ -42,7 +45,13 @@ $start_path 		= trailingslashit( dirname( __FILE__ ) );
 						<h2>Course activities</h2>
 					</header>
 
-					<?php \UBC\Helpers::locate_template_part_in_plugin( $start_path, 'me-progress.php', true, false, array() ); ?>
+					<?php
+
+					if ( ! empty( $show_mark_complete_btn ) ) :
+
+						\UBC\Helpers::locate_template_part_in_plugin( $start_path, 'me-progress.php', true, false, array() );
+
+					endif ?>
 
 					<?php \UBC\Helpers::locate_template_part_in_plugin( $start_path, 'me-notes.php', true, false, array() ); ?>
 

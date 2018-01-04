@@ -12,6 +12,9 @@ $the_id 				= $wp_query->post->ID;
 
 $data 					= get_query_var( 'template_data' );
 
+// Checking to see if mark as completed is set to be used
+$show_mark_complete_btn = \UBC\Press\Utils::do_components_show_mark_as_complete();
+
 $get_the_title			= get_the_title();
 $get_the_id				= get_the_id();
 
@@ -50,6 +53,8 @@ $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_se
 				</button>
 			</div>
 			<ul id="mark-as-complete-<?php echo esc_attr( $get_the_id ); ?>" class="button-group section-button-group small-horizontal menu float-right">
+
+				<?php if ( ! empty( $show_mark_complete_btn ) ) : ?>
 				<li>
 					<a
 					role="button"
@@ -72,6 +77,7 @@ $fav_url 				= \UBC\Press\Ajax\Utils::get_ubc_press_ajax_action_url( 'fav_sub_se
 						<span class="show-for-sr">Mark component as completed</span>
 					</a><!-- .mark as-complete -->
 				</li>
+			<?php endif; ?>
 				<li>
 					<a role="button" href="<?php echo esc_url( $fav_url ); ?>" class="button alert <?php echo esc_html( $button_size ); ?> <?php echo esc_attr( $saved_for_later_classes ); ?> heart save-for-later" data-tooltip aria-haspopup="true" data-disable-hover="false" tabindex="1" title="Bookmark for later" data-nonce="<?php echo esc_html( $fav_nonce ); ?>" data-post_id="<?php echo absint( $data['post_id'] ); ?>">
 						<svg class="ui-icon heart"><use xlink:href="#saved"></use></svg>

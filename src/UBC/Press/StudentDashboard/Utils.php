@@ -158,13 +158,22 @@ class Utils {
 
 	public static function ubc_press_tab_names() {
 
+		// Checking to see if mark as completed is set to be used
+		$show_mark_complete_btn = \UBC\Press\Utils::do_components_show_mark_as_complete();
+
 		$tab_names = array(
 
-			'progress', 'notes', 'saved', 'groups', 'discussions',
+			'notes', 'saved', 'groups', 'discussions',
 
 		);
 
-		return $tab_names;
+		if ( ! empty( $show_mark_complete_btn ) ) :
+
+			array_unshift( $tab_names, 'progress' );
+
+		endif;
+
+			return $tab_names;
 
 	}
 

@@ -1201,6 +1201,19 @@ class Utils {
 
 	}/* get_automatic_completable_component_types() */
 
+	/**
+	 * A true or false function used to determine whether components use mark as complete
+	 *
+	 * @since 0.7.2
+	 *
+	 * @return (bool) True or false.
+	 */
+
+	public static function do_components_show_mark_as_complete() {
+
+		return true;
+
+	}/* do_components_show_mark_as_complete */
 
 	/**
 	 * Test whether a component can be completed. Expects the Post ID
