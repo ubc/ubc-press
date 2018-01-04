@@ -1,0 +1,6 @@
+# Gulp will reference these paths when it copies files
+PATHS:
+  # Paths to JavaScript libraries, which are combined into one file
+  javascript:
+    - "node_modules/notyf/src/notyf.js"
+    - "src/UBC/Press/Theme/assets/js/ubc-press-ajax.js"
