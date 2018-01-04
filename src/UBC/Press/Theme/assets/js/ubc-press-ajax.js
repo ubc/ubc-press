@@ -15,7 +15,7 @@
 	var localized_data = ubc_press_ajax;
 
 	//Notification messages using Notyf - Use google to find more, ok?
-	var notyf 																= new Notyf({delay:4000});
+	var notyf 																= new Notyf( { delay:4000 } );
 	var notesNotyfReponseMessage 							= '<strong>Note</strong> saved.';
 	var markAsCompleteNotyfMessage 						= 'Marked as <strong>Completed</strong>.';
 	var markAsInCompleteNotyfMessage 					= 'Marked as <strong>incompleted</strong>.';
@@ -92,6 +92,7 @@
 			if ( typeof this.markAsCompleteButtons !== 'undefined' ) {
 				return this.markAsCompleteButtons;
 			}
+
 
 			// None cached, so grab and cache them
 			var fetched = document.querySelectorAll( '.mark-as-complete' );
