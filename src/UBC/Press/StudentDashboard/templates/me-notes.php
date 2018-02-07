@@ -9,7 +9,7 @@ $lead = ( empty( $notes ) ) ? 'You have made no notes for this course.' : 'These
 <section class="tabs-panel notes is-active" id="dashboard-notes">
 
 	<header>
-		<h2>Notes</h2>
+		<h2>Note pad</h2>
 		<p class="lead"><?php echo wp_kses_post( $lead ); ?></p>
 	</header>
 
