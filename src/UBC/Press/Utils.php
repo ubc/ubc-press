@@ -1900,6 +1900,35 @@ class Utils {
 	 * @return null
 	 */
 
+	public static function ubc_press_get_section_ids_with_component_type( $id ) {
+
+		$section_ids 	= $id;
+
+		if ( is_array( $section_ids ) ) :
+
+			return;
+
+		endif;
+
+		$section_component_id = get_post_meta( $section_ids, 'component_associations', true );
+
+		$post_type = get_post_type( $section_component_id );
+
+		return $post_type;
+
+	}
+
+	/**
+	 * Get section ids with specified comonent type
+	 *
+	 * Usage: \UBC\Press\Utils::get_section_list()
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
 	public static function get_section_ids_with_component_type() {
 
 		$section_ids 		= \UBC\Press\Utils::get_full_section_list();
@@ -1908,7 +1937,7 @@ class Utils {
 		foreach ( $section_ids as $section_id  ) {
 
 			$section_component_ids = get_post_meta( $section_id, 'component_associations', true );
-			$post_type 			= array();
+			$post_type 						 = array();
 
 			if ( ! empty( $section_component_ids ) ) :
 

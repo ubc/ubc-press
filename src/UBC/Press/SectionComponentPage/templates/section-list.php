@@ -57,29 +57,37 @@ $section_type = UBC_WP_CLF_Lite::get_course_content_name_convention();
 
 ?>
 
-	<li class="align-items-center">
-		<a href="<?php echo esc_url( $get_permalink ); ?>" title="<?php echo esc_html( $get_title ); ?>" class="sub-section-link row">
-			<h4><?php echo esc_html( $get_title ); ?></h4>
-		<br />
-		<?php if ( is_user_logged_in() ) : ?>
+<li class="align-items-center sub-section-<?php echo esc_html( $get_id ); ?>" data-post-id="<?php echo absint( $get_id ); ?>">
+	<a href="<?php echo esc_url( $get_permalink ); ?>" title="<?php the_title_attribute( array( 'before' => 'Read more on ', 'after' => wp_kses_post( $comp_text_to_output ) ) ); ?>" class="sub-section-link row">
+		<?php if ( is_user_logged_in() && ! empty( $show_mark_complete_btn ) ) : ?>
 
-		<span class="completed-components-details show-for-sr"><small>[<?php echo wp_kses_post( $comp_text_to_output ); ?>]</small></span>
+			<span class="completed-components-details show-for-sr"><small>[<?php echo wp_kses_post( $comp_text_to_output ); ?>]</small></span>
 
-		<?php if ( $num_total_components > 0 ) : ?>
+			<?php if ( $num_total_components > 0 ) : ?>
 
-		<div aria-hidden="true" class="progress <?php echo esc_html( $numb_total_complete ); ?> <?php echo esc_html( $no_complete_components ); ?>" role="progressbar" tabindex="0" aria-valuenow="<?php echo absint( $num_percentage ); ?>" aria-valuemin="0" aria-valuetext="<?php echo absint( $num_percentage ); ?> percent"  aria-valuemax="100">
-			<div class="progress-meter" style="width: <?php echo absint( $num_percentage ); ?>%">
-				<p class="progress-meter-text"><?php echo absint( $num_percentage ); ?>%</p>
+			<div aria-hidden="true" class="progress <?php echo esc_html( $numb_total_complete ); ?> <?php echo esc_html( $no_complete_components ); ?>" role="progressbar" tabindex="0" aria-valuenow="<?php echo absint( $num_percentage ); ?>" aria-valuemin="0" aria-valuetext="<?php echo absint( $num_percentage ); ?> percent"  aria-valuemax="100">
+				<div class="progress-meter" style="width: <?php echo absint( $num_percentage ); ?>%">
+				</div>
+				<p class="progress-meter-text"><span class="show-for-sr"><?php echo absint( $num_percentage ); ?>%</span> <svg class="ui-icon" aria-hidden="true"><use xlink:href="#checkmark-circle"></use></svg></p>
 			</div>
-		</div>
+
+		<?php else: ?>
+
+			<span class="forum-icon">
+				<svg class="ui-icon discussions" aria-hidden="true"><use xlink:href="#discussions"></use></svg>
+			</span>
+
+			<?php endif; ?>
+
+
 
 		<?php endif; ?>
-
-	<?php endif; ?>
-
+		<h4 class="sub-section-title">
+			<?php  echo esc_html( $get_title ); ?>
+		</h4>
 	</a>
 
-	</li>
+</li>
 
 <?php endforeach; ?>
 

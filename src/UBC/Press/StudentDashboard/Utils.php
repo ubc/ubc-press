@@ -177,5 +177,24 @@ class Utils {
 
 	}
 
+	/**
+	 * gets the dashboard url with text, one can also select a specific dashbaord tab
+	 *
+	 * @since 1.0.0
+	 * @return string
+	 */
+
+	public static function ubc_press_go_to_dashboard_url( $tab_name = '', $tab_url_text = '', $target = '_blank' ) {
+
+		$dashboard_url 	= \UBC\Press\StudentDashboard\Utils::ubc_press_get_dashboard_url();
+		$usable_tabs 		= \UBC\Press\StudentDashboard\Utils::ubc_press_tab_names();
+		$tabs_name			= ( ! empty( $tab_name ) ? $tab_name : 'dashboard' );
+		$tab_url_text 	= ( ! empty( $tab_url_text ) ? $tab_url_text : 'Find all ' . $tabs_name );
+		$url						= ( in_array( $tabs_name, $usable_tabs ) ? $dashboard_url .'/#dashboard-' . $tabs_name : $dashboard_url );
+
+			return $dashboard_link 	= '<a href="'. esc_url( $url ) .'" title="Go to '. esc_attr( $tabs_name ) .'" target="' . esc_attr( $target ) . '">'. esc_html( $tab_url_text ). '</a>';
+
+	}
+
 
 }/* Utils */

@@ -18,6 +18,7 @@ get_header();
 
 $get_component 			= ! empty( $wp_query->query_vars['component'] ) ? $wp_query->query_vars['component'] : '';
 $get_component_name = 'hiddenquiz' === $get_component ? 'quizze' : $get_component;
+$section_type = UBC_WP_CLF_Lite::get_course_content_name_convention();
 
 ?>
 
@@ -37,10 +38,10 @@ $get_component_name = 'hiddenquiz' === $get_component ? 'quizze' : $get_componen
 						<?php echo esc_html( $get_component_name ); ?>s<br />
 					</h1>
 					<p>
-						All section(s) that contain: <?php echo esc_html( $get_component_name ); ?>s.
+						All <?php echo esc_html( $section_type ); ?>(s) that contain: <?php echo esc_html( $get_component_name ); ?>s.
 					</p>
 				</header>
-				<div class="sections-container">
+				<div class="sections-container component-types">
 
 					<?php \UBC\Helpers::locate_template_part_in_plugin( $start_path, 'section-list.php', true, false, array() ); ?>
 

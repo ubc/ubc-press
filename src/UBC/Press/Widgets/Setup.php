@@ -98,6 +98,9 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		$handouts_widget = new \UBC\Press\Widgets\HandoutsWidget\Setup();
 		register_widget( '\UBC\Press\Widgets\HandoutsWidget\Setup' );
 
+		$handouts_widget = new \UBC\Press\Widgets\SectionComponentWidget\Setup();
+		register_widget( '\UBC\Press\Widgets\SectionComponentWidget\Setup' );
+
 	}/* setup_wp_dashboard() */
 
 

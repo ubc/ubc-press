@@ -1,5 +1,11 @@
 <?php
 
+/**
+
+ * Sort sections by url/coursecontent/?component=component_name
+
+ */
+
 namespace UBC\Press\SectionComponentPage;
 
 /**
