@@ -79,6 +79,9 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 
 		add_action( 'ubcpressajax_fetch_feedback_form', array( $this, 'ubcpressajax_fetch_feedback_form__process' ) );
 
+		// When a new site is created, flush the rewrite rules
+		add_action( 'wpmu_new_blog', array( $this, 'wpmu_new_blog__flush_rewrite_rules' ), 10, 6 );
+
 	}/* setup_actions() */
 
 	function ag_add_oembed_handlers() {
@@ -348,5 +351,29 @@ class Setup extends \UBC\Press\ActionsBeforeAndAfter {
 		\UBC\Press\Ajax\Utils::send_json_success( array( 'form' => $form ), $redirect_to );
 
 	}/* ubcpressajax_fetch_feedback_form__process() */
+
+	/**
+	 * When a new site is created, flush the rewrite rules
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param int	$blog_id Blog ID.
+	 * @param int	$user_id User ID.
+	 * @param string $domain  Site domain.
+	 * @param string $path	Site path.
+	 * @param int	$site_id Site ID. Only relevant on multi-network installs.
+	 * @param array  $meta	Meta data. Used to set initial site options.
+	 * @return null
+	 */
+
+	public function wpmu_new_blog__flush_rewrite_rules( $blog_id, $user_id, $domain, $path, $site_id, $meta ) {
+
+		switch_to_blog( $blog_id );
+
+		$hard = false;
+
+		flush_rewrite_rules( $hard );
+
+	}/* wpmu_new_blog__run_gforms_installer() */
 
 }/* class Setup */
