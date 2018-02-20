@@ -58,7 +58,7 @@ $section_type = UBC_WP_CLF_Lite::get_course_content_name_convention();
 ?>
 
 <li class="align-items-center sub-section-<?php echo esc_html( $get_id ); ?>" data-post-id="<?php echo absint( $get_id ); ?>">
-	<a href="<?php echo esc_url( $get_permalink ); ?>" title="<?php the_title_attribute( array( 'before' => 'Read more on ', 'after' => wp_kses_post( $comp_text_to_output ) ) ); ?>" class="sub-section-link row">
+	<a href="<?php echo esc_url( $get_permalink ); ?>" title="<?php the_title_attribute( array( 'before' => 'Read more on ', 'after' => wp_kses_post( $comp_text_to_output ), true, absint( $get_id ) ) ); ?>" class="sub-section-link row">
 		<?php if ( is_user_logged_in() && ! empty( $show_mark_complete_btn ) ) : ?>
 
 			<span class="completed-components-details show-for-sr"><small>[<?php echo wp_kses_post( $comp_text_to_output ); ?>]</small></span>

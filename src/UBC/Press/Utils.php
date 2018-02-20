@@ -1919,9 +1919,91 @@ class Utils {
 	}
 
 	/**
+	 * A function to get sections meta vaule component associations
+	 *
+	 * Usage: \UBC\Press\Utils::get_all_section_component_meta_value()
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function get_all_section_component_meta_value( $post_id = '' ) {
+
+		$section_component_ids = get_post_meta( $post_id, 'component_associations', true );
+		$post_type 						 = array();
+		$args = array();
+
+		if ( ! empty( $section_component_ids ) ) :
+
+			foreach ( $section_component_ids as $section_component_id ) :
+
+				$post_type[] = get_post_type( $section_component_id );
+
+			endforeach;
+
+			$args['id'] = $post_id;
+			$args['type'] = $post_type;
+
+		endif;
+
+			return $args;
+
+	}
+
+	/**
+	 * A function to get componet types for a section's components
+	 *
+	 * Usage: \UBC\Press\Utils::get_component_types_from_section_id()
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param null
+	 * @return null
+	 */
+
+	public static function get_component_types_from_section_id( $post_ids = '' ) {
+
+		if ( ! $post_ids ) :
+
+			return;
+
+		endif;
+
+		$sections_id_with_components_type = array();
+
+		if ( is_array( $post_ids ) ) :
+
+			foreach ( $post_ids as $post_id ) :
+
+				$section_function = \UBC\Press\Utils::get_all_section_component_meta_value( $post_id );
+
+				if ( ! empty( $section_function['type'] ) ) :
+
+					$sections_id_with_components_type[] = $section_function;
+
+			endif;
+
+			endforeach;
+
+				return $sections_id_with_components_type;
+
+		else :
+
+			$section_function 		= \UBC\Press\Utils::get_all_section_component_meta_value( $post_ids );
+
+			$sections_id_with_components_type[] = $section_function;
+
+			return $sections_id_with_components_type;
+
+		endif;
+
+	}
+
+	/**
 	 * Get section ids with specified comonent type
 	 *
-	 * Usage: \UBC\Press\Utils::get_section_list()
 	 *
 	 * @since 1.0.0
 	 *
@@ -1931,42 +2013,17 @@ class Utils {
 
 	public static function get_section_ids_with_component_type() {
 
-		$section_ids 		= \UBC\Press\Utils::get_full_section_list();
-		$sections_id_with_components_type = array();
+		$section_ids 														= \UBC\Press\Utils::get_full_section_list();
+		$get_component_types_from_section_id 		= \UBC\Press\Utils::get_component_types_from_section_id( $section_ids );
 
-		foreach ( $section_ids as $section_id  ) {
-
-			$section_component_ids = get_post_meta( $section_id, 'component_associations', true );
-			$post_type 						 = array();
-
-			if ( ! empty( $section_component_ids ) ) :
-
-				foreach ( $section_component_ids as $section_component_id ) {
-
-					$post_type[] = get_post_type( $section_component_id );
-
-				}
-
-				$args = array();
-				$args['id'] = $section_id;
-				$args['type'] = $post_type;
-
-				$sections_id_with_components_type[] = $args;
-
-			endif;
-
-		}
-
-		$ubc_press_sections_with_post_type = apply_filters( 'ubc_press_sections_with_post_type', $sections_id_with_components_type );
-
-		return $sections_id_with_components_type;
+		return $get_component_types_from_section_id;
 
 	}
 
 	/**
-	 * Get section ids with specified comonent type
+	 * Get section ids with specified comonent type, ie. reading
 	 *
-	 * Usage: \UBC\Press\Utils::get_section_list()
+	 * Usage: \UBC\Press\Utils::ubc_press_get_sections_by_component()
 	 *
 	 * @since 1.0.0
 	 *
@@ -1976,21 +2033,25 @@ class Utils {
 
 	public static function ubc_press_get_sections_by_component( $post_type = '' ) {
 
-		$ids = array();
-
 		if ( empty( $post_type ) ) {
 
 			return;
 
 		}
 
+		$ids = array();
+
 		$components 	 = \UBC\Press\Utils::get_section_ids_with_component_type();
 
 		foreach ( $components as $component ) {
 
-			if ( in_array( $post_type, $component['type'] ) ) :
+			if ( ! empty( $component['type'] ) ) :
 
-				$ids[] = $component['id'];
+				if ( in_array( $post_type, $component['type'] ) ) :
+
+					$ids[] = $component['id'];
+
+				endif;
 
 			endif;
 
