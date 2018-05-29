@@ -42,7 +42,7 @@ class Press {
 	 * @var (string) $version The version of this plugin
 	 */
 
-	protected static $version = '0.7.2';
+	protected static $version = '0.7.35';
 
 
 	/**
