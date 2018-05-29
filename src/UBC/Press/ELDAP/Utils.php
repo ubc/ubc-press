@@ -3,6 +3,15 @@
 namespace UBC\Press\ELDAP;
 
 /**
+ * NOTE
+ * ----
+ *
+ * Currently, this is completely UBC-Centric. We're working on abstracting it
+ * to make sure it can work with any LDAP structure.
+ *
+ */
+
+/**
  * Setup for our ELDAP pieces
  *
  * @since 1.0.0
